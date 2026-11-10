@@ -109,12 +109,12 @@
       <form id="admin-login-form" onsubmit="AdminApp.handleLogin(event)">
         <div style="text-align: left; margin-bottom: 16px;">
           <label style="display: block; font-size: 13px; font-weight: 800; color: #374151; margin-bottom: 6px;" data-i18n="login_user_label">এডমিন আইডি / ইমেইল *</label>
-          <input type="text" id="admin-login-user" required placeholder="ইমেইল বা ইউজারনেম লিখুন" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
+          <input type="text" id="admin-login-user" required placeholder="ইমেইল বা ইউজারনেম লিখুন" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
         </div>
 
         <div style="text-align: left; margin-bottom: 22px;">
           <label style="display: block; font-size: 13px; font-weight: 800; color: #374151; margin-bottom: 6px;" data-i18n="login_pass_label">পাসওয়ার্ড *</label>
-          <input type="password" id="admin-login-pass" required placeholder="পাসওয়ার্ড লিখুন" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
+          <input type="password" id="admin-login-pass" required placeholder="পাসওয়ার্ড লিখুন" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="current-password" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
         </div>
 
         <div id="admin-login-error" style="display: none; padding: 10px; background: #fee2e2; border: 1px solid #f87171; color: #b91c1c; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 16px; text-align: left;"></div>
@@ -122,6 +122,15 @@
         <button type="submit" id="admin-login-btn" style="width: 100%; padding: 12px; background: #0d4d29; color: #ffffff; border: none; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.2s;" data-i18n="login_btn">
           লগইন করুন ➔
         </button>
+
+        <button type="button" onclick="AdminApp.quickDemoLogin()" style="width: 100%; margin-top: 10px; padding: 10px; background: #f0fdf4; color: #166534; border: 1.5px dashed #86efac; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; transition: all 0.2s;">
+          🔑 এক-ক্লিকে সুপার এডমিন প্রবেশ
+        </button>
+
+        <div style="margin-top: 14px; padding: 10px; background: #f8fafc; border-radius: 8px; font-size: 12px; color: #64748b; line-height: 1.6; text-align: left;">
+          <div><b>আইডি:</b> <code style="color: #0d4d29;">admin@premefarm.com</code> বা <code style="color: #0d4d29;">admin</code></div>
+          <div><b>পাসওয়ার্ড:</b> <code style="color: #0d4d29;">Admin@PremeFarm</code> বা <code style="color: #0d4d29;">admin</code> বা <code style="color: #0d4d29;">1234</code></div>
+        </div>
       </form>
     </div>
   </div>
