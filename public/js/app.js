@@ -311,23 +311,30 @@ const PremeStore = {
     let html = '';
     this.cart.forEach((item, idx) => {
       html += `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #fff; border-radius: 12px; border: 1px solid #e2e8e3; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <img src="${item.image}" style="width: 60px; height: 60px; object-fit: contain; background: #f2f7f3; border-radius: 8px; padding: 4px;" alt="">
-            <div>
-              <h4 style="font-size: 16px; font-weight: 800; color: #0d4d29;">${item.name}</h4>
-              <span style="font-size: 13.5px; color: #556958;">সাইজ/ওজন: <b>${item.variant}</b></span>
-              <div style="font-size: 16px; font-weight: 800; color: #e67e22; margin-top: 4px;">৳${item.price}</div>
+        <div class="cart-page-item">
+          <div class="cart-page-item-top">
+            <img src="${item.image}" class="cart-page-item-img" alt="${item.name}">
+            <div class="cart-page-item-details">
+              <h4 class="cart-page-item-title">${item.name}</h4>
+              <div class="cart-page-item-variant">সাইজ/ওজন: <b>${item.variant}</b></div>
+              <div class="cart-page-item-unit-price">একক মূল্য: ৳${item.price}</div>
             </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="display: flex; align-items: center; border: 1.5px solid #cedcd0; border-radius: 20px; overflow: hidden;">
-              <button onclick="PremeStore.updateQuantity(${idx}, -1)" style="border:none; padding: 6px 12px; cursor:pointer; background:#fff; font-weight:700;">-</button>
-              <span style="padding: 0 10px; font-weight: 800;">${item.quantity}</span>
-              <button onclick="PremeStore.updateQuantity(${idx}, 1)" style="border:none; padding: 6px 12px; cursor:pointer; background:#fff; font-weight:700;">+</button>
+          <div class="cart-page-item-bottom">
+            <div class="cart-page-qty-wrap">
+              <button onclick="PremeStore.updateQuantity(${idx}, -1)" class="cart-page-qty-btn" aria-label="Decrease">-</button>
+              <span class="cart-page-qty-num">${item.quantity}</span>
+              <button onclick="PremeStore.updateQuantity(${idx}, 1)" class="cart-page-qty-btn" aria-label="Increase">+</button>
             </div>
-            <span style="font-size: 17px; font-weight: 900; color: #1b2a1e; min-width: 70px; text-align: right;">৳${item.price * item.quantity}</span>
-            <button onclick="PremeStore.removeFromCart(${idx})" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 18px; padding: 6px;">🗑️</button>
+            <div class="cart-page-item-subtotal">৳${item.price * item.quantity}</div>
+            <button onclick="PremeStore.removeFromCart(${idx})" class="cart-page-remove-btn" title="মুছে ফেলুন">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+            </button>
           </div>
         </div>
       `;
@@ -673,7 +680,7 @@ function onHeaderSearchInput(val) {
 
 // ================= ANIMATED TYPEWRITER SEARCH PLACEHOLDER =================
 function initSearchPlaceholderAnimation() {
-  const inputs = document.querySelectorAll('#header-search-input, #shop-search-input');
+  const inputs = document.querySelectorAll('#header-search-input, #shop-search-input, .drawer-search-input');
   if (!inputs.length) return;
 
   const suggestions = [
