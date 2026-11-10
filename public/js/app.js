@@ -671,33 +671,69 @@ function onHeaderSearchInput(val) {
   dropdown.classList.add('active');
 }
 
-// ================= ANIMATED SEARCH PLACEHOLDER =================
+// ================= ANIMATED TYPEWRITER SEARCH PLACEHOLDER =================
 function initSearchPlaceholderAnimation() {
-  const input = document.getElementById('header-search-input');
-  if (!input) return;
+  const inputs = document.querySelectorAll('#header-search-input, #shop-search-input');
+  if (!inputs.length) return;
 
   const suggestions = [
     'মধুময় কালো সোনা খুঁজুন...',
     'খাঁটি দানাদার গাওয়া ঘি খুঁজুন...',
     'সুন্দরবনের প্রাকৃতিক মধু খুঁজুন...',
-    'ইলিশ মাছের আচার খুঁজুন...',
+    'ইলিশ মাছের স্পেশাল আচার...',
     'রোজেলা হারবাল চা খুঁজুন...',
-    'প্রিমিয়াম ড্রাই ফ্রুটস খুঁজুন...'
+    'সুপারফুড সীড মিক্স খুঁজুন...',
+    'রসুনের খাঁটি সরিষার আচার...',
+    'প্রাকৃতিক পুষ্টিকর ভেষজ পথ্য...'
   ];
 
-  let currentIdx = 0;
-  let isFocused = false;
+  let phraseIdx = 0;
+  let charIdx = 0;
+  let isDeleting = false;
+  let typingTimer = null;
 
-  input.addEventListener('focus', () => { isFocused = true; });
-  input.addEventListener('blur', () => { isFocused = false; });
+  inputs.forEach(input => {
+    input.addEventListener('focus', () => { 
+      input._isFocused = true;
+      input.setAttribute('placeholder', 'যেকোনো পণ্য লিখুন...');
+    });
 
-  input.setAttribute('placeholder', suggestions[0]);
+    input.addEventListener('blur', () => { 
+      input._isFocused = false; 
+    });
+  });
 
-  setInterval(() => {
-    if (isFocused || (input.value && input.value.trim().length > 0)) return;
-    currentIdx = (currentIdx + 1) % suggestions.length;
-    input.setAttribute('placeholder', suggestions[currentIdx]);
-  }, 2600);
+  function typeLoop() {
+    const currentPhrase = suggestions[phraseIdx];
+    
+    if (isDeleting) {
+      charIdx--;
+    } else {
+      charIdx++;
+    }
+
+    const text = currentPhrase.substring(0, charIdx);
+    inputs.forEach(input => {
+      if (!input._isFocused && (!input.value || input.value.trim().length === 0)) {
+        input.setAttribute('placeholder', text);
+      }
+    });
+
+    let speed = isDeleting ? 35 : 75;
+
+    if (!isDeleting && charIdx === currentPhrase.length) {
+      speed = 1800; // Hold at the end of phrase
+      isDeleting = true;
+    } else if (isDeleting && charIdx === 0) {
+      isDeleting = false;
+      phraseIdx = (phraseIdx + 1) % suggestions.length;
+      speed = 300; // Pause before typing next phrase
+    }
+
+    typingTimer = setTimeout(typeLoop, speed);
+  }
+
+  typeLoop();
 }
 
 function toggleMobileNav() {
@@ -740,7 +776,14 @@ document.addEventListener('click', (e) => {
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+// Ensure initialization runs both on DOMContentLoaded and immediately if already loaded
+function bootStore() {
   PremeStore.init();
   initSearchPlaceholderAnimation();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootStore);
+} else {
+  bootStore();
+}
