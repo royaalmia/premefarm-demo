@@ -411,6 +411,7 @@ const AdminApp = {
       this.currentUser = masterUser;
       const loginScreen = document.getElementById('admin-login-screen');
       if (loginScreen) {
+        loginScreen.style.display = 'none';
         loginScreen.style.setProperty('display', 'none', 'important');
       }
 
@@ -445,6 +446,7 @@ const AdminApp = {
         this.currentUser = data.user;
         const loginScreen = document.getElementById('admin-login-screen');
         if (loginScreen) {
+          loginScreen.style.display = 'none';
           loginScreen.style.setProperty('display', 'none', 'important');
         }
         try {
@@ -474,10 +476,6 @@ const AdminApp = {
   },
 
   quickDemoLogin() {
-    this.handleLogin();
-  },
-    if (userInp) userInp.value = 'admin@premefarm.com';
-    if (passInp) passInp.value = 'Admin@PremeFarm';
     this.handleLogin();
   },
 
@@ -1187,7 +1185,6 @@ const AdminApp = {
     } catch (e) {
       alert('ডিলিট ব্যর্থ হয়েছে।');
     }
-  },
   },
 
   async updateStatus(id, status) {

@@ -13,9 +13,9 @@
     "steadfast": {
       "enabled": true,
       "name": "Steadfast Courier",
-      "baseUrl": "https://portal.steadfast.com.bd/api/v1/create_order",
-      "apiKey": "sf_live_api_key_premefarm_2026",
-      "secretKey": "sf_secret_key_9948271038",
+      "baseUrl": "https://portal.packzy.com/api/v1/create_order",
+      "apiKey": "o8pnudnvo70jpz6jgraykqdi9qnwvyjl",
+      "secretKey": "8ipxndp3quigmytzdk3jzzwu",
       "autoDispatch": false,
       "sandbox": false
     },

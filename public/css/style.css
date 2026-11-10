@@ -585,10 +585,10 @@ body {
 /* ================= TRUST BADGES / FEATURES ================= */
 .features-strip {
   max-width: 1240px;
-  margin: 30px auto;
+  margin: 40px auto 30px auto;
   padding: 0 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
 }
 
@@ -2223,6 +2223,12 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Hide footer on all pages except homepage on mobile */
+  body:not(.homepage) .site-footer,
+  body:not(.homepage) footer {
+    display: none !important;
+  }
+
   .mobile-menu-btn {
     display: flex !important;
     align-items: center;

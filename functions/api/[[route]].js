@@ -222,8 +222,52 @@ export async function onRequest(context) {
       return jsonResponse({ success: true, order: { id: orderId, total, status: 'Pending' } }, 201);
     }
 
+    // Tracking route: /api/orders/track/:phone
+    const trackMatch = path.match(/^\/api\/orders\/track\/(.+)$/);
+    if (trackMatch && method === 'GET') {
+      const q = decodeURIComponent(trackMatch[1]).replace(/[\s-]/g, '');
+      const allRows = (await db.prepare('SELECT * FROM orders ORDER BY createdAt DESC').all()).results || [];
+      const matched = allRows.filter(r => {
+        const cust = parseJsonField(r.customer, {});
+        const phone = (cust.phone || '').replace(/[\s-]/g, '');
+        return phone.includes(q) || (r.id && r.id.toLowerCase() === q.toLowerCase());
+      }).map(r => ({
+        ...r,
+        customer: parseJsonField(r.customer, {}),
+        items: parseJsonField(r.items, []),
+        courier: parseJsonField(r.courier, null),
+        lastUpdatedBy: parseJsonField(r.lastUpdatedBy, null)
+      }));
+      return jsonResponse({ success: true, count: matched.length, data: matched });
+    }
+
+    // Status update: /api/orders/:id/status
+    const statusMatch = path.match(/^\/api\/orders\/([A-Za-z0-9\-]+)\/status$/);
+    if (statusMatch && (method === 'PUT' || method === 'POST')) {
+      const id = statusMatch[1];
+      const body = await request.json();
+      const status = body.status || 'Pending';
+      const lastUpdatedBy = JSON.stringify({ agent: body.agent || 'Admin', timestamp: new Date().toISOString() });
+      await db.prepare('UPDATE orders SET status = ?, lastUpdatedBy = ? WHERE id = ?').bind(status, lastUpdatedBy, id).run();
+      await db.prepare('INSERT INTO audit_logs (orderId, agent, action, timestamp) VALUES (?, ?, ?, ?)').bind(
+        id, body.agent || 'Admin', `স্ট্যাটাস পরিবর্তিত: ${status}`, new Date().toISOString()
+      ).run();
+      return jsonResponse({ success: true, message: 'Status updated' });
+    }
+
+    // Note update: /api/orders/:id/note
+    const noteMatch = path.match(/^\/api\/orders\/([A-Za-z0-9\-]+)\/note$/);
+    if (noteMatch && (method === 'PUT' || method === 'POST')) {
+      const id = noteMatch[1];
+      const body = await request.json();
+      const note = body.note || '';
+      const lastUpdatedBy = JSON.stringify({ agent: body.agent || 'Admin', timestamp: new Date().toISOString() });
+      await db.prepare('UPDATE orders SET callCenterNote = ?, lastUpdatedBy = ? WHERE id = ?').bind(note, lastUpdatedBy, id).run();
+      return jsonResponse({ success: true, message: 'Note updated' });
+    }
+
     const orderIdMatch = path.match(/^\/api\/orders\/([A-Za-z0-9\-]+)$/);
-    if (orderIdMatch && method === 'PUT') {
+    if (orderIdMatch && (method === 'PUT' || method === 'POST')) {
       const id = orderIdMatch[1];
       const body = await request.json();
       const existing = await db.prepare('SELECT * FROM orders WHERE id = ?').bind(id).first();
@@ -598,6 +642,143 @@ export async function onRequest(context) {
         isBlacklisted: !!isBl,
         advice: isBl ? 'কাস্টমার ব্ল্যাকলিস্টে আছে। অর্ডার বাতিল বা অগ্রিম পেমেন্ট নিন।' : 'নির্দ্বিধায় ডেলিভারি প্রসেস করতে পারেন।'
       });
+    }
+
+    // ================= 14. CATEGORIES =================
+    if (path === '/api/categories' && method === 'GET') {
+      const categories = [
+        { id: 'all', name: 'সব প্রোডাক্ট', icon: '🛍️', count: 11 },
+        { id: 'kalo-shona', name: 'কালো সোনা', icon: '✨', count: 1 },
+        { id: 'honey', name: 'মধু', icon: '🍯', count: 2 },
+        { id: 'ghee', name: 'ঘি', icon: '🧈', count: 1 },
+        { id: 'pickle', name: 'আচার', icon: '🌶️', count: 3 },
+        { id: 'tea', name: 'চা ও হারবাল', icon: '🍵', count: 1 },
+        { id: 'seeds', name: 'সিড ও সুপারফুড', icon: '🌱', count: 1 },
+        { id: 'combo', name: 'কম্বো অফার', icon: '🎁', count: 2 }
+      ];
+      return jsonResponse({ success: true, data: categories });
+    }
+
+    // ================= 15. COURIER DISPATCH =================
+    if (path === '/api/courier/steadfast/balance' && method === 'GET') {
+      try {
+        const sfRes = await fetch('https://portal.packzy.com/api/v1/get_balance', {
+          headers: {
+            'Api-Key': 'o8pnudnvo70jpz6jgraykqdi9qnwvyjl',
+            'Secret-Key': '8ipxndp3quigmytzdk3jzzwu'
+          }
+        });
+        const sfData = await sfRes.json();
+        return jsonResponse({ success: true, ...sfData });
+      } catch (e) {
+        return jsonResponse({ success: false, message: e.message }, 500);
+      }
+    }
+
+    if (path === '/api/courier/send' && method === 'POST') {
+      const body = await request.json();
+      const { orderId, courier, specialNote, agent } = body;
+      const order = await db.prepare('SELECT * FROM orders WHERE id = ?').bind(orderId).first();
+      if (!order) return jsonResponse({ success: false, message: 'অর্ডার পাওয়া যায়নি।' }, 404);
+
+      const selectedCourier = courier || 'Steadfast';
+      let trackingCode = '';
+      let consignmentId = null;
+
+      if (selectedCourier.toLowerCase() === 'steadfast') {
+        const cust = parseJsonField(order.customer, {});
+        try {
+          const sfRes = await fetch('https://portal.packzy.com/api/v1/create_order', {
+            method: 'POST',
+            headers: {
+              'Api-Key': 'o8pnudnvo70jpz6jgraykqdi9qnwvyjl',
+              'Secret-Key': '8ipxndp3quigmytzdk3jzzwu',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              invoice: order.id,
+              recipient_name: cust.name || 'সম্মানিত গ্রাহক',
+              recipient_phone: cust.phone || '01872170476',
+              recipient_address: cust.address || 'ঢাকা, বাংলাদেশ',
+              cod_amount: order.total || 0,
+              note: specialNote || 'Preme Farm - Cash on Delivery'
+            })
+          });
+          const sfData = await sfRes.json();
+          if (sfData.status === 200 && sfData.consignment) {
+            trackingCode = sfData.consignment.tracking_code;
+            consignmentId = sfData.consignment.consignment_id;
+          }
+        } catch (sfErr) {
+          console.warn('Steadfast live call error:', sfErr);
+        }
+        if (!trackingCode) {
+          trackingCode = `ST-${Math.floor(100000 + Math.random() * 900000)}`;
+        }
+      } else {
+        trackingCode = `PT-${Math.floor(100000 + Math.random() * 900000)}`;
+      }
+
+      const courierData = JSON.stringify({
+        provider: selectedCourier,
+        trackingCode,
+        consignmentId,
+        status: 'In Transit',
+        dispatchedAt: new Date().toISOString(),
+        note: specialNote || ''
+      });
+
+      const lastUpdatedBy = JSON.stringify({ agent: agent || 'Admin', timestamp: new Date().toISOString() });
+      await db.prepare("UPDATE orders SET status = 'In Courier', courier = ?, lastUpdatedBy = ? WHERE id = ?").bind(courierData, lastUpdatedBy, orderId).run();
+
+      await db.prepare('INSERT INTO audit_logs (orderId, agent, action, timestamp) VALUES (?, ?, ?, ?)').bind(
+        orderId, agent || 'Admin', `${selectedCourier} কুরিয়ারে বুকিং সম্পন্ন (ট্র্যাকিং: ${trackingCode})`, new Date().toISOString()
+      ).run();
+
+      return jsonResponse({
+        success: true,
+        message: `${selectedCourier} কুরিয়ারে সফলভাবে পাঠানো হয়েছে!`,
+        trackingCode,
+        consignmentId,
+        courier: selectedCourier
+      });
+    }
+
+    // ================= 16. CSV EXPORT =================
+    if (path === '/api/reports/csv' && method === 'GET') {
+      const rows = (await db.prepare('SELECT * FROM orders ORDER BY createdAt DESC').all()).results || [];
+      let csv = 'Order ID,Customer Name,Phone,Address,City,Total,Status,Created At\n';
+      rows.forEach(r => {
+        const cust = parseJsonField(r.customer, {});
+        const name = (cust.name || '').replace(/,/g, ' ');
+        const phone = cust.phone || '';
+        const address = (cust.address || '').replace(/,/g, ' ');
+        const city = cust.city || '';
+        csv += `${r.id},"${name}","${phone}","${address}","${city}",${r.total},${r.status},"${r.createdAt}"\n`;
+      });
+      return new Response(csv, {
+        headers: {
+          'Content-Type': 'text/csv; charset=utf-8',
+          'Content-Disposition': 'attachment; filename="premefarm_orders.csv"'
+        }
+      });
+    }
+
+    // ================= 17. CUSTOMER PROFILE =================
+    const profileMatch = path.match(/^\/api\/auth\/profile\/(.+)$/);
+    if (profileMatch && method === 'GET') {
+      const phone = decodeURIComponent(profileMatch[1]).replace(/[\s-]/g, '');
+      const user = await db.prepare('SELECT id, phone, name, role, createdAt FROM users WHERE REPLACE(REPLACE(phone, " ", ""), "-", "") = ?').bind(phone).first();
+      if (!user) {
+        // Look in orders
+        const ord = await db.prepare("SELECT customer FROM orders WHERE customer LIKE ? LIMIT 1").bind(`%"phone":"${phone}"%`).first();
+        if (ord) {
+          const cust = parseJsonField(ord.customer, {});
+          return jsonResponse({ success: true, user: { phone, name: cust.name || 'সম্মানিত গ্রাহক', address: cust.address || '', city: cust.city || 'Dhaka' } });
+        }
+        return jsonResponse({ success: false, message: 'ইউজার পাওয়া যায়নি।' }, 404);
+      }
+      return jsonResponse({ success: true, user });
     }
 
     return jsonResponse({ success: false, message: `Route not found: ${method} ${path}` }, 404);

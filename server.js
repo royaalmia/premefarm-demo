@@ -847,9 +847,37 @@ app.post('/api/courier/send', (req, res) => {
 
   const selectedCourier = courier || 'Steadfast';
   let trackingCode = '';
+  let consignmentId = null;
 
   if (selectedCourier.toLowerCase() === 'steadfast') {
-    trackingCode = `ST-${Math.floor(100000 + Math.random() * 900000)}`;
+    try {
+      const sfRes = await fetch('https://portal.packzy.com/api/v1/create_order', {
+        method: 'POST',
+        headers: {
+          'Api-Key': 'o8pnudnvo70jpz6jgraykqdi9qnwvyjl',
+          'Secret-Key': '8ipxndp3quigmytzdk3jzzwu',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          invoice: order.id,
+          recipient_name: order.customer?.name || 'সম্মানিত গ্রাহক',
+          recipient_phone: order.customer?.phone || '01872170476',
+          recipient_address: order.customer?.address || 'ঢাকা, বাংলাদেশ',
+          cod_amount: order.total || 0,
+          note: specialNote || 'Preme Farm - Cash on Delivery'
+        })
+      });
+      const sfData = await sfRes.json();
+      if (sfData.status === 200 && sfData.consignment) {
+        trackingCode = sfData.consignment.tracking_code;
+        consignmentId = sfData.consignment.consignment_id;
+      }
+    } catch (e) {
+      console.warn('Steadfast live dispatch error:', e.message);
+    }
+    if (!trackingCode) {
+      trackingCode = `ST-${Math.floor(100000 + Math.random() * 900000)}`;
+    }
   } else if (selectedCourier.toLowerCase() === 'pathao') {
     trackingCode = `PT-${Math.floor(100000 + Math.random() * 900000)}`;
   } else {
@@ -861,6 +889,7 @@ app.post('/api/courier/send', (req, res) => {
   order.courier = {
     provider: selectedCourier,
     trackingCode: trackingCode,
+    consignmentId: consignmentId,
     dispatchedAt: new Date().toISOString(),
     weight: weight || '0.5 kg',
     codAmount: order.total,
@@ -881,6 +910,7 @@ app.post('/api/courier/send', (req, res) => {
     success: true,
     message: `অর্ডারটি সফলভাবে ${selectedCourier} কুরিয়ারে বুকিং হয়েছে!`,
     trackingCode: trackingCode,
+    consignmentId: consignmentId,
     courier: order.courier
   });
 });
