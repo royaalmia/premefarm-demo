@@ -1,0 +1,149 @@
+-- =========================================================
+-- Preme Farm Enterprise Cloudflare D1 Database Schema & Seed
+-- Compatible with Cloudflare Workers, Pages Functions & SQLite
+-- =========================================================
+
+DROP TABLE IF EXISTS products;
+CREATE TABLE products (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT,
+  category TEXT,
+  categoryName TEXT,
+  tag TEXT,
+  price INTEGER,
+  regularPrice INTEGER,
+  rating REAL DEFAULT 5.0,
+  reviewCount INTEGER DEFAULT 100,
+  image TEXT,
+  gallery TEXT,
+  description TEXT,
+  benefits TEXT,
+  ingredients TEXT,
+  variants TEXT
+);
+
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders (
+  id TEXT PRIMARY KEY,
+  customer TEXT NOT NULL,
+  items TEXT NOT NULL,
+  subtotal INTEGER DEFAULT 0,
+  deliveryCharge INTEGER DEFAULT 70,
+  total INTEGER NOT NULL,
+  status TEXT DEFAULT 'Pending',
+  source TEXT DEFAULT 'Website Store',
+  callCenterNote TEXT DEFAULT '',
+  courier TEXT,
+  lastUpdatedBy TEXT,
+  createdAt TEXT
+);
+
+DROP TABLE IF EXISTS failed_orders;
+CREATE TABLE failed_orders (
+  id TEXT PRIMARY KEY,
+  customer TEXT NOT NULL,
+  product TEXT,
+  amount INTEGER DEFAULT 0,
+  step TEXT,
+  reason TEXT,
+  status TEXT DEFAULT 'Failed / Abandoned',
+  createdAt TEXT
+);
+
+DROP TABLE IF EXISTS blacklist;
+CREATE TABLE blacklist (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  type TEXT NOT NULL,
+  value TEXT NOT NULL UNIQUE,
+  reason TEXT,
+  blockedBy TEXT,
+  createdAt TEXT
+);
+
+DROP TABLE IF EXISTS audit_logs;
+CREATE TABLE audit_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  orderId TEXT,
+  agent TEXT,
+  action TEXT,
+  timestamp TEXT
+);
+
+DROP TABLE IF EXISTS coupons;
+CREATE TABLE coupons (
+  code TEXT PRIMARY KEY,
+  discount INTEGER,
+  type TEXT,
+  minOrder INTEGER,
+  validUntil TEXT,
+  usageCount INTEGER DEFAULT 0,
+  status TEXT DEFAULT 'active'
+);
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id TEXT PRIMARY KEY,
+  phone TEXT UNIQUE,
+  name TEXT,
+  password TEXT,
+  role TEXT DEFAULT 'customer',
+  createdAt TEXT
+);
+
+DROP TABLE IF EXISTS settings;
+CREATE TABLE settings (
+  key TEXT PRIMARY KEY,
+  value TEXT
+);
+
+DROP TABLE IF EXISTS landing_pages;
+CREATE TABLE landing_pages (
+  id TEXT PRIMARY KEY,
+  slug TEXT,
+  title TEXT,
+  template TEXT,
+  product TEXT,
+  views INTEGER DEFAULT 0,
+  conversions INTEGER DEFAULT 0,
+  status TEXT DEFAULT 'active'
+);
+
+DROP TABLE IF EXISTS cms;
+CREATE TABLE cms (
+  key TEXT PRIMARY KEY,
+  value TEXT
+);
+
+-- ==================== SEED DATA ====================
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (1, 'প্রিমি ফার্ম কালো সোনা (Black Gold - মধুময় কালোজিরা)', 'kalo-shona-madhumoy-kalojira', 'kalo-shona', 'কালো সোনা', 'বেস্ট সেলার • ১০০% অর্গানিক', 0, 0, 5, 468, 'images/kalo_shona_jar.png', '["images/kalo_shona_jar.png","images/hero_banner_1.png","images/hero_banner_2.png"]', '১০০% খাঁটি সুন্দরবনের মধু, বাছাইকৃত কালোজিরা, খাঁটি সরিষার তেল ও পুষ্টিকর গুঁড়া মশলার সমন্বয়ে তৈরি ঐতিহ্যবাহী বিশেষ পথ্য ''কালো সোনা''। এটি সারাদিনের কর্মশক্তি বৃদ্ধি করে, দীর্ঘস্থায়ী ক্লান্তি দূর করে এবং রোগ প্রতিরোধ ক্ষমতা বহুগুণে বৃদ্ধি করে।', '["স্মৃতিশক্তি বৃদ্ধি ও মস্তিষ্কের কার্যক্ষমতা সচল রাখে","ত্বকের প্রাকৃতিক উজ্জ্বলতা ও লাবণ্য বৃদ্ধি করে","কোলেস্টেরল ও রক্তচাপ নিয়ন্ত্রণে বিশেষ ভূমিকা রাখে","শারীরিক দুর্বলতা ও ক্লান্তি দূর করে শক্তি বৃদ্ধি করে","রক্ত বিশুদ্ধকরণ ও রক্ত সঞ্চালন স্বাভাবিক রাখে","শরীরের রোগ প্রতিরোধ ক্ষমতা (ইমিউনিটি) বৃদ্ধি করে"]', 'বাছাইকৃত প্রিমিয়াম কালোজিরা, খাঁটি সরিষার তেল, সুন্দরবনের মধু, পুষ্টিকর গুঁড়া মশলা ও প্রাকৃতিক ভেষজ উপাদান।', '[{"size":"২৫০ গ্রাম","regularPrice":650,"price":550,"popular":false},{"size":"৪০০ গ্রাম","regularPrice":1150,"price":950,"popular":true},{"size":"১ কেজি","regularPrice":1850,"price":1550,"popular":false}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (2, 'প্রিমি ফার্ম খাঁটি গাওয়া ঘি (Aroma Premium Ghee)', 'premium-aroma-gawa-ghee', 'ghee', 'ঘি', 'শতভাগ খাঁটি ও দানাদার', 0, 0, 5, 284, 'images/hero_banner_2.png', '["images/hero_banner_2.png"]', 'গ্রামের দেশি গরুর খাঁটি দুধের মাখন থেকে ঐতিহ্যবাহী জ্বাল পদ্ধতিতে তৈরি অতুলনীয় সুগন্ধি ও সুস্বাদু দানাদার গাওয়া ঘি। কোনো কৃত্রিম ফ্লেভার বা রং ছাড়া শতভাগ প্রাকৃতিক।', '["অতুলনীয় সুবাস ও খাঁটি দানাদার টেক্সচার","উন্নত মানের ফ্যাট হজমশক্তি ও রোগ প্রতিরোধ বাড়ায়","মস্তিষ্কের পুষ্টি ও স্মৃতিশক্তি বৃদ্ধিতে দারুণ উপকারী"]', '১০০% খাঁটি দেশি গরুর দুধের মাখন থেকে প্রস্তুত গাওয়া ঘি।', '[{"size":"৫০০ গ্রাম","regularPrice":1050,"price":890,"popular":true},{"size":"১ কেজি","regularPrice":1950,"price":1690,"popular":false}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (3, 'সুন্দরবনের প্রাকৃতিক খাঁটি মধু (Pure Sundarban Wild Honey)', 'sundarban-pure-wild-honey', 'honey', 'মধু', '১০০% কাঁচা ও বিশুদ্ধ', 0, 0, 5, 340, 'images/kalo_shona_jar.png', '["images/kalo_shona_jar.png"]', 'সুন্দরবনের গভীর জঙ্গল থেকে মোয়ালদের দ্বারা সরাসরি সংগৃহীত ১০০% কাঁচা ও বিশুদ্ধ খলিশা ও গরান ফুলের মধু। কোনো চিনি বা কৃত্রিম তরল মিশ্রণমুক্ত।', '["কাশি, ঠান্ডা ও শ্বাসকষ্টের প্রাকৃতিক উপশম","শারীরিক বল ও মেধা শক্তি বৃদ্ধি করে","শরীরের রোগ প্রতিরোধ ব্যবস্থা সুদৃঢ় করে"]', '১০০% সুন্দরবনের প্রাকৃতিক কাঁচা মধু।', '[{"size":"৫০০ গ্রাম","regularPrice":750,"price":650,"popular":true},{"size":"১ কেজি","regularPrice":1400,"price":1200,"popular":false}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (4, 'খাঁটি সরিষা ফুলের মধু (Mustard Flower Honey)', 'mustard-flower-pure-honey', 'honey', 'মধু', 'প্রাকৃতিক পুষ্টি', 0, 0, 4.9, 165, 'images/kalo_shona_jar.png', '["images/kalo_shona_jar.png"]', 'শীতকালে সরিষা ক্ষেত থেকে সংগৃহীত হালকা সোনালী রঙের শতভাগ খাঁটি সরিষা ফুলের মধু। পুষ্টি ও মিষ্টি স্বাদে অতুলনীয়।', '["সহজে হজম হয় ও প্রাকৃতিক মিষ্টির স্বাস্থ্যকর উৎস","শিশুদের শারীরিক বিকাশ ও মেধা বৃদ্ধিতে সাহায্য করে"]', '১০০% প্রাকৃতিক সরিষা ফুলের মধু।', '[{"size":"৫০০ গ্রাম","regularPrice":550,"price":450,"popular":true},{"size":"১ কেজি","regularPrice":990,"price":850,"popular":false}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (5, 'প্রিমিয়াম ইলিশ মাছের আচার (Authentic Hilsa Fish Pickle)', 'premium-hilsa-fish-pickle', 'pickle', 'আচার', 'প্রিমি ফার্ম সিগনেচার স্পেশাল', 0, 0, 5, 389, 'images/hero_banner_1.png', '["images/hero_banner_1.png"]', 'তাজা খাঁটি ইলিশ মাছ, খাঁটি ঘানিভাঙা সরিষার তেল, কাঁচা মরিচ ও ঘরোয়া বিশেষ মশলায় প্রস্তুত ঐতিহ্যবাহী জিভে জল আনা ইলিশ আচার। কোনো রাসায়নিক প্রিজারভেটিভ নেই।', '["ঘরোয়া রেসিপিতে তৈরি খাঁটি বাঙ্গালি স্বাদ","শতভাগ প্রিজারভেটিভ ও কেমিক্যালমুক্ত","খিচুড়ি, পোলাও বা গরম ভাতের সাথে অনন্য রসনা তৃপ্তি"]', 'তাজা ইলিশ মাছের টুকরো, খাঁটি সরিষার তেল, পাঁচফোড়ন, মেথি, রসুন, কাঁচা মরিচ, সিরকা ও খাঁটি মশলা।', '[{"size":"২০০ গ্রাম","regularPrice":650,"price":580,"popular":false},{"size":"৪০০ গ্রাম","regularPrice":980,"price":880,"popular":true},{"size":"৮০০ গ্রাম","regularPrice":1650,"price":1480,"popular":false}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (6, '৬ ধরনের ঘরোয়া খাঁটি আচার কম্বো (6-Pickle Feast Combo)', '6-pickle-feast-combo', 'pickle', 'আচার', 'ফ্যামিলি ফেস্ট কম্বো', 0, 0, 4.9, 174, 'images/hero_banner_2.png', '["images/hero_banner_2.png"]', 'আম, তেঁতুল, জলপাই, চালতা, বরই এবং রসুনের খাঁটি সরিষার তেলে তৈরি ৬টি ঐতিহ্যবাহী স্পেশাল আচারের সম্পূর্ণ ফ্যামিলি প্যাক।', '["একসাথে ৬টি ভিন্ন স্বাদের প্রিমিয়াম আচার","রুচি বৃদ্ধি ও হজমে চমৎকার সহায়ক","১০০% খাঁটি ও স্বাস্থ্যসম্মত ঘরোয়া প্রক্রিয়া"]', 'আম, মিষ্টি তেঁতুল, জলপাই, চালতা, টক বরই, দেশি রসুন, খাঁটি সরিষার তেল ও মসলা।', '[{"size":"৬টি স্পেশাল আচার কম্বো সেট","regularPrice":1500,"price":1300,"popular":true}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (7, 'রসুনের খাঁটি সরিষার তেলের আচার (Garlic Pickle)', 'pure-garlic-pickle', 'pickle', 'আচার', 'স্বাস্থ্যকর ভেষজ আচার', 0, 0, 4.8, 112, 'images/hero_banner_1.png', '["images/hero_banner_1.png"]', 'বাছাইকৃত দেশি রসুনের কোয়া, খাঁটি সরিষার তেল ও সুস্বাদু মসলার সমন্বয়ে তৈরি স্বাস্থ্যকর আচার। কোলেস্টেরল ও রক্তচাপ নিয়ন্ত্রণে সাহায্য করে।', '["হার্ট ভালো রাখতে ও কোলেস্টেরল কমাতে সহায়ক","ভাতের সাথে অনন্য সুস্বাদু ও রুচিকর"]', 'দেশি রসুন, খাঁটি সরিষার তেল, সরিষা দানা, মেথি, জিরা, ধনে, শুকনো মরিচ।', '[{"size":"৩৫০ গ্রাম","regularPrice":450,"price":380,"popular":true}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (8, 'রোজেলা টি / চুকাই চা (Premium Rosella Herbal Tea)', 'premium-rosella-tea', 'tea', 'চা ও হারবাল', 'হার্বাল ওয়েলনেস', 0, 0, 4.9, 192, 'images/wellness_model.png', '["images/wellness_model.png","images/hero_banner_3.png"]', '১০০% প্রাকৃতিক রোজেলা (হিবিস্কাস/চুকাই) ফুলের পাপড়ি দিয়ে তৈরি প্রিমিয়াম ভেষজ চা। প্রচুর অ্যান্টিঅক্সিডেন্ট ও ভিটামিন সি সমৃদ্ধ যা রক্তচাপ ও ওজন নিয়ন্ত্রণে অতুলনীয়। ক্যাফেইনমুক্ত সতেজ পানীয়।', '["উচ্চ রক্তচাপ ও হাইপারটেনশন নিয়ন্ত্রণে সাহায্য করে","শরীরের মেদ কমাতে ও ওজন নিয়ন্ত্রণে সহায়ক","প্রচুর ভিটামিন সি ও অ্যান্টিঅক্সিডেন্ট রোগ প্রতিরোধ বাড়ায়","হৃদযন্ত্র সুস্থ রাখে ও লিভার ডিটক্সে সাহায্য করে"]', '১০০% প্রাকৃতিক রোজেলা (চুকাই/হিবিস্কাস) শুকনো ফুল।', '[{"size":"১০০ গ্রাম","regularPrice":350,"price":290,"popular":true}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (9, 'প্রিমিয়াম সীড মিক্স (Superfood Seed Mix - 5 Seeds Blend)', 'superfood-seed-mix', 'seeds', 'সিড ও সুপারফুড', 'সুপারফুড • ওমেগা-৩ সমৃদ্ধ', 0, 0, 4.9, 235, 'images/morning_model.png', '["images/morning_model.png","images/hero_banner_2.png"]', 'চিয়া সিড, সূর্যমুখী বীজ, কুমড়ার বীজ, অর্গানিক তিসি এবং সাদা তিলের সুষম ও পুষ্টিকর সুপারফুড মিশ্রণ। ওমেগা-৩, ফাইবার ও প্রোটিনে ভরপুর যা প্রতিদিনের পুষ্টির চাহিদা মেটায়।', '["ওমেগা-৩ ফ্যাটি এসিড হার্ট ও রক্তনালী সুস্থ রাখে","উচ্চ খাদ্য আঁশ বা ফাইবার হজমপ্রক্রিয়া সহজ করে","শরীরের শক্তি ও কর্মক্ষমতা সারাদিন ধরে রাখে"]', 'চিয়া সিড, সূর্যমুখী বীজ, কুমড়ার বীজ, তিসি (Flaxseed), সাদা তিল।', '[{"size":"৫০০ গ্রাম","regularPrice":590,"price":500,"popular":true}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (10, 'সীড মিক্স (৫০০g) + রোজেলা টি (১০০g) স্পেশাল হেলথ কম্বো', 'seed-mix-rosella-tea-health-combo', 'combo', 'কম্বো অফার', 'স্পেশাল সেভার কম্বো • বেস্ট ভ্যালু', 0, 0, 5, 310, 'images/hero_banner_3.png', '["images/hero_banner_3.png","images/wellness_model.png"]', 'সুস্থ ও চনমনে জীবনযাপনের সেরা স্বাস্থ্যকর জুড়ি — ৫০০ গ্রাম সুপারফুড সীড মিক্স এবং ১০০ গ্রাম অ্যান্টিঅক্সিডেন্ট সমৃদ্ধ রোজেলা টি একসাথে বিশেষ ছাড়ে।', '["সম্পূর্ণ প্রাকৃতিক পুষ্টি ও অ্যান্টিঅক্সিডেন্টের সংমিশ্রণ","হৃদযন্ত্রের সুরক্ষা ও ওজন নিয়ন্ত্রণে কার্যকর জুড়ি","একসাথে দুটি সুপারফুড বিশেষ সাশ্রয়ী মূল্যে"]', '৫০০ গ্রাম প্রিমিয়াম সীড মিক্স + ১০০ গ্রাম রোজেলা টি।', '[{"size":"কম্বো সেট (সীড মিক্স ৫০০g + রোজেলা টি ১০০g)","regularPrice":850,"price":750,"popular":true}]');
+INSERT INTO products (id, name, slug, category, categoryName, tag, price, regularPrice, rating, reviewCount, image, gallery, description, benefits, ingredients, variants) VALUES (11, '৩টি আচার + ১টি উপহার মেগা প্যাক (3 Pickle + 1 Free Gift Offer)', '3-pickle-plus-free-gift-pack', 'combo', 'কম্বো অফার', 'মেগা অফার • ফ্রি গিফট', 0, 0, 4.9, 210, 'images/hero_banner_1.png', '["images/hero_banner_1.png"]', 'পছন্দের ৩টি স্পেশাল আচার কিনলে পাচ্ছেন আরও ১টি আকর্ষণীয় উপহার প্যাক সম্পূর্ণ ফ্রি! পরিবারের সবার পছন্দমতো সেরা স্বাদের অফার।', '["৩টি আচার কিনলে ১টি সম্পূর্ণ ফ্রি","অসাধারণ খাঁটি স্বাদ ও সেরা ভ্যালু অফার"]', '৩টি প্রিমিয়াম সিলেকশন আচার + ১টি সারপ্রাইজ গিফট প্যাক।', '[{"size":"৩টি আচার + ১টি ফ্রি প্যাক","regularPrice":1300,"price":1090,"popular":true}]');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-7270', '{"name":"???? ??????","phone":"01811223344","address":"????????, ????","city":"ঢাকা"}', '[{"id":1,"name":"?????? ????? ???? ????","variant":"রেগুলার","price":950,"quantity":1}]', 950, 70, 1020, 'Pending', 'Recovered: Landing Page', 'ব্যর্থ অর্ডার রূপান্তর করা হয়েছে। এজেন্টের মাধ্যমে কনফার্মড।', 'null', '{"agent":"????? ?????","action":"ব্যর্থ অর্ডার রূপান্তর করা হয়েছে (পূর্বের ID: FAIL-2381)","actionEn":"Failed order converted to confirmed order (Prev ID: FAIL-2381)","timestamp":"2026-11-10T20:51:08.989Z"}', '2026-11-10T20:51:08.989Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-4524', '{"name":"???? ?????","phone":"01711223344","address":"????-??, ???-?, ????????, ????","city":"Dhaka"}', '[{"price":1250,"quantity":1,"name":"????????? ???? ???? - ??????? ???? (? ????)"}]', 1250, 70, 1320, 'In Courier', 'Landing Page (FB Ad)', '?????????? ???? ??? ?????, ??????? ??????', '{"provider":"Steadfast","trackingCode":"ST-581619","dispatchedAt":"2026-11-10T18:32:27.976Z","weight":1,"codAmount":1320,"status":"In Transit","note":"Handle with care - Preme Farm"}', 'null', '2026-11-10T18:32:27.788Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-2542', '{"name":"FB Ad Test Buyer","phone":"01999887766","address":"?????? ?, ????","city":"Dhaka"}', '[{"price":950,"quantity":1,"name":"?????? ????? ???? ????","id":1,"size":"??? ?????"}]', 950, 70, 1020, 'Confirmed', 'Landing Page (FB Ad)', 'FB Boost Campaign Lead', 'null', 'null', '2026-11-10T18:24:27.046Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-2041', '{"name":"à¦®à¦¾à¦¹à¦®à§à¦¦à§à¦² à¦¹à¦¾à¦¸à¦¾à¦¨","phone":"01712345678","address":"à¦¬à¦¾à§œà¦¿ à§§à§¨, à¦°à§‹à¦¡ à§ª, à¦¸à§‡à¦•à§à¦Ÿà¦° à§­, à¦‰à¦¤à§à¦¤à¦°à¦¾, à¦¢à¦¾à¦•à¦¾","city":"Dhaka"}', '[{"productId":1,"name":"à¦ªà§à¦°à¦¿à¦®à¦¿ à¦«à¦¾à¦°à§à¦® à¦•à¦¾à¦²à§‹ à¦¸à§‹à¦¨à¦¾ (Black Gold)","size":"à§ªà§¦à§¦ à¦—à§à¦°à¦¾à¦®","price":950,"quantity":1}]', 950, 70, 1020, 'Pending', 'Landing Page (FB Ad)', 'à¦¨à¦¤à§à¦¨ à¦…à¦°à§à¦¡à¦¾à¦° à¦à¦¸à§‡à¦›à§‡à¥¤ à¦•à¦² à¦¦à¦¿à§Ÿà§‡ à¦¨à¦¿à¦¶à§à¦šà¦¿à¦¤ à¦•à¦°à¦¤à§‡ à¦¹à¦¬à§‡à¥¤', 'null', 'null', '2026-11-10T23:45:00.000Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-2042', '{"name":"à¦¸à¦¾à§Ÿà¦®à¦¾ à¦¸à§à¦²à¦¤à¦¾à¦¨à¦¾","phone":"01819556677","address":"à¦¨à¦¾à¦¸à¦¿à¦°à¦¾à¦¬à¦¾à¦¦ à¦¹à¦¾à¦‰à¦œà¦¿à¦‚ à¦¸à§‹à¦¸à¦¾à¦‡à¦Ÿà¦¿, à¦°à§‹à¦¡ à§¨, à¦šà¦Ÿà§à¦Ÿà¦—à§à¦°à¦¾à¦®","city":"Outside Dhaka"}', '[{"productId":5,"name":"à¦ªà§à¦°à¦¿à¦®à¦¿à¦¯à¦¼à¦¾à¦® à¦‡à¦²à¦¿à¦¶ à¦®à¦¾à¦›à§‡à¦° à¦†à¦šà¦¾à¦° (Hilsa Pickle)","size":"à§ªà§¦à§¦ à¦—à§à¦°à¦¾à¦®","price":880,"quantity":1},{"productId":8,"name":"à¦°à§‹à¦œà§‡à¦²à¦¾ à¦Ÿà¦¿ (à§§à§¦à§¦ à¦—à§à¦°à¦¾à¦®)","size":"à§§à§¦à§¦ à¦—à§à¦°à¦¾à¦®","price":290,"quantity":1}]', 1170, 130, 1300, 'Pending', 'Main Website', '', 'null', 'null', '2026-11-10T23:30:00.000Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-2038', '{"name":"à¦•à¦¬à¦¿à¦° à¦šà§Œà¦§à§à¦°à§€","phone":"01912889900","address":"à¦¬à¦¾à§œà¦¿ à§§à§®, à¦°à§‹à¦¡ à§©, à¦§à¦¾à¦¨à¦®à¦¨à§à¦¡à¦¿, à¦¢à¦¾à¦•à¦¾","city":"Dhaka"}', '[{"productId":2,"name":"à¦ªà§à¦°à¦¿à¦®à¦¿ à¦«à¦¾à¦°à§à¦® à¦–à¦¾à¦à¦Ÿà¦¿ à¦—à¦¾à¦“à§Ÿà¦¾ à¦˜à¦¿","size":"à§«à§¦à§¦ à¦—à§à¦°à¦¾à¦®","price":890,"quantity":1}]', 890, 70, 960, 'Hold', 'Landing Page (FB Ad)', 'à¦•à¦¾à¦¸à§à¦Ÿà¦®à¦¾à¦° à¦¬à¦²à§‡à¦›à§‡à¦¨ à¦•à¦¾à¦² à¦¦à§à¦ªà§à¦° à§§à§¨à¦Ÿà¦¾à§Ÿ à¦•à¦² à¦•à¦°à§‡ à¦•à¦¨à¦«à¦¾à¦°à§à¦® à¦•à¦°à¦¤à§‡à¥¤', 'null', 'null', '2026-11-10T21:15:00.000Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-2035', '{"name":"à¦¡à¦¾à¦ƒ à¦®à§‹à¦°à§à¦¶à§‡à¦¦ à¦¹à¦¾à¦¸à¦¾à¦¨","phone":"01723445566","address":"à¦‰à¦ªà¦¶à¦¹à¦° à¦¸à§‡à¦•à§à¦Ÿà¦° à§¨, à¦°à¦¾à¦œà¦¶à¦¾à¦¹à§€ à¦¸à¦¦à¦°","city":"Outside Dhaka"}', '[{"productId":1,"name":"à¦ªà§à¦°à¦¿à¦®à¦¿ à¦«à¦¾à¦°à§à¦® à¦•à¦¾à¦²à§‹ à¦¸à§‹à¦¨à¦¾ (Black Gold)","size":"à§§ à¦•à§‡à¦œà¦¿","price":1550,"quantity":1},{"productId":3,"name":"à¦¸à§à¦¨à§à¦¦à¦°à¦¬à¦¨à§‡à¦° à¦ªà§à¦°à¦¾à¦•à§ƒà¦¤à¦¿à¦• à¦–à¦¾à¦à¦Ÿà¦¿ à¦®à¦§à§","size":"à§«à§¦à§¦ à¦—à§à¦°à¦¾à¦®","price":650,"quantity":1}]', 2200, 70, 2200, 'Confirmed', 'Main Website', 'à¦•à¦² à¦¦à¦¿à§Ÿà§‡ à¦­à§‡à¦°à¦¿à¦«à¦¾à¦‡ à¦•à¦°à¦¾ à¦¹à§Ÿà§‡à¦›à§‡à¥¤ à¦¦à§à¦°à§à¦¤ à¦ªà¦¾à¦°à§à¦¸à§‡à¦² à¦ªà¦¾à¦ à¦¾à¦¤à§‡ à¦¹à¦¬à§‡à¥¤', 'null', 'null', '2026-11-10T19:50:00.000Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-2028', '{"name":"à¦¨à¦¾à¦œà¦®à§à¦² à¦¹à§à¦¦à¦¾","phone":"01872170476","address":"à¦ªà§à¦²à¦Ÿ à§®, à¦¬à§à¦²à¦• à¦¸à¦¿, à¦¬à¦¸à§à¦¨à§à¦§à¦°à¦¾ à¦†/à¦, à¦¢à¦¾à¦•à¦¾","city":"Dhaka"}', '[{"productId":1,"name":"à¦ªà§à¦°à¦¿à¦®à¦¿ à¦«à¦¾à¦°à§à¦® à¦•à¦¾à¦²à§‹ à¦¸à§‹à¦¨à¦¾ (Black Gold)","size":"à§ªà§¦à§¦ à¦—à§à¦°à¦¾à¦®","price":950,"quantity":2}]', 1900, 70, 1970, 'In Courier', 'Landing Page (FB Ad)', 'Steadfast à¦•à§à¦°à¦¿à§Ÿà¦¾à¦°à§‡ à¦¬à§à¦•à¦¿à¦‚ à¦¸à¦®à§à¦ªà¦¨à§à¦¨à¥¤', '{"provider":"Steadfast","trackingCode":"ST-492104","dispatchedAt":"2026-11-10T18:00:00.000Z","status":"In Transit","weight":"1.0 kg"}', 'null', '2026-11-10T17:10:00.000Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-2015', '{"name":"à¦¤à¦¾à¦¨à¦­à§€à¦° à¦†à¦¹à¦®à§‡à¦¦","phone":"01711223344","address":"à¦¬à¦¾à§œà¦¿ à§ªà§¨, à¦°à§‹à¦¡ à§­, à¦§à¦¾à¦¨à¦®à¦¨à§à¦¡à¦¿, à¦¢à¦¾à¦•à¦¾","city":"Dhaka"}', '[{"productId":1,"name":"à¦ªà§à¦°à¦¿à¦®à¦¿ à¦«à¦¾à¦°à§à¦® à¦•à¦¾à¦²à§‹ à¦¸à§‹à¦¨à¦¾ (Black Gold)","size":"à§ªà§¦à§¦ à¦—à§à¦°à¦¾à¦®","price":950,"quantity":1}]', 950, 70, 1020, 'Delivered', 'Main Website', 'à¦•à¦¾à¦¸à§à¦Ÿà¦®à¦¾à¦° à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦•à§à¦¯à¦¾à¦¶ à¦¦à¦¿à§Ÿà§‡ à¦ªà¦¾à¦°à§à¦¸à§‡à¦² à¦°à¦¿à¦¸à¦¿à¦­ à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤', '{"provider":"Steadfast","trackingCode":"ST-918241","status":"Delivered"}', 'null', '2026-11-09T14:20:00.000Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-1998', '{"name":"à¦«à¦°à¦¿à¦¦ à¦‰à¦¦à§à¦¦à¦¿à¦¨","phone":"01612998877","address":"à¦®à¦¾à¦¦à¦¾à¦°à§€à¦ªà§à¦° à¦¸à¦¦à¦°, à¦®à¦¾à¦¦à¦¾à¦°à§€à¦ªà§à¦°","city":"Outside Dhaka"}', '[{"productId":6,"name":"à§¬ à¦§à¦°à¦¨à§‡à¦° à¦˜à¦°à§‹à¦¯à¦¼à¦¾ à¦–à¦¾à¦à¦Ÿà¦¿ à¦†à¦šà¦¾à¦° à¦•à¦®à§à¦¬à§‹","size":"à§¬à¦Ÿà¦¿ à¦•à¦®à§à¦¬à§‹","price":1300,"quantity":1}]', 1300, 130, 1430, 'Return', 'Landing Page (FB Ad)', 'à¦•à§à¦°à¦¿à§Ÿà¦¾à¦° à§© à¦¬à¦¾à¦° à¦šà§‡à¦·à§à¦Ÿà¦¾à¦° à¦ªà¦°à¦“ à¦•à¦¾à¦¸à§à¦Ÿà¦®à¦¾à¦° à¦«à§‹à¦¨ à¦°à¦¿à¦¸à¦¿à¦­ à¦•à¦°à§‡à¦¨à¦¨à¦¿, à¦¤à¦¾à¦‡ à¦°à¦¿à¦Ÿà¦¾à¦°à§à¦¨ à¦¹à§Ÿà§‡à¦›à§‡à¥¤', '{"provider":"Pathao","trackingCode":"PT-309182","status":"Returned to Merchant"}', 'null', '2026-11-08T11:40:00.000Z');
+INSERT INTO orders (id, customer, items, subtotal, deliveryCharge, total, status, source, callCenterNote, courier, lastUpdatedBy, createdAt) VALUES ('PF-1992', '{"name":"à¦•à¦¾à¦®à¦°à§à¦² à¦‡à¦¸à¦²à¦¾à¦®","phone":"01511223344","address":"à¦®à¦¿à¦°à¦ªà§à¦° à§§à§¦, à¦¢à¦¾à¦•à¦¾","city":"Dhaka"}', '[{"productId":3,"name":"à¦¸à§à¦¨à§à¦¦à¦°à¦¬à¦¨à§‡à¦° à¦ªà§à¦°à¦¾à¦•à§ƒà¦¤à¦¿à¦• à¦–à¦¾à¦à¦Ÿà¦¿ à¦®à¦§à§","size":"à§«à§¦à§¦ à¦—à§à¦°à¦¾à¦®","price":650,"quantity":1}]', 650, 70, 720, 'Cancelled', 'Main Website', 'à¦•à¦¾à¦¸à§à¦Ÿà¦®à¦¾à¦° à¦­à§à¦²à¦¬à¦¶à¦¤ à¦¡à¦¾à¦¬à¦² à¦…à¦°à§à¦¡à¦¾à¦° à¦•à¦°à§‡à¦›à¦¿à¦²à§‡à¦¨, à¦¤à¦¾à¦‡ à¦à¦Ÿà¦¿ à¦¬à¦¾à¦¤à¦¿à¦² à¦•à¦°à¦¾ à¦¹à§Ÿà§‡à¦›à§‡à¥¤', 'null', 'null', '2026-11-08T09:10:00.000Z');
+INSERT INTO failed_orders (id, customer, product, amount, step, reason, status, createdAt) VALUES ('FAIL-901', '{"name":"মাহমুদুল হাসান","phone":"01712349876","address":"বাড়ি ১২, রোড ৪, সেক্টর ৭, উত্তরা, ঢাকা","city":"Dhaka"}', 'প্রিমি ফার্ম মধুময় কালো সোনা (৫০০ গ্রাম)', 0, '', '', 'Abandoned', '2026-11-10T22:15:00.000Z');
+INSERT INTO failed_orders (id, customer, product, amount, step, reason, status, createdAt) VALUES ('FAIL-902', '{"name":"কামরুল ইসলাম","phone":"01987654321","address":"মাস্টারপাড়া, সৈয়দপুর, নীলফামারী","city":"Outside Dhaka"}', 'সুন্দরবনের প্রাকৃতিক খলিসা ফুলের মধু (১ কেজি)', 0, '', '', 'Abandoned', '2026-11-10T23:30:00.000Z');
+INSERT INTO settings (key, value) VALUES ('general', '{"store":{"name":"Preme Farm (প্রিমি ফার্ম)","domain":"premefarm.com","hotline":"01872170476","supportEmail":"support@premefarm.com","address":"ঢাকা, বাংলাদেশ","deliveryChargeInsideDhaka":70,"deliveryChargeOutsideDhaka":130,"freeDeliveryThreshold":1800},"couriers":{"steadfast":{"enabled":true,"name":"Steadfast Courier","baseUrl":"https://portal.steadfast.com.bd/api/v1/create_order","apiKey":"sf_live_api_key_premefarm_2026","secretKey":"sf_secret_key_9948271038","autoDispatch":false,"sandbox":false},"pathao":{"enabled":true,"name":"Pathao Courier","baseUrl":"https://api-hermes.pathao.com/aladdin/api/v1/orders","clientId":"pathao_client_premefarm_102","clientSecret":"pathao_secret_99812401","storeId":"store_dhaka_01","sandbox":false},"redx":{"enabled":false,"name":"RedX Courier","baseUrl":"https://openapi.redx.com.bd/v1.0.0-beta/parcels","apiToken":"","sandbox":false}}}');
+INSERT INTO cms (key, value) VALUES ('content', '{"header":{"topTicker":"🌿 বিশেষ মেগা অফার: ২ বা ততোধিক প্রোডাক্ট অর্ডারে সারা দেশে ক্যাশ অন ডেলিভারি একদম ফ্রি!","hotline":"01872170476","logoImage":"images/logo.png","brandName":"Preme Farm","brandTagline":"প্রিমি ফার্ম • সুখী জীবনের জন্য স্বাস্থ্যকর খাবার"},"banners":[{"id":1,"badge":"⚡ কাজের ক্লান্তি দূর করার ন্যাচারাল ফর্মুলা","title":"অফিসের কাজের ক্লান্তি? <br><span class=\"gold\">সারাদিন থাকুন চাঙ্গা ও প্রাণবন্ত!</span>","desc":"টানা কাজের চাপ আর শারীরিক দুর্বলতাকে বিদায় জানান। কাজের টেবিলে রাখুন প্রিমি ফার্মের মধুময় কালো সোনা — ১০০% প্রাকৃতিক স্ট্যামিনা বুস্টার।","image":"images/hero_banner_1.png","buttonText":"🛍️ এখনই অর্ডার করুন","productId":1},{"id":2,"badge":"🌿 সুস্থ ও ফিট থাকার সহজ অভ্যাস","title":"খাঁটি পণ্যের বিশ্বস্ত ঠিকানা <br><span class=\"gold\">আপনার সুস্থতার সিক্রেট পার্টনার!</span>","desc":"প্রতিদিন সকালে মাত্র এক চামচেই ফিরিয়ে আনুন অফুরন্ত উদ্যম, ক্লান্তিহীন কর্মশক্তি ও অটুট রোগ প্রতিরোধ ক্ষমতা।","image":"images/hero_banner_2.png","buttonText":"🛍️ ট্রায়াল প্যাক অর্ডার করুন","productId":1},{"id":3,"badge":"🍵 ১০০% খাঁটি ভেষজ ওয়েলনেস","title":"সুখী জীবনের জন্য <br><span class=\"gold\">স্বাস্থ্যকর ও খাঁটি খাবার</span>","desc":"সুন্দরবনের কাঁচা মধু, দানাদার গাওয়া ঘি, রোজেলা টি ও ঘরোয়া আচারের খাঁটি স্বাদ ঘরে বসেই উপভোগ করুন।","image":"images/hero_banner_3.png","buttonText":"🛍️ শপ দেখুন","productId":2}],"footer":{"aboutText":"সুখী জীবনের জন্য স্বাস্থ্যকর ও খাঁটি খাবার পৌঁছে দিতে প্রিমি ফার্ম নিবেদিতপ্রাণ। কোনো রাসায়নিক প্রিজারভেটিভ বা ভেজাল নেই — শতভাগ প্রাকৃতিক ও নিরাপদ পথ্য।","hotline":"01872170476","hotlineHours":"সকাল ৯টা - রাত ১১টা","address":"ঢাকা, বাংলাদেশ","copyright":"© ২০২৬ Preme Farm (প্রিমি ফার্ম)। সর্বস্বত্ব সংরক্ষিত।"},"staff":[{"id":"staff-admin","name":"সুপার এডমিন","username":"admin","pin":"1234","role":"Super Admin","roleTitleBn":"সুপার এডমিন","roleTitleEn":"Super Admin","permissions":["*"]},{"id":"staff-tanvir","name":"তানভীর (Agent-01)","username":"tanvir","pin":"1234","role":"Call Center Agent","roleTitleBn":"কল সেন্টার এক্সিকিউটিভ","roleTitleEn":"Call Center Agent","permissions":["orders"]},{"id":"staff-sadia","name":"সাদিয়া (Agent-02)","username":"sadia","pin":"1234","role":"Call Center Agent","roleTitleBn":"কল সেন্টার এক্সিকিউটিভ","roleTitleEn":"Call Center Agent","permissions":["orders"]},{"id":"staff-rafiq","name":"রফিক (Supervisor)","username":"rafiq","pin":"1234","role":"Supervisor","roleTitleBn":"কল সেন্টার সুপারভাইজার","roleTitleEn":"Supervisor","permissions":["orders","audit","blacklist"]},{"id":"staff-marketing","name":"মার্কেটিং স্পেশালিস্ট","username":"marketing","pin":"1234","role":"Marketing","roleTitleBn":"মার্কেটিং স্পেশালিস্ট","roleTitleEn":"Marketing Specialist","permissions":["landing","coupons"]}]}');
+INSERT OR IGNORE INTO coupons (code, discount, type, minOrder, validUntil, usageCount, status) VALUES ('PREME10', 0, 'fixed', 800, '', 0, 'Active');
+INSERT OR IGNORE INTO coupons (code, discount, type, minOrder, validUntil, usageCount, status) VALUES ('EID50', 0, 'fixed', 500, '', 0, 'Active');
+INSERT OR IGNORE INTO coupons (code, discount, type, minOrder, validUntil, usageCount, status) VALUES ('FREESHIP', 0, 'shipping', 1200, '', 0, 'Active');
+INSERT OR REPLACE INTO users (id, phone, name, password, role, createdAt) VALUES ('ADMIN-01', 'admin@premefarm.com', 'সুপার এডমিন', 'Admin@PremeFarm', 'super_admin', datetime('now'));
+INSERT OR REPLACE INTO users (id, phone, name, password, role, createdAt) VALUES ('USER-DEMO', '01700000000', 'কাস্টমার ডেমো', '123456', 'customer', datetime('now'));
