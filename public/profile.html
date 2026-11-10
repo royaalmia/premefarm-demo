@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>একাউন্ট পেজ | Preme Farm (প্রিমি ফার্ম)</title>
+  <meta name="description" content="প্রিমি ফার্ম কাস্টমার একাউন্ট - লগইন, রেজিস্টার, পূর্বের অর্ডার এবং ডেলিভারি ঠিকানা পরিচালনা করুন।">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    *, *::before, *::after, html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span {
+      font-family: 'Hind Siliguri', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    }
+    body {
+      background-color: #fafbfc;
+      color: #222222;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Container */
+    .profile-page-wrapper {
+      max-width: 1140px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* ================= AUTH SPLIT VIEW (UNLOGGED) ================= */
+    .auth-split-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 40px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+    @media (max-width: 768px) {
+      .auth-split-card {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 36px;
+      }
+    }
+    .auth-left-col {
+      padding-right: 20px;
+    }
+    .auth-right-col {
+      border-left: 1px solid #eef2f6;
+      padding-left: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    @media (max-width: 768px) {
+      .auth-right-col {
+        border-left: none;
+        border-top: 1px solid #eef2f6;
+        padding-left: 0;
+        padding-top: 30px;
+      }
+    }
+
+    .auth-heading {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0d4d29;
+      margin-bottom: 22px;
+    }
+    .auth-label {
+      display: block;
+      font-size: 14.5px;
+      color: #374151;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .auth-label span {
+      color: #dc2626;
+    }
+    .auth-input-wrap {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #ffffff;
+    }
+    .auth-input:focus {
+      border-color: #0d4d29;
+      box-shadow: 0 0 0 2px rgba(13, 77, 41, 0.1);
+    }
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .btn-auth-darkgreen {
+      background: #093b1f;
+      color: #ffffff;
+      border: none;
+      padding: 11px 28px;
+      border-radius: 4px;
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: inline-block;
+      transition: background 0.2s;
+      text-transform: uppercase;
+    }
+    .btn-auth-darkgreen:hover {
+      background: #062b16;
+    }
+
+    .btn-auth-lime {
+      background: #7cb305;
+      color: #ffffff;
+      border: none;
+      padding: 11px 32px;
+      border-radius: 4px;
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: inline-block;
+      transition: background 0.2s;
+      text-transform: uppercase;
+    }
+    .btn-auth-lime:hover {
+      background: #689f04;
+    }
+
+    .auth-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      font-size: 14px;
+      color: #4b5563;
+    }
+    .auth-bottom-row a {
+      color: #0d4d29;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .auth-bottom-row a:hover {
+      text-decoration: underline;
+    }
+
+    /* ================= CUSTOMER DASHBOARD (LOGGED IN) ================= */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 40px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 36px 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+    @media (max-width: 860px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 24px;
+      }
+    }
+
+    /* Left Sidebar */
+    .dashboard-sidebar-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0d4d29;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .dashboard-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dashboard-menu li a {
+      display: block;
+      padding: 10px 16px;
+      color: #374151;
+      text-decoration: none;
+      font-size: 15.5px;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .dashboard-menu li a:hover {
+      background: #f3f4f6;
+      color: #0d4d29;
+    }
+    .dashboard-menu li a.active {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    /* Right Content Area */
+    .dashboard-content-area {
+      border-left: 1px solid #f1f5f9;
+      padding-left: 36px;
+    }
+    @media (max-width: 860px) {
+      .dashboard-content-area {
+        border-left: none;
+        padding-left: 0;
+      }
+    }
+
+    .welcome-greeting {
+      font-size: 17px;
+      color: #111827;
+      margin-bottom: 14px;
+    }
+    .welcome-greeting b {
+      color: #0d4d29;
+    }
+    .welcome-greeting a {
+      color: #7cb305;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .welcome-greeting a:hover {
+      text-decoration: underline;
+    }
+
+    .welcome-instruction {
+      font-size: 15px;
+      color: #4b5563;
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+    .welcome-instruction a {
+      color: #7cb305;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .welcome-instruction a:hover {
+      text-decoration: underline;
+    }
+
+    /* Big Action Cards Grid */
+    .dashboard-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 20px;
+    }
+    .dash-action-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .dash-action-card:hover {
+      border-color: #0d4d29;
+      box-shadow: 0 6px 18px rgba(13, 77, 41, 0.08);
+      transform: translateY(-2px);
+    }
+    .dash-card-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 14px;
+      color: #9ca3af;
+      transition: color 0.2s;
+    }
+    .dash-action-card:hover .dash-card-icon {
+      color: #0d4d29;
+    }
+    .dash-card-title {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    /* Tab Panes */
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Orders Table */
+    .orders-history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+    .orders-history-table th {
+      background: #f8fafc;
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+    .orders-history-table td {
+      padding: 14px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+    .badge-status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge-status.pending { background: #fef3c7; color: #92400e; }
+    .badge-status.confirmed { background: #dbeafe; color: #1e40af; }
+    .badge-status.in-courier { background: #e0e7ff; color: #4338ca; }
+    .badge-status.delivered { background: #dcfce7; color: #15803d; }
+    .badge-status.return { background: #fee2e2; color: #991b1b; }
+    .badge-status.cancelled { background: #f1f5f9; color: #64748b; }
+  </style>
+</head>
+<body>
+
+  <!-- Unified Store Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="/" class="brand-logo-link">
+          <img src="images/logo.png" alt="Preme Farm Logo" class="brand-logo-img">
+        </a>
+      </div>
+
+      <nav class="header-nav">
+        <a href="/" class="nav-item">হোম</a>
+        <a href="/shop" class="nav-item">শপ</a>
+      </nav>
+
+      <!-- Search Bar matching reference image -->
+      <div class="header-search-wrap">
+        <form action="/shop" method="GET" class="header-search-form" onsubmit="handleHeaderSearch(event)">
+          <input type="text" name="q" id="header-search-input" placeholder="Search for products" autocomplete="off" oninput="onHeaderSearchInput(this.value)">
+          <button type="submit" class="header-search-btn" title="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </form>
+        <div id="header-search-dropdown" class="header-search-dropdown"></div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Circular Profile Icon -->
+        <a href="/profile" class="header-profile-btn active" title="আমার একাউন্ট">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+
+        <!-- Compact Lime Green Cart Pill -->
+        <div class="header-cart-pill-wrap" onclick="PremeStore.openCartDrawer()" title="শপিং কার্ট">
+          <div class="header-cart-pill">
+            <div class="cart-pill-circle">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+            </div>
+            <span class="cart-pill-total" id="header-cart-total">৳ ০</span>
+            <span class="cart-pill-badge" id="header-cart-count">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Profile Page Wrapper -->
+  <div class="profile-page-wrapper">
+
+    <!-- ================= VIEW 1: AUTHENTICATION (LOGGED OUT) ================= -->
+    <div id="unauthenticated-section">
+
+      <!-- 1A: LOGIN VIEW (Default) -->
+      <div class="auth-split-card" id="view-login">
+        <!-- Left: Login Form -->
+        <div class="auth-left-col">
+          <h2 class="auth-heading">Login</h2>
+          <form onsubmit="handleCustomerLogin(event)">
+            <label class="auth-label">Username or email address <span>*</span></label>
+            <div class="auth-input-wrap">
+              <input type="text" id="login-phone" class="auth-input" placeholder="মোবাইল নম্বর বা ইমেইল..." required>
+            </div>
+
+            <label class="auth-label">Password <span>*</span></label>
+            <div class="auth-input-wrap">
+              <input type="password" id="login-password" class="auth-input" placeholder="আপনার পাসওয়ার্ড..." required>
+              <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('login-password')">👁️</button>
+            </div>
+
+            <button type="submit" class="btn-auth-darkgreen" id="login-submit-btn">LOG IN</button>
+
+            <div class="auth-bottom-row">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" id="remember-me" checked> Remember me
+              </label>
+              <a href="#" onclick="alert('পাসওয়ার্ড ভুলে গেলে সরাসরি প্রিমি ফার্ম হটলাইনে 01872170476 কল করুন।'); return false;">Lost your password?</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Register Prompt -->
+        <div class="auth-right-col">
+          <h2 class="auth-heading">রেজিস্টার</h2>
+          <p style="font-size: 15px; color: #4b5563; line-height: 1.8; margin-bottom: 28px;">
+            <b>Preme Farm-প্রিমি ফার্ম</b> -এ রেজিস্টার করার মাধ্যমে আপনার অর্ডার করার প্রক্রিয়াটি দ্রুত এবং সহজতর করুন। নিচের বাটনটিতে ক্লিক করে একটি অ্যাকাউন্ট তৈরি করুন এবং আমাদের কাছ থেকে আপনার খাঁটি পণ্য ক্রয় নিশ্চিত করুন।
+          </p>
+          <div>
+            <button type="button" class="btn-auth-darkgreen" onclick="showAuthView('register')">REGISTER</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1B: REGISTER VIEW -->
+      <div class="auth-split-card" id="view-register" style="display: none;">
+        <!-- Left: Register Form -->
+        <div class="auth-left-col">
+          <h2 class="auth-heading">Register</h2>
+          <form onsubmit="handleCustomerRegister(event)">
+            <label class="auth-label">Username <span>*</span></label>
+            <div class="auth-input-wrap">
+              <input type="text" id="reg-name" class="auth-input" placeholder="আপনার পূর্ণ নাম..." required>
+            </div>
+
+            <label class="auth-label">Mobile / Email address <span>*</span></label>
+            <div class="auth-input-wrap">
+              <input type="text" id="reg-phone" class="auth-input" placeholder="১১ ডিজিটের মোবাইল নম্বর..." required>
+            </div>
+
+            <label class="auth-label">Password <span>*</span></label>
+            <div class="auth-input-wrap">
+              <input type="password" id="reg-password" class="auth-input" placeholder="কমপক্ষে ৪ অক্ষরের পাসওয়ার্ড..." required>
+              <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('reg-password')">👁️</button>
+            </div>
+
+            <button type="submit" class="btn-auth-darkgreen" id="reg-submit-btn">REGISTER</button>
+          </form>
+        </div>
+
+        <!-- Right: Login Prompt -->
+        <div class="auth-right-col">
+          <h2 class="auth-heading">লগইন</h2>
+          <p style="font-size: 15px; color: #4b5563; line-height: 1.8; margin-bottom: 28px;">
+            আপনার মোবাইল নম্বর এবং পাসওয়ার্ড দিয়ে লগ ইন করুন, এবং আজই কেনাকাটা শুরু করুন!
+          </p>
+          <div>
+            <button type="button" class="btn-auth-lime" onclick="showAuthView('login')">LOGIN</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ================= VIEW 2: CUSTOMER DASHBOARD (LOGGED IN) ================= -->
+    <div id="authenticated-section" style="display: none;">
+      <div class="dashboard-layout">
+        
+        <!-- Left Sidebar -->
+        <aside class="dashboard-sidebar">
+          <h3 class="dashboard-sidebar-title">একাউন্ট পেজ</h3>
+          <ul class="dashboard-menu">
+            <li><a href="#" class="active" id="menu-dashboard" onclick="switchCustomerTab('dashboard', event)">Dashboard</a></li>
+            <li><a href="#" id="menu-orders" onclick="switchCustomerTab('orders', event)">Orders</a></li>
+            <!-- Note: Downloads option removed as explicitly requested -->
+            <li><a href="#" id="menu-address" onclick="switchCustomerTab('address', event)">Address</a></li>
+            <li><a href="#" id="menu-details" onclick="switchCustomerTab('details', event)">Account details</a></li>
+            <li><a href="#" onclick="handleCustomerLogout(event)" style="color: #dc2626;">Logout</a></li>
+          </ul>
+        </aside>
+
+        <!-- Right Content Area -->
+        <main class="dashboard-content-area">
+          
+          <!-- TAB A: DASHBOARD HOME (Matching Reference Image) -->
+          <div class="tab-pane active" id="pane-dashboard">
+            <div class="welcome-greeting">
+              Hello <b id="greeting-username">গ্রাহক</b> (not <span id="greeting-username-alt">গ্রাহক</span>? <a href="#" onclick="handleCustomerLogout(event)">Log out</a>)
+            </div>
+            
+            <p class="welcome-instruction">
+              আপনার একাউন্ট ড্যাশবোর্ড থেকে আপনি সহজেই আপনার সাম্প্রতিক 
+              <a href="#" onclick="switchCustomerTab('orders', event)">অর্ডারসমূহ</a> দেখতে পারবেন, 
+              ডেলিভারি ও বিলিং <a href="#" onclick="switchCustomerTab('address', event)">ঠিকানা</a> পরিচালনা করতে পারবেন এবং 
+              <a href="#" onclick="switchCustomerTab('details', event)">পাসওয়ার্ড ও একাউন্ট বিবরণ</a> পরিবর্তন করতে পারবেন।
+            </p>
+
+            <!-- 4 Clean Action Cards (NO Downloads) -->
+            <div class="dashboard-cards-grid">
+              
+              <!-- 1. Orders Card -->
+              <div class="dash-action-card" onclick="switchCustomerTab('orders')">
+                <svg class="dash-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span class="dash-card-title">Orders</span>
+              </div>
+
+              <!-- 2. Address Card -->
+              <div class="dash-action-card" onclick="switchCustomerTab('address')">
+                <svg class="dash-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span class="dash-card-title">Address</span>
+              </div>
+
+              <!-- 3. Account details Card -->
+              <div class="dash-action-card" onclick="switchCustomerTab('details')">
+                <svg class="dash-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="dash-card-title">Account details</span>
+              </div>
+
+              <!-- 4. Logout Card -->
+              <div class="dash-action-card" onclick="handleCustomerLogout(event)">
+                <svg class="dash-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span class="dash-card-title">Logout</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TAB B: ORDERS LIST -->
+          <div class="tab-pane" id="pane-orders">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h3 style="font-size: 20px; font-weight: 800; color: #0d4d29;">আমার অর্ডারসমূহ</h3>
+              <a href="/shop" class="btn-auth-darkgreen" style="padding: 8px 16px; font-size: 13px;">+ নতুন অর্ডার করুন</a>
+            </div>
+
+            <div id="customer-orders-container">
+              <p style="color: #64748b; font-size: 14.5px;">অর্ডার লোড হচ্ছে...</p>
+            </div>
+          </div>
+
+          <!-- TAB C: ADDRESS MANAGEMENT -->
+          <div class="tab-pane" id="pane-address">
+            <h3 style="font-size: 20px; font-weight: 800; color: #0d4d29; margin-bottom: 20px;">ডেলিভারি ঠিকানা</h3>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">
+              নিচের ঠিকানাটি আপনার ক্যাশ অন ডেলিভারি অর্ডারে ডিফল্ট শিপিং এড্রেস হিসেবে ব্যবহার করা হবে।
+            </p>
+            <form onsubmit="handleSaveAddress(event)" style="max-width: 500px;">
+              <label class="auth-label">সম্পূর্ণ ঠিকানা <span>*</span></label>
+              <div class="auth-input-wrap">
+                <textarea id="addr-input" class="auth-input" rows="3" placeholder="বাড়ি নং, রোড নং, এলাকা, থানা, জেলা..." required></textarea>
+              </div>
+
+              <label class="auth-label">ডেলিভারি জোন <span>*</span></label>
+              <div class="auth-input-wrap">
+                <select id="addr-city" class="auth-input">
+                  <option value="Dhaka">ঢাকার ভেতরে (ডেলিভারি চার্জ ৳৭০)</option>
+                  <option value="Outside Dhaka">ঢাকার বাইরে (ডেলিভারি চার্জ ৳১৩০)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn-auth-darkgreen">ঠিকানা সংরক্ষণ করুন</button>
+            </form>
+          </div>
+
+          <!-- TAB D: ACCOUNT DETAILS -->
+          <div class="tab-pane" id="pane-details">
+            <h3 style="font-size: 20px; font-weight: 800; color: #0d4d29; margin-bottom: 20px;">একাউন্ট তথ্য ও পাসওয়ার্ড</h3>
+            <form onsubmit="handleSaveAccountDetails(event)" style="max-width: 500px;">
+              <label class="auth-label">পূর্ণ নাম <span>*</span></label>
+              <div class="auth-input-wrap">
+                <input type="text" id="details-name" class="auth-input" required>
+              </div>
+
+              <label class="auth-label">মোবাইল নম্বর (পরিবর্তনযোগ্য নয়)</label>
+              <div class="auth-input-wrap">
+                <input type="text" id="details-phone" class="auth-input" style="background:#f1f5f9;" readonly>
+              </div>
+
+              <div style="margin: 24px 0 16px; border-top: 1px dashed #e2e8f0; padding-top: 16px;">
+                <h4 style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 12px;">পাসওয়ার্ড পরিবর্তন (ঐচ্ছিক)</h4>
+                
+                <label class="auth-label">নতুন পাসওয়ার্ড</label>
+                <div class="auth-input-wrap">
+                  <input type="password" id="details-new-pwd" class="auth-input" placeholder="পরিবর্তন না করতে চাইলে ফাঁকা রাখুন...">
+                </div>
+              </div>
+
+              <button type="submit" class="btn-auth-darkgreen">তথ্য হালনাগাদ করুন</button>
+            </form>
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Cart Drawer Component -->
+  <div class="cart-overlay" id="cart-overlay" onclick="PremeStore.closeCartDrawer()"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>আপনার শপিং কার্ট</h3>
+      <button class="cart-close-btn" onclick="PremeStore.closeCartDrawer()">✕</button>
+    </div>
+    <div class="cart-items-body" id="cart-items-body"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>সাবটোটাল:</span>
+        <span id="cart-drawer-subtotal">৳০</span>
+      </div>
+      <a href="/cart" class="btn-primary-large" style="width: 100%; justify-content: center;">অর্ডারে এগিয়ে যান ➔</a>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    let activeCustomer = null;
+
+    function togglePasswordVisibility(id) {
+      const input = document.getElementById(id);
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    }
+
+    function showAuthView(view) {
+      document.getElementById('view-login').style.display = view === 'login' ? 'grid' : 'none';
+      document.getElementById('view-register').style.display = view === 'register' ? 'grid' : 'none';
+    }
+
+    function switchCustomerTab(tabName, evt) {
+      if (evt) evt.preventDefault();
+      
+      // Update Menu Links
+      document.querySelectorAll('.dashboard-menu a').forEach(a => a.classList.remove('active'));
+      const activeMenu = document.getElementById(`menu-${tabName}`);
+      if (activeMenu) activeMenu.classList.add('active');
+
+      // Update Panes
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      const pane = document.getElementById(`pane-${tabName}`);
+      if (pane) pane.classList.add('active');
+
+      if (tabName === 'orders') {
+        loadCustomerOrders();
+      }
+    }
+
+    // Check Auth State on Page Load
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('premefarm_current_user');
+      if (saved) {
+        try {
+          activeCustomer = JSON.parse(saved);
+          renderCustomerDashboard();
+        } catch(e) {
+          localStorage.removeItem('premefarm_current_user');
+          renderAuthForms();
+        }
+      } else {
+        renderAuthForms();
+      }
+    });
+
+    function renderAuthForms() {
+      document.getElementById('unauthenticated-section').style.display = 'block';
+      document.getElementById('authenticated-section').style.display = 'none';
+      showAuthView('login');
+    }
+
+    function renderCustomerDashboard() {
+      document.getElementById('unauthenticated-section').style.display = 'none';
+      document.getElementById('authenticated-section').style.display = 'block';
+
+      // Set Greetings
+      const name = activeCustomer.name || 'গ্রাহক';
+      document.getElementById('greeting-username').textContent = name;
+      document.getElementById('greeting-username-alt').textContent = name;
+
+      // Populate Address Form
+      document.getElementById('addr-input').value = activeCustomer.address || '';
+      if (activeCustomer.city) {
+        document.getElementById('addr-city').value = activeCustomer.city;
+      }
+
+      // Populate Account Details Form
+      document.getElementById('details-name').value = activeCustomer.name || '';
+      document.getElementById('details-phone').value = activeCustomer.phone || '';
+
+      switchCustomerTab('dashboard');
+    }
+
+    // LOGIN ACTION
+    async function handleCustomerLogin(e) {
+      e.preventDefault();
+      const phone = document.getElementById('login-phone').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('login-submit-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'লগইন হচ্ছে...';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, password })
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
+          activeCustomer = data.user;
+          localStorage.setItem('premefarm_current_user', JSON.stringify(data.user));
+          renderCustomerDashboard();
+        } else {
+          alert(data.message || 'ভুল মোবাইল নম্বর অথবা পাসওয়ার্ড।');
+        }
+      } catch (err) {
+        alert('সার্ভারে যোগাযোগ করা যাচ্ছে না। আবার চেষ্টা করুন।');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'LOG IN';
+      }
+    }
+
+    // REGISTER ACTION
+    async function handleCustomerRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const btn = document.getElementById('reg-submit-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'রেজিস্টার হচ্ছে...';
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, password })
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
+          alert('অভিনন্দন! আপনার প্রিমি ফার্ম একাউন্ট সফলভাবে তৈরি হয়েছে।');
+          activeCustomer = data.user;
+          localStorage.setItem('premefarm_current_user', JSON.stringify(data.user));
+          renderCustomerDashboard();
+        } else {
+          alert(data.message || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে।');
+        }
+      } catch (err) {
+        alert('সার্ভারে সমস্যা দেখা দিয়েছে।');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'REGISTER';
+      }
+    }
+
+    // LOGOUT
+    function handleCustomerLogout(e) {
+      if (e) e.preventDefault();
+      if (confirm('আপনি কি নিশ্চিতভাবে একাউন্ট থেকে লগআউট করতে চান?')) {
+        localStorage.removeItem('premefarm_current_user');
+        activeCustomer = null;
+        renderAuthForms();
+      }
+    }
+
+    // LOAD CUSTOMER ORDERS
+    async function loadCustomerOrders() {
+      const container = document.getElementById('customer-orders-container');
+      if (!activeCustomer || !activeCustomer.phone) {
+        container.innerHTML = '<p>কোনো অর্ডার পাওয়া যায়নি।</p>';
+        return;
+      }
+
+      container.innerHTML = '<p style="color:#64748b;">অর্ডার হিস্ট্রি লোড হচ্ছে...</p>';
+
+      try {
+        const res = await fetch(`/api/orders/track/${activeCustomer.phone}`);
+        const data = await res.json();
+        const orders = data.data || [];
+
+        if (orders.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">
+              <p style="font-size: 16px; color: #64748b; margin-bottom: 14px;">আপনার কোনো পূর্ববর্তী অর্ডার পাওয়া যায়নি।</p>
+              <a href="/shop" class="btn-auth-darkgreen">এখনই শপ থেকে অর্ডার করুন</a>
+            </div>
+          `;
+          return;
+        }
+
+        let html = `
+          <div style="overflow-x: auto;">
+            <table class="orders-history-table">
+              <thead>
+                <tr>
+                  <th>অর্ডার আইডি</th>
+                  <th>তারিখ</th>
+                  <th>পণ্যের বিবরণ</th>
+                  <th>মোট বিল</th>
+                  <th>স্ট্যাটাস</th>
+                  <th>কুরিয়ার ট্র্যাকিং</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        orders.forEach(o => {
+          const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
+          const itemsSummary = (o.items || []).map(i => `${i.name} (x${i.quantity || 1})`).join('<br>');
+          
+          let statusClass = 'pending';
+          let statusText = o.status || 'Pending';
+          if (statusText === 'Confirmed') statusClass = 'confirmed';
+          else if (statusText === 'In Courier' || statusText === 'Shipped') statusClass = 'in-courier';
+          else if (statusText === 'Delivered') statusClass = 'delivered';
+          else if (statusText === 'Return') statusClass = 'return';
+          else if (statusText === 'Cancelled') statusClass = 'cancelled';
+
+          let courierInfo = '<span style="color:#94a3b8; font-size:12px;">প্রসেসিং হচ্ছে</span>';
+          if (o.courier && o.courier.trackingCode) {
+            courierInfo = `
+              <b style="color:#0d4d29;">${o.courier.provider}</b><br>
+              <span style="font-family:monospace; background:#eef5f0; padding:2px 6px; border-radius:4px; font-size:12px; font-weight:800;">
+                ${o.courier.trackingCode}
+              </span>
+            `;
+          }
+
+          html += `
+            <tr>
+              <td><b style="color: #0d4d29;">#${o.id}</b></td>
+              <td>${dateStr}</td>
+              <td style="font-size: 13px; max-width: 200px;">${itemsSummary}</td>
+              <td><b>৳${o.total}</b><br><span style="font-size:11px; color:#64748b;">COD</span></td>
+              <td><span class="badge-status ${statusClass}">${statusText}</span></td>
+              <td>${courierInfo}</td>
+            </tr>
+          `;
+        });
+
+        html += `</tbody></table></div>`;
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = '<p style="color: #dc2626;">অর্ডার লোড করতে সমস্যা হয়েছে।</p>';
+      }
+    }
+
+    // SAVE ADDRESS
+    async function handleSaveAddress(e) {
+      e.preventDefault();
+      const address = document.getElementById('addr-input').value.trim();
+      const city = document.getElementById('addr-city').value;
+
+      try {
+        const res = await fetch('/api/auth/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: activeCustomer.phone, address, city })
+        });
+        const data = await res.json();
+        if (data.success) {
+          activeCustomer.address = address;
+          activeCustomer.city = city;
+          localStorage.setItem('premefarm_current_user', JSON.stringify(activeCustomer));
+          alert('ডেলিভারি ঠিকানা সফলভাবে সংরক্ষণ করা হয়েছে!');
+        } else {
+          alert('ঠিকানা সেভ করা যায়নি।');
+        }
+      } catch (err) {
+        alert('সার্ভারে যোগাযোগ করা যায়নি।');
+      }
+    }
+
+    // SAVE ACCOUNT DETAILS
+    async function handleSaveAccountDetails(e) {
+      e.preventDefault();
+      const name = document.getElementById('details-name').value.trim();
+      const newPassword = document.getElementById('details-new-pwd').value;
+
+      const payload = { phone: activeCustomer.phone, name };
+      if (newPassword) payload.newPassword = newPassword;
+
+      try {
+        const res = await fetch('/api/auth/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          activeCustomer.name = name;
+          localStorage.setItem('premefarm_current_user', JSON.stringify(activeCustomer));
+          document.getElementById('greeting-username').textContent = name;
+          document.getElementById('greeting-username-alt').textContent = name;
+          document.getElementById('details-new-pwd').value = '';
+          alert('একাউন্ট তথ্য সফলভাবে হালনাগাদ করা হয়েছে!');
+        } else {
+          alert('তথ্য আপডেট করা যায়নি।');
+        }
+      } catch (err) {
+        alert('সার্ভারে সমস্যা হয়েছে।');
+      }
+    }
+  </script>
+</body>
+</html>

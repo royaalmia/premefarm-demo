@@ -1,0 +1,10 @@
+[
+  { "id": "all", "name": "সব প্রোডাক্ট", "icon": "🛍️", "count": 10 },
+  { "id": "kalo-shona", "name": "কালো সোনা", "icon": "✨", "count": 1 },
+  { "id": "honey", "name": "মধু", "icon": "🍯", "count": 2 },
+  { "id": "ghee", "name": "ঘি", "icon": "🧈", "count": 1 },
+  { "id": "pickle", "name": "আচার", "icon": "🌶️", "count": 3 },
+  { "id": "tea", "name": "চা ও হারবাল", "icon": "🍵", "count": 1 },
+  { "id": "seeds", "name": "সিড ও সুপারফুড", "icon": "🌱", "count": 1 },
+  { "id": "combo", "name": "কম্বো অফার", "icon": "🎁", "count": 2 }
+]

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>শপ | Preme Farm (প্রিমি ফার্ম)</title>
+  <meta name="description" content="প্রিমি ফার্ম অনলাইন শপ - খাঁটি মধু, গাওয়া ঘি, ইলিশ আচার, রোজেলা চা ও ভেষজ পণ্যের বিশ্বস্ত প্রতিষ্ঠান।">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    *, *::before, *::after, html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span {
+      font-family: 'Hind Siliguri', 'Noto Sans Bengali', -apple-system, sans-serif !important;
+    }
+
+    /* Modern Shop 2-Column Layout */
+    .shop-layout {
+      max-width: 1240px;
+      margin: 30px auto 60px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .shop-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .shop-sidebar {
+        position: static;
+        padding: 14px;
+        border-radius: 14px;
+      }
+      .sidebar-title {
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        font-size: 16px;
+      }
+      .category-list {
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+        gap: 8px;
+      }
+      .category-btn {
+        width: auto;
+        white-space: nowrap;
+        padding: 8px 14px;
+        font-size: 13.5px;
+      }
+    }
+
+    /* Left Sidebar: Categories */
+    .shop-sidebar {
+      background: #ffffff;
+      border: 1.5px solid #dce8dd;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+      position: sticky;
+      top: 90px;
+    }
+
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0d4d29;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f0e9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .category-btn {
+      width: 100%;
+      text-align: left;
+      padding: 11px 16px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: #f7faf8;
+      color: #2d3e30;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .category-btn:hover {
+      background: #eef6f0;
+      color: #0d4d29;
+      border-color: #c9ded0;
+    }
+
+    .category-btn.active {
+      background: #0d4d29;
+      color: #ffffff;
+      border-color: #0d4d29;
+      box-shadow: 0 4px 12px rgba(13, 77, 41, 0.2);
+    }
+
+    .category-btn.active .cat-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    .cat-badge {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #e2ede4;
+      color: #0d4d29;
+      font-weight: 800;
+    }
+
+    /* Right Catalog Area */
+    .catalog-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 20px;
+      background: #ffffff;
+      padding: 16px 20px;
+      border-radius: 14px;
+      border: 1px solid #dce8dd;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #f4f8f5;
+      border: 1.5px solid #d0e0d3;
+      border-radius: 30px;
+      padding: 6px 16px;
+      width: 280px;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14.5px;
+      width: 100%;
+      padding: 4px;
+    }
+
+    /* Products Grid */
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    /* Product Card */
+    .shop-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1.5px solid #e1ebe3;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .shop-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(13, 77, 41, 0.12);
+      border-color: #0d4d29;
+    }
+
+    .shop-card-img-wrap {
+      position: relative;
+      height: 220px;
+      background: #f9fbf9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 14px;
+    }
+
+    .shop-card-img-wrap img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .shop-card:hover .shop-card-img-wrap img {
+      transform: scale(1.05);
+    }
+
+    .shop-card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #0d4d29;
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .shop-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .shop-card-title {
+      font-size: 16.5px;
+      font-weight: 800;
+      color: #1b2a1e;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      min-height: 46px;
+    }
+
+    .shop-card-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .price-current {
+      font-size: 20px;
+      font-weight: 900;
+      color: #0d4d29;
+    }
+
+    .price-regular {
+      font-size: 14px;
+      color: #88968a;
+      text-decoration: line-through;
+    }
+
+    .shop-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn-buy-instant {
+      flex: 1;
+      background: #0d4d29;
+      color: #ffffff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-buy-instant:hover {
+      background: #176a3b;
+    }
+
+    .btn-cart-icon {
+      background: #eef5f0;
+      color: #0d4d29;
+      border: 1px solid #c8decb;
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-cart-icon:hover {
+      background: #0d4d29;
+      color: #ffffff;
+    }
+
+    /* Pagination */
+    .pagination-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 40px;
+    }
+
+    .page-btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: 1.5px solid #d0e0d3;
+      background: #ffffff;
+      color: #2d3e30;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .page-btn:hover {
+      border-color: #0d4d29;
+      color: #0d4d29;
+    }
+
+    .page-btn.active {
+      background: #0d4d29;
+      color: #ffffff;
+      border-color: #0d4d29;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+
+
+  <!-- Header (NO ADMIN LINK) -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="brand-logo">
+        <div class="logo-circle">
+          <img src="images/logo.png" alt="Preme Farm Logo">
+        </div>
+        <div class="brand-text">
+          <h1>Preme Farm</h1>
+          <span>প্রিমি ফার্ম • সুখী জীবনের জন্য স্বাস্থ্যকর খাবার</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">হোম</a></li>
+          <li><a href="/shop" class="nav-link active">শপ</a></li>
+        </ul>
+      </nav>
+
+      <!-- Search Bar matching reference image -->
+      <div class="header-search-wrap">
+        <form action="/shop" method="GET" class="header-search-form" onsubmit="handleHeaderSearch(event)">
+          <input type="text" name="q" id="header-search-input" placeholder="Search for products" autocomplete="off" oninput="onHeaderSearchInput(this.value)">
+          <button type="submit" class="header-search-btn" title="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </form>
+        <div id="header-search-dropdown" class="header-search-dropdown"></div>
+      </div>
+
+      <div class="header-actions">
+        <a href="tel:01872170476" class="hotline-pill">
+          <span>📞</span> 01872170476
+        </a>
+
+        <!-- Circular Profile Icon -->
+        <a href="/profile" class="header-profile-circle" title="আমার একাউন্ট">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+
+        <!-- Compact Lime Green Cart Pill -->
+        <div class="header-cart-pill-wrap" onclick="PremeStore.openCartDrawer()" title="শপিং কার্ট">
+          <div class="header-cart-pill">
+            <div class="cart-pill-circle">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+            </div>
+            <span class="cart-pill-total" id="header-cart-total">৳ ০</span>
+            <span class="cart-pill-badge" id="header-cart-count">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner -->
+  <div style="background: linear-gradient(135deg, #09311a 0%, #0d4d29 100%); color: #fff; padding: 34px 20px; text-align: center; border-bottom: 3px solid #D4AF37;">
+    <h1 style="font-size: 32px; font-weight: 900; margin-bottom: 6px;">প্রিমি ফার্ম অনলাইন শপ</h1>
+    <p style="font-size: 15.5px; color: #d7e8db; max-width: 650px; margin: 0 auto;">
+      খাঁটি গাওয়া ঘি, সুন্দরবনের মধু, স্পেশাল ইলিশ আচার, রোজেলা চা ও ভেষজ পথ্যের বিশ্বস্ত সম্ভার। ক্যাশ অন ডেলিভারিতে সারাদেশে ডেলিভারি।
+    </p>
+  </div>
+
+  <!-- Main 2-Column Shop Layout -->
+  <main class="shop-layout">
+    <!-- Left Sidebar: Categories Filter -->
+    <aside class="shop-sidebar">
+      <div class="sidebar-title">
+        <span>🏷️</span> ক্যাটাগরি তালিকা
+      </div>
+      <ul class="category-list" id="sidebar-categories">
+        <li>
+          <button class="category-btn active" onclick="selectCategory('all', this)">
+            <span>🛍️ সব প্রোডাক্ট</span>
+            <span class="cat-badge" id="badge-all">11</span>
+          </button>
+        </li>
+        <li>
+          <button class="category-btn" onclick="selectCategory('kalo-shona', this)">
+            <span>✨ কালো সোনা</span>
+            <span class="cat-badge">1</span>
+          </button>
+        </li>
+        <li>
+          <button class="category-btn" onclick="selectCategory('ghee', this)">
+            <span>🧈 গাওয়া ঘি</span>
+            <span class="cat-badge">1</span>
+          </button>
+        </li>
+        <li>
+          <button class="category-btn" onclick="selectCategory('honey', this)">
+            <span>🍯 খাঁটি মধু</span>
+            <span class="cat-badge">2</span>
+          </button>
+        </li>
+        <li>
+          <button class="category-btn" onclick="selectCategory('pickle', this)">
+            <span>🌶️ ইলিশ ও আচার</span>
+            <span class="cat-badge">3</span>
+          </button>
+        </li>
+        <li>
+          <button class="category-btn" onclick="selectCategory('tea', this)">
+            <span>🍵 রোজেলা চা</span>
+            <span class="cat-badge">1</span>
+          </button>
+        </li>
+        <li>
+          <button class="category-btn" onclick="selectCategory('seeds', this)">
+            <span>🌱 সীড মিক্স</span>
+            <span class="cat-badge">1</span>
+          </button>
+        </li>
+        <li>
+          <button class="category-btn" onclick="selectCategory('combo', this)">
+            <span>🎁 স্পেশাল কম্বো</span>
+            <span class="cat-badge">2</span>
+          </button>
+        </li>
+      </ul>
+
+      <div style="margin-top: 24px; padding: 14px; background: #f0f7f2; border-radius: 12px; border: 1px solid #c7decb; font-size: 13.5px; line-height: 1.5; color: #16562f;">
+        <b>🚚 ক্যাশ অন ডেলিভারি</b><br>
+        পণ্য হাতে পেয়ে চেক করে মূল্য পরিশোধ করবেন। ২ বা ততোধিক প্রোডাক্টে ফ্রি ডেলিভারি!
+      </div>
+    </aside>
+
+    <!-- Right Side: Products Catalog & Pagination -->
+    <section>
+      <!-- Controls Bar -->
+      <div class="catalog-header-bar">
+        <div>
+          <span style="font-weight: 800; color: #0d4d29; font-size: 16px;">
+            প্রদর্শন: <span id="showing-category-name">সব প্রোডাক্ট</span> (<span id="total-count-text">0টি পণ্য</span>)
+          </span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="shop-search-input" placeholder="পণ্য খুঁজুন..." oninput="handleSearch(this.value)">
+          </div>
+          <select id="sort-select" onchange="handleSort(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1.5px solid #d0e0d3; background:#fff; font-size:13.5px; font-weight:700; outline:none; cursor:pointer;">
+            <option value="default">ডিফল্ট ক্রম</option>
+            <option value="price-low">মূল্য: কম থেকে বেশি</option>
+            <option value="price-high">মূল্য: বেশি থেকে কম</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="shop-grid" id="shop-products-grid">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="pagination-bar" id="pagination-controls">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Contact Buttons -->
+  <div class="floating-actions">
+    <a href="https://wa.me/8801872170476" target="_blank" class="btn-float whatsapp">💬</a>
+    <a href="tel:01872170476" class="btn-float phone">📞</a>
+  </div>
+
+  <!-- Cart Drawer Component -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="PremeStore.closeCartDrawer()"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <h3><span>🛒</span> আপনার শপিং কার্ট</h3>
+      <button onclick="PremeStore.closeCartDrawer()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+    </div>
+    <div class="cart-drawer-body" id="cart-drawer-items">
+      <!-- Items -->
+    </div>
+    <div class="cart-drawer-footer">
+      <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:800; color:#0d4d29; margin-bottom:12px;">
+        <span>সাবটোটাল:</span>
+        <span id="cart-drawer-subtotal">৳০</span>
+      </div>
+      <a href="/cart" class="btn-primary-large" style="width:100%; text-align:center; padding:12px; text-decoration:none; display:block;">
+        ক্যাশ অন ডেলিভারিতে অর্ডার করুন ➔
+      </a>
+    </div>
+  </div>
+
+  <!-- Scripts (STRICTLY NO FOOTER ON SHOP PAGE AS REQUESTED) -->
+  <script src="js/app.js"></script>
+  <script>
+    let allProducts = [];
+    let filteredProducts = [];
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let sortMode = 'default';
+    let currentPage = 1;
+    const itemsPerPage = 6;
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadShopData();
+    });
+
+    async function loadShopData() {
+      try {
+        const res = await fetch('/api/products');
+        if (res.ok) {
+          const json = await res.json();
+          allProducts = json.data || [];
+        }
+      } catch (e) {
+        console.warn('API error, using local fallback.');
+      }
+
+      if (allProducts.length === 0 && window.PremeStore && window.PremeStore.products) {
+        allProducts = window.PremeStore.products;
+      }
+
+      // Check URL search parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlSearch = urlParams.get('search') || urlParams.get('q');
+      if (urlSearch) {
+        searchQuery = urlSearch.trim().toLowerCase();
+        const headerInput = document.getElementById('header-search-input');
+        if (headerInput) headerInput.value = urlSearch;
+      }
+
+      applyFilters();
+    }
+
+    function selectCategory(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const catNameMap = {
+        'all': 'সব প্রোডাক্ট',
+        'kalo-shona': 'কালো সোনা',
+        'ghee': 'গাওয়া ঘি',
+        'honey': 'খাঁটি মধু',
+        'pickle': 'ইলিশ ও আচার',
+        'tea': 'রোজেলা চা',
+        'seeds': 'সীড মিক্স',
+        'combo': 'স্পেশাল কম্বো'
+      };
+      document.getElementById('showing-category-name').textContent = catNameMap[cat] || 'পণ্যসমূহ';
+
+      currentPage = 1;
+      applyFilters();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim().toLowerCase();
+      currentPage = 1;
+      applyFilters();
+    }
+
+    function handleSort(mode) {
+      sortMode = mode;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      filteredProducts = allProducts.filter(p => {
+        const matchCat = (activeCategory === 'all') || (p.category === activeCategory);
+        const matchSearch = !searchQuery || 
+          (p.name && p.name.toLowerCase().includes(searchQuery)) ||
+          (p.description && p.description.toLowerCase().includes(searchQuery));
+        return matchCat && matchSearch;
+      });
+
+      if (sortMode === 'price-low') {
+        filteredProducts.sort((a, b) => (a.variants[0]?.price || 0) - (b.variants[0]?.price || 0));
+      } else if (sortMode === 'price-high') {
+        filteredProducts.sort((a, b) => (b.variants[0]?.price || 0) - (a.variants[0]?.price || 0));
+      }
+
+      document.getElementById('total-count-text').textContent = `${filteredProducts.length}টি পণ্য`;
+      renderGrid();
+      renderPagination();
+    }
+
+    function renderGrid() {
+      const container = document.getElementById('shop-products-grid');
+      const startIdx = (currentPage - 1) * itemsPerPage;
+      const pageItems = filteredProducts.slice(startIdx, startIdx + itemsPerPage);
+
+      if (pageItems.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #fff; border-radius: 14px; border: 1.5px dashed #cfded2;">
+            <span style="font-size: 40px;">🔍</span>
+            <h3 style="font-size: 19px; color: #0d4d29; margin: 10px 0 6px;">এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি</h3>
+            <p style="color: #64748b; font-size: 14px;">অন্য কোনো ক্যাটাগরি বেছে নিন অথবা সকল পণ্য দেখুন।</p>
+            <button onclick="selectCategory('all', document.querySelector('.category-btn'))" class="btn-buy-instant" style="display:inline-flex; width:auto; padding:8px 20px; margin-top:12px;">সব পণ্য দেখুন ➔</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = pageItems.map(p => {
+        const variant = p.variants && p.variants[0] ? p.variants[0] : { price: 850, regularPrice: 990, size: 'স্ট্যান্ডার্ড' };
+        return `
+          <div class="shop-card">
+            <div class="shop-card-img-wrap">
+              <span class="shop-card-badge">${p.tag || 'প্রিমিয়াম'}</span>
+              <img src="${p.image}" alt="${p.name}" loading="lazy">
+            </div>
+            <div class="shop-card-body">
+              <h3 class="shop-card-title">${p.name}</h3>
+              <div style="font-size: 13px; color: #64748b; margin-bottom: 8px;">
+                প্যাক সাইজ: <b style="color: #0d4d29;">${variant.size}</b>
+              </div>
+              <div class="shop-card-price-row">
+                <span class="price-current">৳${variant.price}</span>
+                ${variant.regularPrice ? `<span class="price-regular">৳${variant.regularPrice}</span>` : ''}
+              </div>
+              <div class="shop-card-actions">
+                <button onclick="instantBuyProduct(${p.id}, '${variant.size}', ${variant.price})" class="btn-buy-instant">
+                  <span>🛍️</span> অর্ডার করুন
+                </button>
+                <button onclick="PremeStore.addToCart(${p.id}, '${variant.size}', ${variant.price}, 1)" class="btn-cart-icon" title="কার্টে যোগ করুন">
+                  🛒
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPagination() {
+      const container = document.getElementById('pagination-controls');
+      const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+      if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+
+      let html = `
+        <button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+          ◀ পূর্ববর্তী
+        </button>
+      `;
+
+      for (let i = 1; i <= totalPages; i++) {
+        html += `
+          <button class="page-btn ${currentPage === i ? 'active' : ''}" onclick="goToPage(${i})">
+            ${i}
+          </button>
+        `;
+      }
+
+      html += `
+        <button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+          পরবর্তী ➔
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderGrid();
+      renderPagination();
+      window.scrollTo({ top: 200, behavior: 'smooth' });
+    }
+
+    function instantBuyProduct(id, size, price) {
+      PremeStore.addToCart(id, size, price, 1);
+      window.location.href = '/cart';
+    }
+  </script>
+</body>
+</html>

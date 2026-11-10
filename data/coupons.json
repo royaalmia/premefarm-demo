@@ -1,0 +1,29 @@
+[
+  {
+    "id": "cpn-1",
+    "code": "PREME10",
+    "type": "fixed",
+    "amount": 100,
+    "minOrder": 800,
+    "status": "Active",
+    "description": "যেকোনো অর্ডারে ১০০ টাকা ক্যাশ ডিসকাউন্ট"
+  },
+  {
+    "id": "cpn-2",
+    "code": "EID50",
+    "type": "fixed",
+    "amount": 50,
+    "minOrder": 500,
+    "status": "Active",
+    "description": "স্পেশাল ৫০ টাকা ছাড়"
+  },
+  {
+    "id": "cpn-3",
+    "code": "FREESHIP",
+    "type": "shipping",
+    "amount": 70,
+    "minOrder": 1200,
+    "status": "Active",
+    "description": "১২০০ টাকার অর্ডারে সম্পূর্ণ ফ্রি ডেলিভারি"
+  }
+]

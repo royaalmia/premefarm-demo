@@ -1,0 +1,39 @@
+{
+  "store": {
+    "name": "Preme Farm (প্রিমি ফার্ম)",
+    "domain": "premefarm.com",
+    "hotline": "01872170476",
+    "supportEmail": "support@premefarm.com",
+    "address": "ঢাকা, বাংলাদেশ",
+    "deliveryChargeInsideDhaka": 70,
+    "deliveryChargeOutsideDhaka": 130,
+    "freeDeliveryThreshold": 1800
+  },
+  "couriers": {
+    "steadfast": {
+      "enabled": true,
+      "name": "Steadfast Courier",
+      "baseUrl": "https://portal.steadfast.com.bd/api/v1/create_order",
+      "apiKey": "sf_live_api_key_premefarm_2026",
+      "secretKey": "sf_secret_key_9948271038",
+      "autoDispatch": false,
+      "sandbox": false
+    },
+    "pathao": {
+      "enabled": true,
+      "name": "Pathao Courier",
+      "baseUrl": "https://api-hermes.pathao.com/aladdin/api/v1/orders",
+      "clientId": "pathao_client_premefarm_102",
+      "clientSecret": "pathao_secret_99812401",
+      "storeId": "store_dhaka_01",
+      "sandbox": false
+    },
+    "redx": {
+      "enabled": false,
+      "name": "RedX Courier",
+      "baseUrl": "https://openapi.redx.com.bd/v1.0.0-beta/parcels",
+      "apiToken": "",
+      "sandbox": false
+    }
+  }
+}

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বিশেষ অফার | Preme Farm (প্রিমি ফার্ম)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after, html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span {
+      font-family: 'Hind Siliguri', 'Noto Sans Bengali', -apple-system, sans-serif !important;
+    }
+    body {
+      background: #f4f7f4;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+    .lp-header {
+      background: #ffffff;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e2ebe4;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .lp-container {
+      max-width: 880px;
+      margin: 0 auto 50px;
+      background: #ffffff;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1.5px solid #dce8dd;
+    }
+
+    /* Template Header Banners */
+    .lp-hero-box {
+      background: linear-gradient(135deg, #09311a 0%, #0d4d29 100%);
+      color: #ffffff;
+      padding: 36px 24px;
+      text-align: center;
+      position: relative;
+    }
+    .lp-hero-box.flash-sale {
+      background: linear-gradient(135deg, #7c1a1a 0%, #991b1b 50%, #b91c1c 100%);
+    }
+    .lp-hero-box.mega-combo {
+      background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    }
+    .lp-hero-box.social-proof {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    }
+    .lp-hero-box.herbal-wellness {
+      background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+    }
+
+    .lp-badge {
+      display: inline-block;
+      background: #D4AF37;
+      color: #0b2e18;
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-weight: 900;
+      font-size: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(212,175,55,0.4);
+    }
+    .lp-badge.urgent {
+      background: #ef4444;
+      color: #ffffff;
+      animation: pulse 1.6s infinite;
+    }
+    .lp-title {
+      font-size: 27px;
+      font-weight: 900;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+    .lp-subtitle {
+      font-size: 16px;
+      color: #d7ebd9;
+      max-width: 680px;
+      margin: 0 auto 20px;
+      line-height: 1.5;
+    }
+
+    /* Urgency Bars & Timers */
+    .urgency-top-strip {
+      background: #b91c1c;
+      color: #ffffff;
+      padding: 10px 16px;
+      text-align: center;
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .countdown-timer-bar {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      border-radius: 12px;
+      padding: 12px 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffd875;
+      margin-bottom: 12px;
+    }
+    .timer-digits {
+      font-family: monospace !important;
+      font-size: 22px;
+      font-weight: 900;
+      background: #000;
+      color: #facc15;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 2px;
+    }
+
+    /* Stock Progress Bar */
+    .stock-meter-box {
+      max-width: 480px;
+      margin: 16px auto 0;
+      background: rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 12px 18px;
+    }
+    .stock-progress-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .stock-progress-fill {
+      height: 100%;
+      width: 86%;
+      background: #22c55e;
+      border-radius: 6px;
+    }
+
+    /* Product Showcase */
+    .lp-image-wrap {
+      text-align: center;
+      padding: 28px 20px;
+      background: #fbfdfb;
+      border-bottom: 1px solid #e5ede6;
+    }
+    .lp-image-wrap img {
+      max-width: 420px;
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      object-fit: cover;
+    }
+
+    .lp-price-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .lp-reg-price {
+      font-size: 19px;
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+    .lp-offer-price {
+      font-size: 34px;
+      font-weight: 900;
+      color: #0d4d29;
+    }
+
+    .btn-scroll-order {
+      background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      padding: 16px 38px;
+      border-radius: 40px;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(230, 126, 34, 0.4);
+      animation: pulse 2s infinite;
+      transition: transform 0.2s;
+    }
+    .btn-scroll-order:hover {
+      transform: translateY(-2px);
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    /* Trust Seals */
+    .trust-seals-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 20px 24px;
+      background: #f8faf8;
+      border-bottom: 1px solid #e2ebe4;
+    }
+    @media (max-width: 640px) {
+      .trust-seals-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .seal-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #dce8dd;
+    }
+    .seal-icon {
+      font-size: 22px;
+    }
+    .seal-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1.25;
+    }
+
+    /* Benefits Section */
+    .lp-benefits-section {
+      padding: 32px 28px;
+      background: #ffffff;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+      font-size: 16.5px;
+      color: #1e293b;
+      line-height: 1.45;
+    }
+    .benefit-icon {
+      background: #eef7f0;
+      color: #0d4d29;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Reviews Section for Template 4 */
+    .reviews-section {
+      padding: 28px;
+      background: #fbfcfb;
+      border-top: 1px solid #e2ebe4;
+    }
+    .review-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    @media (max-width: 640px) {
+      .review-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .review-card {
+      background: #ffffff;
+      border: 1px solid #dbe7dc;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .reviewer-name {
+      font-weight: 800;
+      font-size: 14.5px;
+      color: #0d4d29;
+    }
+    .review-stars {
+      color: #f59e0b;
+      font-size: 14px;
+    }
+    .review-comment {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.4;
+    }
+
+    /* Combo Packages for Template 3 */
+    .combo-packages-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    @media (max-width: 700px) {
+      .combo-packages-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .package-card {
+      background: #ffffff;
+      border: 2px solid #cedcd0;
+      border-radius: 14px;
+      padding: 16px 14px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .package-card.selected {
+      border-color: #0d4d29;
+      background: #f4faf5;
+      box-shadow: 0 6px 16px rgba(13, 77, 41, 0.12);
+    }
+    .pkg-tag {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e67e22;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 2px 10px;
+      border-radius: 12px;
+    }
+
+    /* Embedded Order Form */
+    .lp-order-form-box {
+      background: #f4faf5;
+      border: 2.5px solid #0d4d29;
+      border-radius: 20px;
+      padding: 34px 28px;
+      margin: 30px 24px 40px;
+      box-shadow: 0 10px 30px rgba(13, 77, 41, 0.08);
+    }
+    @media (max-width: 540px) {
+      .lp-hero-box {
+        padding: 24px 14px;
+      }
+      .lp-title {
+        font-size: 21px !important;
+      }
+      .lp-subtitle {
+        font-size: 14.5px !important;
+      }
+      .countdown-timer-bar {
+        padding: 8px 14px;
+        gap: 8px;
+        font-size: 13px;
+      }
+      .timer-digits {
+        font-size: 18px;
+        padding: 3px 6px;
+      }
+      .lp-price-box {
+        margin: 14px 0;
+      }
+      .lp-offer-price {
+        font-size: 26px !important;
+      }
+      .btn-scroll-order {
+        font-size: 15.5px !important;
+        padding: 13px 20px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .lp-order-form-box {
+        padding: 20px 14px !important;
+        margin: 20px 10px 30px !important;
+      }
+      .form-title {
+        font-size: 20px !important;
+      }
+      .form-subtitle {
+        font-size: 13.5px !important;
+      }
+    }
+    .form-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 900;
+      color: #0d4d29;
+      margin-bottom: 6px;
+    }
+    .form-subtitle {
+      text-align: center;
+      color: #556958;
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 800;
+      font-size: 14px;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #c9decb;
+      border-radius: 8px;
+      font-size: 15px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #ffffff;
+    }
+    .form-input:focus {
+      border-color: #0d4d29;
+    }
+    .btn-submit-order {
+      width: 100%;
+      background: linear-gradient(135deg, #0d4d29 0%, #15803d 100%);
+      color: #ffffff;
+      border: none;
+      padding: 16px 20px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(13, 77, 41, 0.3);
+      transition: opacity 0.2s;
+    }
+    .btn-submit-order:hover {
+      opacity: 0.95;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Optional Top Urgent Strip for Flash Sale Template -->
+  <div id="lp-urgent-strip" class="urgency-top-strip" style="display: none;">
+    🔥 বিশেষ ফ্ল্যাশ সেল চলছে! আজকের মধ্যে অর্ডার করলে পাচ্ছেন ক্যাশ অন ডেলিভারি ও বিশেষ মূল্যছাড়!
+  </div>
+
+  <!-- Top Logo & Hotline -->
+  <header class="lp-header">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="images/logo.png" alt="Preme Farm Logo" style="width: 44px; height: 44px; object-fit: contain;">
+      <div>
+        <b style="font-size: 18px; color: #0d4d29; display: block; line-height: 1.2;">Preme Farm</b>
+        <span style="font-size: 12px; color: #556958;">সুখী জীবনের জন্য স্বাস্থ্যকর খাবার</span>
+      </div>
+    </div>
+    <a href="tel:01872170476" class="hotline-pill" style="display: flex; align-items: center; gap: 6px; background: #eef5f0; color: #0d4d29; padding: 7px 14px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 13.5px; border: 1px solid #c9decb;">
+      <span>📞</span> 01872170476
+    </a>
+  </header>
+
+  <main class="lp-container">
+    <!-- Hero Box -->
+    <div class="lp-hero-box" id="lp-hero-box">
+      <div class="lp-badge" id="lp-badge">বিশেষ মেগা অফার • ক্যাশ অন ডেলিভারি</div>
+      <h1 class="lp-title" id="lp-title">কাজের ক্লান্তি দূর করার ন্যাচারাল ফর্মুলা — প্রিমি ফার্ম মধুময় কালো সোনা</h1>
+      <p class="lp-subtitle" id="lp-subtitle">১০০% প্রাকৃতিক উপাদানে তৈরি বিশেষ পথ্য • সারা দেশে ফ্রি হোম ডেলিভারি</p>
+
+      <!-- Live Urgency Countdown Bar -->
+      <div class="countdown-timer-bar" id="lp-countdown-bar">
+        <span>⏰ আজকের অফার শেষ হতে বাকি:</span>
+        <span class="timer-digits" id="countdown-text">০৮:২৫:৪৩</span>
+      </div>
+
+      <!-- Stock Meter (Template 2) -->
+      <div class="stock-meter-box" id="lp-stock-meter" style="display: none;">
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 800; color: #fff;">
+          <span>সীমিত স্টক উপলভ্য</span>
+          <span style="color: #ffd875;">বাকি মাত্র ১৩টি প্যাক!</span>
+        </div>
+        <div class="stock-progress-track">
+          <div class="stock-progress-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image & Price -->
+    <div class="lp-image-wrap">
+      <img id="lp-image" src="images/kalo_shona_jar.png" alt="Product Showcase">
+      <div class="lp-price-box">
+        <span class="lp-reg-price" id="lp-reg-price">রেগুলার ৳১১৫০</span>
+        <span class="lp-offer-price" id="lp-offer-price">অফার মূল্য: ৳৯৫০</span>
+      </div>
+      <a href="#order-form-anchor" class="btn-scroll-order">
+        অর্ডার করতে ক্লিক করুন (ক্যাশ অন ডেলিভারি) ➔
+      </a>
+    </div>
+
+    <!-- Trust Seals -->
+    <div class="trust-seals-grid">
+      <div class="seal-item">
+        <div class="seal-icon">🌿</div>
+        <div class="seal-text">১০০% প্রাকৃতিক<br><span style="color:#64748b; font-weight:500;">ভেজালমুক্ত পথ্য</span></div>
+      </div>
+      <div class="seal-item">
+        <div class="seal-icon">🚚</div>
+        <div class="seal-text">ক্যাশ অন ডেলিভারি<br><span style="color:#64748b; font-weight:500;">পণ্য দেখে পেমেন্ট</span></div>
+      </div>
+      <div class="seal-item">
+        <div class="seal-icon">🛡️</div>
+        <div class="seal-text">মানিব্যাক গ্যারান্টি<br><span style="color:#64748b; font-weight:500;">শতভাগ সন্তুষ্টি</span></div>
+      </div>
+      <div class="seal-item">
+        <div class="seal-icon">⭐</div>
+        <div class="seal-text">৪.৯/৫ রেটিং<br><span style="color:#64748b; font-weight:500;">ভেরিফাইড রিভিউ</span></div>
+      </div>
+    </div>
+
+    <!-- Multi-pack Option for Template 3 -->
+    <div id="lp-combo-section" style="display: none; padding: 24px 28px; background: #fff;">
+      <h3 style="font-size: 20px; font-weight: 900; color: #0d4d29; text-align: center; margin-bottom: 8px;">
+        🎁 আপনার পছন্দমতো প্যাক নির্বাচন করুন
+      </h3>
+      <div class="combo-packages-grid">
+        <div class="package-card" onclick="selectLandingPackage(1, 950, 70, this)">
+          <b>১টি ট্রায়াল প্যাক</b>
+          <div style="font-size: 19px; font-weight: 900; color: #0d4d29; margin: 6px 0;">৳৯৫০</div>
+          <div style="font-size: 12px; color: #64748b;">ডেলিভারি চার্জ প্রযোজ্য</div>
+        </div>
+        <div class="package-card selected" onclick="selectLandingPackage(2, 1800, 0, this)">
+          <div class="pkg-tag">সবচেয়ে জনপ্রিয়</div>
+          <b>২টি ফ্যামিলি প্যাক</b>
+          <div style="font-size: 19px; font-weight: 900; color: #0d4d29; margin: 6px 0;">৳১৮০০</div>
+          <div style="font-size: 12px; color: #16a34a; font-weight: 800;">ফ্রি ডেলিভারি + ৳১০০ ছাড়</div>
+        </div>
+        <div class="package-card" onclick="selectLandingPackage(3, 2600, 0, this)">
+          <div class="pkg-tag" style="background:#0d4d29;">মেগা সেভার</div>
+          <b>৩টি মেগা সেভার</b>
+          <div style="font-size: 19px; font-weight: 900; color: #0d4d29; margin: 6px 0;">৳২৬০০</div>
+          <div style="font-size: 12px; color: #16a34a; font-weight: 800;">ফ্রি ডেলিভারি + ৳২৫০ ছাড়</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Benefits -->
+    <div class="lp-benefits-section">
+      <h3 style="font-size: 21px; font-weight: 900; color: #0d4d29; margin-bottom: 20px; text-align: center;">
+        🌿 কেন প্রিমি ফার্মের এই পণ্যটি আপনার জন্য সেরা?
+      </h3>
+      <div id="lp-benefits-list">
+        <!-- Injected -->
+      </div>
+    </div>
+
+    <!-- Customer Reviews Grid (Template 4) -->
+    <div class="reviews-section" id="lp-reviews-section">
+      <div style="text-align: center; margin-bottom: 16px;">
+        <span style="background: #fef3c7; color: #92400e; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 800;">
+          ★ ৪.৯ স্টার ভেরিফাইড রিভিউ
+        </span>
+        <h3 style="font-size: 21px; font-weight: 900; color: #0d4d29; margin-top: 8px;">
+          আমাদের সম্মানিত গ্রাহকদের বাস্তব অভিজ্ঞতা
+        </h3>
+      </div>
+      <div class="review-cards-grid" id="lp-review-cards">
+        <div class="review-card">
+          <div class="review-header">
+            <span class="reviewer-name">মাহবুবুর রহমান (উত্তরা, ঢাকা)</span>
+            <span class="review-stars">★★★★★</span>
+          </div>
+          <p class="review-comment">"আমি বিগত ২ মাস ধরে নিয়মিত নিচ্ছি। সারাদিন অফিসে কাজের পরও আগের মতো ক্লান্তি লাগে না। সত্যিই অসাধারণ প্রডাক্ট।"</p>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <span class="reviewer-name">ফারহানা ইয়াসমিন (চট্টগ্রাম)</span>
+            <span class="review-stars">★★★★★</span>
+          </div>
+          <p class="review-comment">"খাঁটি পণ্যের কোনো তুলনা হয় না। প্যাকেজিং দারুণ ছিল এবং ২ দিনের মধ্যেই ডেলিভারি পেয়েছি। ধন্যবাদ প্রিমি ফার্মকে।"</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1-Click Cash on Delivery Order Form -->
+    <div class="lp-order-form-box" id="order-form-anchor">
+      <h2 class="form-title">অর্ডার করতে নিচের ফর্মটি পূরণ করুন</h2>
+      <p class="form-subtitle">অগ্রিম ১ টাকাও দিতে হবে না — পণ্য হাতে পেয়ে চেক করে মূল্য পরিশোধ করবেন।</p>
+
+      <form id="lp-fast-form" onsubmit="handleLpOrder(event)">
+        <div class="form-group">
+          <label>আপনার নাম *</label>
+          <input type="text" id="lp-name" class="form-input" placeholder="আপনার পূর্ণ নাম লিখুন" required>
+        </div>
+
+        <div class="form-group">
+          <label>মোবাইল নম্বর *</label>
+          <input type="tel" id="lp-phone" class="form-input" placeholder="018XXXXXXXX" required>
+        </div>
+
+        <div class="form-group">
+          <label>সম্পূর্ণ ডেলিভারি ঠিকানা *</label>
+          <textarea id="lp-address" class="form-input" rows="2" placeholder="বাড়ি নং, রোড নং, এলাকা, থানা, জেলা" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>ডেলিভারি এলাকা *</label>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <input type="radio" name="lpDelivery" value="70" checked onchange="updateDelivery(70)">
+              <span>ঢাকা সিটির ভিতরে (৳৭০)</span>
+            </label>
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <input type="radio" name="lpDelivery" value="130" onchange="updateDelivery(130)">
+              <span>ঢাকার বাইরে (৳১৩০)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Bill Summary -->
+        <div style="background: #ffffff; padding: 18px; border-radius: 12px; border: 1.5px solid #c9ded0; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="font-size: 14.5px;">পণ্য মূল্য:</span>
+            <span id="lp-bill-subtotal" style="font-weight: 800; font-size: 15px;">৳৯৫০</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="font-size: 14.5px;">ডেলিভারি চার্জ:</span>
+            <span id="lp-bill-delivery" style="font-weight: 800; font-size: 15px;">৳৭০</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 19px; font-weight: 900; color: #0d4d29; border-top: 1.5px dashed #d5e2d7; padding-top: 10px;">
+            <span>সর্বমোট প্রদেয় বিল:</span>
+            <span id="lp-bill-total">৳১০২০</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit-order" id="lp-submit-btn">
+          ✓ অর্ডার নিশ্চিত করুন (ক্যাশ অন ডেলিভারি)
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    let currentProductPrice = 950;
+    let currentDeliveryCharge = 70;
+    let selectedPackageCount = 1;
+    let currentPageData = null;
+
+    // Countdown Timer Logic
+    let totalSeconds = 8 * 3600 + 25 * 60 + 43;
+    setInterval(() => {
+      if (totalSeconds > 0) totalSeconds--;
+      const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+      const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+      const s = String(totalSeconds % 60).padStart(2, '0');
+      const el = document.getElementById('countdown-text');
+      if (el) el.textContent = `${h}:${m}:${s}`;
+    }, 1000);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pageId = urlParams.get('id') || 'lp-black-gold';
+
+      try {
+        const res = await fetch('/api/landing-pages');
+        if (res.ok) {
+          const json = await res.json();
+          const page = (json.data || []).find(p => p.id === pageId) || json.data[0];
+          if (page) renderLandingContent(page);
+        }
+      } catch (e) {
+        console.warn('API error, using default landing config.');
+      }
+    });
+
+    function renderLandingContent(page) {
+      currentPageData = page;
+      const hero = document.getElementById('lp-hero-box');
+      const tpl = page.template || 'template-1';
+
+      // Reset template classes
+      hero.className = 'lp-hero-box';
+
+      // Apply Template Specific Styles
+      if (tpl === 'template-2') {
+        hero.classList.add('flash-sale');
+        document.getElementById('lp-urgent-strip').style.display = 'block';
+        document.getElementById('lp-stock-meter').style.display = 'block';
+      } else if (tpl === 'template-3') {
+        hero.classList.add('mega-combo');
+        document.getElementById('lp-combo-section').style.display = 'block';
+      } else if (tpl === 'template-4') {
+        hero.classList.add('social-proof');
+        document.getElementById('lp-reviews-section').style.display = 'block';
+      } else if (tpl === 'template-5') {
+        hero.classList.add('herbal-wellness');
+      }
+
+      if (page.title) document.getElementById('lp-title').textContent = page.title;
+      if (page.subtitle) document.getElementById('lp-subtitle').textContent = page.subtitle;
+      if (page.discountBadge) document.getElementById('lp-badge').textContent = page.discountBadge;
+      if (page.image) document.getElementById('lp-image').src = page.image;
+      if (page.regularPrice) document.getElementById('lp-reg-price').textContent = `রেগুলার ৳${page.regularPrice}`;
+      if (page.price) {
+        currentProductPrice = page.price;
+        document.getElementById('lp-offer-price').textContent = `অফার মূল্য: ৳${page.price}`;
+      }
+
+      const benefitsList = page.features || [
+        "অফিস ও কাজের দীর্ঘস্থায়ী ক্লান্তি দূর করে সারাদিনের কর্মশক্তি বৃদ্ধি করে",
+        "স্মৃতিশক্তি, মেধা ও কাজের গভীর মনোযোগ বৃদ্ধি করে",
+        "শরীরের রোগ প্রতিরোধ ক্ষমতা (ইমিউনিটি) বহুগুণ বাড়ায়",
+        "হজমশক্তি উন্নত করে ও গ্যাস্ট্রিকের সমস্যা নিয়ন্ত্রণে রাখে",
+        "১০০% খাঁটি ও প্রাকৃতিক উপাদানের নিশ্চয়তা"
+      ];
+
+      document.getElementById('lp-benefits-list').innerHTML = benefitsList.map(b => `
+        <div class="benefit-item">
+          <div class="benefit-icon">✓</div>
+          <div>${b}</div>
+        </div>
+      `).join('');
+
+      updateLpBill(currentProductPrice);
+    }
+
+    function selectLandingPackage(count, price, deliveryFee, el) {
+      selectedPackageCount = count;
+      currentProductPrice = price;
+      currentDeliveryCharge = deliveryFee;
+
+      document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+      if (el) el.classList.add('selected');
+
+      document.getElementById('lp-bill-subtotal').textContent = `৳${currentProductPrice}`;
+      document.getElementById('lp-bill-delivery').textContent = deliveryFee === 0 ? 'ফ্রি' : `৳${deliveryFee}`;
+      recalculate();
+    }
+
+    function updateLpBill(price) {
+      currentProductPrice = price;
+      document.getElementById('lp-bill-subtotal').textContent = `৳${currentProductPrice}`;
+      recalculate();
+    }
+
+    function updateDelivery(fee) {
+      currentDeliveryCharge = fee;
+      document.getElementById('lp-bill-delivery').textContent = `৳${currentDeliveryCharge}`;
+      recalculate();
+    }
+
+    function recalculate() {
+      const total = currentProductPrice + currentDeliveryCharge;
+      document.getElementById('lp-bill-total').textContent = `৳${total}`;
+    }
+
+    async function handleLpOrder(e) {
+      e.preventDefault();
+      const name = document.getElementById('lp-name').value.trim();
+      const phone = document.getElementById('lp-phone').value.trim();
+      const address = document.getElementById('lp-address').value.trim();
+
+      const btn = document.getElementById('lp-submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'অর্ডার প্রক্রিয়াধীন...';
+
+      const orderPayload = {
+        customer: { name, phone, address, city: currentDeliveryCharge === 70 ? 'ঢাকা' : 'ঢাকার বাইরে' },
+        items: [{
+          id: currentPageData?.productId || 1,
+          name: currentPageData?.productName || document.getElementById('lp-title').textContent,
+          size: selectedPackageCount > 1 ? `${selectedPackageCount}টি প্যাক (কম্বো)` : '১টি প্যাক',
+          price: currentProductPrice,
+          quantity: selectedPackageCount
+        }],
+        deliveryCharge: currentDeliveryCharge,
+        source: 'Landing Page',
+        notes: `Landing Page Order (${currentPageData?.templateName || 'Direct'})`
+      };
+
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+        const data = await res.json();
+        if (data.success && data.order) {
+          alert(`ধন্যবাদ ${name}! আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে (অর্ডার ID: ${data.order.id})। আমাদের প্রতিনিধি শীঘ্রই কল করে কনফার্ম করবেন।`);
+          window.location.href = `/profile?track=${data.order.id}`;
+        } else if (res.status === 403) {
+          alert(data.message || 'অর্ডার গ্রহণ করা সম্ভব হচ্ছে না। অনুগ্রহ করে হটলাইনে যোগাযোগ করুন।');
+          btn.disabled = false;
+          btn.textContent = '✓ অর্ডার নিশ্চিত করুন (ক্যাশ অন ডেলিভারি)';
+        } else {
+          alert('অর্ডার সম্পন্ন করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+          btn.disabled = false;
+          btn.textContent = '✓ অর্ডার নিশ্চিত করুন (ক্যাশ অন ডেলিভারি)';
+        }
+      } catch (err) {
+        alert('ধন্যবাদ! আপনার অর্ডারটি গ্রহণ করা হয়েছে।');
+      }
+    }
+  </script>
+</body>
+</html>

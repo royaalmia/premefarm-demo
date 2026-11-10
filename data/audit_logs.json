@@ -1,0 +1,26 @@
+[
+  {
+    "id": "LOG-1001",
+    "timestamp": "2026-11-10T18:32:27.788Z",
+    "orderId": "PF-4524",
+    "agent": "তানভীর (Agent-01)",
+    "action": "স্ট্যাটাস পরিবর্তন: Confirmed -> In Courier (Steadfast বুকিং ST-581619)",
+    "actionEn": "Status changed: Confirmed -> In Courier (Steadfast booked ST-581619)"
+  },
+  {
+    "id": "LOG-1002",
+    "timestamp": "2026-11-10T18:24:27.046Z",
+    "orderId": "PF-2542",
+    "agent": "সাদিয়া (Agent-02)",
+    "action": "অর্ডার কনফার্ম করা হয়েছে (নোট: FB Boost Campaign Lead)",
+    "actionEn": "Order confirmed (Note: FB Boost Campaign Lead)"
+  },
+  {
+    "id": "LOG-1003",
+    "timestamp": "2026-11-10T18:20:00.000Z",
+    "orderId": "PF-2038",
+    "agent": "তানভীর (Agent-01)",
+    "action": "অর্ডার হোল্ড করা হয়েছে (নোট: কাস্টমার কাল দুপুরে কল দিতে বলেছেন)",
+    "actionEn": "Order put on Hold (Note: Customer asked to call tomorrow noon)"
+  }
+]

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>শপিং কার্ট ও ক্যাশ অন ডেলিভারি চেকআউট | Preme Farm</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    @media (max-width: 860px) {
+      #cart-page-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+      }
+      .checkout-card {
+        padding: 20px 16px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="brand-logo">
+        <div class="logo-circle">
+          <img src="images/logo.png" alt="Preme Farm Logo">
+        </div>
+        <div class="brand-text">
+          <h1>Preme Farm</h1>
+          <span>প্রিমি ফার্ম • সুখী জীবনের জন্য স্বাস্থ্যকর খাবার</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">হোম</a></li>
+          <li><a href="/shop" class="nav-link">শপ</a></li>
+        </ul>
+      </nav>
+
+      <!-- Search Bar matching reference image -->
+      <div class="header-search-wrap">
+        <form action="/shop" method="GET" class="header-search-form" onsubmit="handleHeaderSearch(event)">
+          <input type="text" name="q" id="header-search-input" placeholder="Search for products" autocomplete="off" oninput="onHeaderSearchInput(this.value)">
+          <button type="submit" class="header-search-btn" title="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </form>
+        <div id="header-search-dropdown" class="header-search-dropdown"></div>
+      </div>
+
+      <div class="header-actions">
+        <a href="tel:01872170476" class="hotline-pill">
+          <span>📞</span> 01872170476
+        </a>
+
+        <!-- Circular Profile Icon -->
+        <a href="/profile" class="header-profile-circle" title="আমার একাউন্ট">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+
+        <!-- Compact Lime Green Cart Pill -->
+        <div class="header-cart-pill-wrap" onclick="PremeStore.openCartDrawer()" title="শপিং কার্ট">
+          <div class="header-cart-pill">
+            <div class="cart-pill-circle">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+            </div>
+            <span class="cart-pill-total" id="header-cart-total">৳ ০</span>
+            <span class="cart-pill-badge" id="header-cart-count">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Cart & Fast Checkout Page -->
+  <main style="max-width: 1100px; margin: 30px auto 60px; padding: 0 20px; min-height: 600px;">
+    <div style="margin-bottom: 24px; text-align: center;">
+      <h1 style="font-size: 30px; font-weight: 900; color: #0d4d29;">আপনার শপিং কার্ট ও চেকআউট</h1>
+      <p style="color: #556958; font-size: 15.5px;">সরাসরি ক্যাশ অন ডেলিভারিতে অর্ডার করুন — পণ্য হাতে পেয়ে মূল্য পরিশোধ করবেন।</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 30px;" id="cart-page-grid">
+      <!-- Left Column: Items List -->
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="font-size: 19px; font-weight: 800; color: #1b2a1e;">নির্বাচিত প্রোডাক্ট সমূহ</h3>
+          <a href="/shop" style="color: #0d4d29; font-weight: 700; text-decoration: none; font-size: 14px;">+ আরও প্রোডাক্ট যোগ করুন</a>
+        </div>
+        <div id="cart-page-list">
+          <!-- Dynamically filled by app.js -->
+        </div>
+
+        <div style="background: #eaf3ec; border: 1px solid #c8e0cc; border-radius: 12px; padding: 16px; margin-top: 16px; display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 28px;">🚚</span>
+          <div>
+            <b style="color: #0d4d29; font-size: 15px;">দ্রুততম ক্যাশ অন ডেলিভারি</b>
+            <p style="font-size: 13px; color: #495e4e; margin: 0;">ঢাকার ভিতরে ২৪-৪৮ ঘণ্টা, ঢাকার বাইরে ৪৮-৭২ ঘণ্টার মধ্যে হোম ডেলিভারি।</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Fast 1-Page COD Order Form -->
+      <div>
+        <div class="checkout-card" style="padding: 28px; border-width: 1.5px;">
+          <h3 style="font-size: 20px; font-weight: 900; color: #0d4d29; margin-bottom: 16px; border-bottom: 1px solid #e2e8e3; padding-bottom: 10px;">
+            ডেলিভারি তথ্য (Cash on Delivery)
+          </h3>
+
+          <form id="dedicated-cart-form" onsubmit="handleCartPageSubmit(event)">
+            <div class="form-group">
+              <label class="form-label">আপনার নাম <span class="req">*</span></label>
+              <input type="text" id="cart-name" class="form-control" placeholder="যেমন: মো: আরিফুল ইসলাম" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">মোবাইল নম্বর <span class="req">*</span></label>
+              <input type="tel" id="cart-phone" class="form-control" placeholder="যেমন: 01872170476" required pattern="[0-9]{11}">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">পূর্ণাঙ্গ ঠিকানা <span class="req">*</span></label>
+              <textarea id="cart-address" class="form-control" rows="2" placeholder="বাসা/হোল্ডিং নম্বর, রোড, এলাকা, জেলা" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">ডেলিভারি এরিয়া</label>
+              <div class="delivery-options">
+                <label class="delivery-radio selected" id="cart-lbl-dhaka" onclick="setCartDelivery(70)">
+                  <span><input type="radio" name="cartDelivery" value="70" checked> ঢাকার ভেতরে (৳৭০)</span>
+                  <b>৳৭০</b>
+                </label>
+                <label class="delivery-radio" id="cart-lbl-outside" onclick="setCartDelivery(130)">
+                  <span><input type="radio" name="cartDelivery" value="130"> ঢাকার বাইরে (৳১৩০)</span>
+                  <b>৳১৩০</b>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">বিশেষ নোট (যদি থাকে)</label>
+              <input type="text" id="cart-notes" class="form-control" placeholder="যেমন: বিকালের পর ডেলিভারি দিলে ভালো হয়">
+            </div>
+
+            <!-- Coupon / Promo Code Input -->
+            <div style="background: #f7faf8; border: 1.5px dashed #c6dccb; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;">
+              <label style="display: block; font-size: 13.5px; font-weight: 700; color: #0d4d29; margin-bottom: 6px;">🎟️ প্রোমো বা কুপন কোড আছে?</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="coupon-input" placeholder="যেমন: PREME10 বা EID50" style="flex: 1; padding: 9px 12px; border: 1px solid #cedcd0; border-radius: 6px; font-size: 14px; text-transform: uppercase;">
+                <button type="button" onclick="applyCouponCode()" style="background: #0d4d29; color: #fff; border: none; padding: 9px 16px; border-radius: 6px; font-weight: 700; font-size: 13.5px; cursor: pointer;">
+                  প্রয়োগ
+                </button>
+              </div>
+              <div id="coupon-alert" style="font-size: 13px; font-weight: 700; margin-top: 6px; display: none;"></div>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="summary-calc" style="background: #fbfdfb; padding: 14px; border-radius: 8px; border: 1px solid #e1ebe2; margin-bottom: 16px;">
+              <div class="calc-row">
+                <span>প্রোডাক্ট সাবটোটাল:</span>
+                <span id="cart-page-subtotal" style="font-weight: 700;">৳০</span>
+              </div>
+              <div class="calc-row" id="coupon-discount-row" style="display: none; color: #16a34a;">
+                <span>কুপন ছাড়:</span>
+                <span id="cart-page-discount" style="font-weight: 700;">- ৳০</span>
+              </div>
+              <div class="calc-row">
+                <span>ডেলিভারি চার্জ:</span>
+                <span id="cart-page-delivery" style="font-weight: 700;">৳৭০</span>
+              </div>
+              <div class="calc-row total-row">
+                <span>সর্বমোট বিল:</span>
+                <span id="cart-page-total" style="color: #e67e22;">৳০</span>
+              </div>
+            </div>
+
+            <div class="payment-method-box" style="margin-bottom: 18px;">
+              <span style="font-size: 22px;">💵</span>
+              <div>
+                <b style="color: #0d4d29; font-size: 14.5px;">পেমেন্ট মেথড: ক্যাশ অন ডেলিভারি</b>
+                <div style="font-size: 12.5px; color: #556;">অগ্রিম কোনো পেমেন্ট লাগবে না।</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit-order" style="padding: 14px 20px; font-size: 17.5px;">
+              <span>✓</span> অর্ডার নিশ্চিত করুন (ক্যাশ অন ডেলিভারি)
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Order Success Modal -->
+  <div class="modal-overlay" id="order-success-modal">
+    <div class="modal-content">
+      <div class="success-icon">✓</div>
+      <h2 style="font-size: 26px; font-weight: 900; color: #0d4d29; margin-bottom: 8px;">অর্ডার সফল হয়েছে!</h2>
+      <p style="font-size: 15.5px; color: #556958; margin-bottom: 20px;">
+        ধন্যবাদ <b id="success-customer-name" style="color: #1b2a1e;">গ্রাহক</b>, আপনার অর্ডার আইডি: <span id="success-order-id" style="color: #e67e22; font-weight: 900;">PF-0000</span>
+      </p>
+      <div style="background: #f7f9f7; border: 1px solid #dbe6dc; border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: left; font-size: 14.5px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>মোবাইল:</span> <b id="success-customer-phone">-</b></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>পেমেন্ট:</span> <b style="color: #0d4d29;">ক্যাশ অন ডেলিভারি (COD)</b></div>
+        <div style="display:flex; justify-content:space-between;"><span>মোট প্রদেয় টাকা:</span> <b id="success-order-total" style="color: #e67e22; font-size: 18px;">৳০</b></div>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <a id="success-whatsapp-btn" href="#" target="_blank" class="btn-primary-large" style="flex: 1; background: #25d366; box-shadow: 0 4px 14px rgba(37,211,102,0.4);">
+          <span>💬</span> হোয়াটসঅ্যাপে বার্তা পাঠান
+        </a>
+        <a href="/profile" class="btn-secondary-outline" style="color: #0d4d29; border-color: #0d4d29; padding: 12px 20px;">
+          অর্ডার ট্র্যাক করুন ➔
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts (NO SITE FOOTER AS REQUESTED) -->
+  <script src="js/app.js"></script>
+  <script>
+    let appliedDiscount = 0;
+
+    function applyCouponCode() {
+      const code = (document.getElementById('coupon-input').value || '').trim().toUpperCase();
+      const alertBox = document.getElementById('coupon-alert');
+      const discountRow = document.getElementById('coupon-discount-row');
+      const discountText = document.getElementById('cart-page-discount');
+
+      if (!code) {
+        alertBox.style.display = 'block';
+        alertBox.style.color = '#ef4444';
+        alertBox.textContent = 'অনুগ্রহ করে কুপন কোড প্রবেশ করান।';
+        return;
+      }
+
+      if (code === 'PREME10') {
+        appliedDiscount = 100; // ৳১০০ ডিসকাউন্ট
+        alertBox.style.display = 'block';
+        alertBox.style.color = '#15803d';
+        alertBox.textContent = 'অভিনন্দন! "PREME10" কুপনে ১০০ টাকা ছাড় যোগ হয়েছে!';
+      } else if (code === 'EID50' || code === 'SAVE50') {
+        appliedDiscount = 50; // ৳৫০ ডিসকাউন্ট
+        alertBox.style.display = 'block';
+        alertBox.style.color = '#15803d';
+        alertBox.textContent = 'অভিনন্দন! ৫০ টাকা ছাড় সফলভাবে প্রয়োগ হয়েছে!';
+      } else if (code === 'FREESHIP') {
+        appliedDiscount = PremeStore.deliveryCharge || 70;
+        alertBox.style.display = 'block';
+        alertBox.style.color = '#15803d';
+        alertBox.textContent = 'অভিনন্দন! ফ্রি ডেলিভারি কুপন প্রযোজ্য হয়েছে!';
+      } else {
+        alertBox.style.display = 'block';
+        alertBox.style.color = '#ef4444';
+        alertBox.textContent = 'দুঃখিত, এই কুপন কোডটি মেয়াদোত্তীর্ণ অথবা সঠিক নয়।';
+        appliedDiscount = 0;
+      }
+
+      if (appliedDiscount > 0) {
+        discountRow.style.display = 'flex';
+        discountText.textContent = `- ৳${appliedDiscount}`;
+      } else {
+        discountRow.style.display = 'none';
+      }
+
+      updateTotalsWithDiscount();
+    }
+
+    function updateTotalsWithDiscount() {
+      const subtotal = PremeStore.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const delivery = PremeStore.deliveryCharge || 70;
+      const total = Math.max(0, subtotal + delivery - appliedDiscount);
+
+      const totalEl = document.getElementById('cart-page-total');
+      if (totalEl) totalEl.textContent = `৳${total}`;
+    }
+
+    function setCartDelivery(fee) {
+      PremeStore.deliveryCharge = fee;
+      document.getElementById('cart-lbl-dhaka').classList.toggle('selected', fee === 70);
+      document.getElementById('cart-lbl-outside').classList.toggle('selected', fee === 130);
+      PremeStore.renderCartPage();
+      updateTotalsWithDiscount();
+    }
+
+    function handleCartPageSubmit(e) {
+      e.preventDefault();
+      const formData = {
+        name: document.getElementById('cart-name').value,
+        phone: document.getElementById('cart-phone').value,
+        address: document.getElementById('cart-address').value,
+        notes: document.getElementById('cart-notes').value,
+        discount: appliedDiscount
+      };
+      PremeStore.submitOrder(formData);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Check if logged in customer exists, auto-fill checkout fields
+      try {
+        const u = JSON.parse(localStorage.getItem('premefarm_current_user') || 'null');
+        if (u) {
+          const nameInput = document.getElementById('cart-name');
+          const phoneInput = document.getElementById('cart-phone');
+          const addrInput = document.getElementById('cart-address');
+          if (nameInput && u.name) nameInput.value = u.name;
+          if (phoneInput && u.phone) phoneInput.value = u.phone;
+          if (addrInput && u.address) addrInput.value = u.address;
+          if (u.city === 'Outside Dhaka') {
+            setCartDelivery(130);
+          }
+        }
+      } catch (e) {}
+
+      // Default to spotlight product if cart is empty so user can test instant checkout immediately!
+      if (PremeStore.cart.length === 0) {
+        PremeStore.cart.push({
+          productId: 1,
+          name: "প্রিমি ফার্ম কালো সোনা (Black Gold)",
+          variant: "৪০০ গ্রাম",
+          price: 950,
+          image: "images/kalo_shona_jar.png",
+          quantity: 1
+        });
+        PremeStore.saveCart();
+      }
+      PremeStore.renderCartPage();
+    });
+  </script>
+</body>
+</html>

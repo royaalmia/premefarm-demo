@@ -1,0 +1,391 @@
+[
+  {
+    "id": 1,
+    "name": "প্রিমি ফার্ম কালো সোনা (Black Gold - মধুময় কালোজিরা)",
+    "slug": "kalo-shona-madhumoy-kalojira",
+    "category": "kalo-shona",
+    "categoryName": "কালো সোনা",
+    "tag": "বেস্ট সেলার • ১০০% অর্গানিক",
+    "image": "images/kalo_shona_jar.png",
+    "gallery": [
+      "images/kalo_shona_jar.png",
+      "images/hero_banner_1.png",
+      "images/hero_banner_2.png"
+    ],
+    "rating": 5,
+    "reviewCount": 468,
+    "description": "১০০% খাঁটি সুন্দরবনের মধু, বাছাইকৃত কালোজিরা, খাঁটি সরিষার তেল ও পুষ্টিকর গুঁড়া মশলার সমন্বয়ে তৈরি ঐতিহ্যবাহী বিশেষ পথ্য 'কালো সোনা'। এটি সারাদিনের কর্মশক্তি বৃদ্ধি করে, দীর্ঘস্থায়ী ক্লান্তি দূর করে এবং রোগ প্রতিরোধ ক্ষমতা বহুগুণে বৃদ্ধি করে।",
+    "ingredients": "বাছাইকৃত প্রিমিয়াম কালোজিরা, খাঁটি সরিষার তেল, সুন্দরবনের মধু, পুষ্টিকর গুঁড়া মশলা ও প্রাকৃতিক ভেষজ উপাদান।",
+    "benefits": [
+      "স্মৃতিশক্তি বৃদ্ধি ও মস্তিষ্কের কার্যক্ষমতা সচল রাখে",
+      "ত্বকের প্রাকৃতিক উজ্জ্বলতা ও লাবণ্য বৃদ্ধি করে",
+      "কোলেস্টেরল ও রক্তচাপ নিয়ন্ত্রণে বিশেষ ভূমিকা রাখে",
+      "শারীরিক দুর্বলতা ও ক্লান্তি দূর করে শক্তি বৃদ্ধি করে",
+      "রক্ত বিশুদ্ধকরণ ও রক্ত সঞ্চালন স্বাভাবিক রাখে",
+      "শরীরের রোগ প্রতিরোধ ক্ষমতা (ইমিউনিটি) বৃদ্ধি করে"
+    ],
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম",
+        "regularPrice": 650,
+        "price": 550,
+        "popular": false
+      },
+      {
+        "size": "৪০০ গ্রাম",
+        "regularPrice": 1150,
+        "price": 950,
+        "popular": true
+      },
+      {
+        "size": "১ কেজি",
+        "regularPrice": 1850,
+        "price": 1550,
+        "popular": false
+      }
+    ],
+    "stock": 144,
+    "inStock": true
+  },
+  {
+    "id": 2,
+    "name": "প্রিমি ফার্ম খাঁটি গাওয়া ঘি (Aroma Premium Ghee)",
+    "slug": "premium-aroma-gawa-ghee",
+    "category": "ghee",
+    "categoryName": "ঘি",
+    "tag": "শতভাগ খাঁটি ও দানাদার",
+    "image": "images/hero_banner_2.png",
+    "gallery": [
+      "images/hero_banner_2.png"
+    ],
+    "rating": 5,
+    "reviewCount": 284,
+    "description": "গ্রামের দেশি গরুর খাঁটি দুধের মাখন থেকে ঐতিহ্যবাহী জ্বাল পদ্ধতিতে তৈরি অতুলনীয় সুগন্ধি ও সুস্বাদু দানাদার গাওয়া ঘি। কোনো কৃত্রিম ফ্লেভার বা রং ছাড়া শতভাগ প্রাকৃতিক।",
+    "ingredients": "১০০% খাঁটি দেশি গরুর দুধের মাখন থেকে প্রস্তুত গাওয়া ঘি।",
+    "benefits": [
+      "অতুলনীয় সুবাস ও খাঁটি দানাদার টেক্সচার",
+      "উন্নত মানের ফ্যাট হজমশক্তি ও রোগ প্রতিরোধ বাড়ায়",
+      "মস্তিষ্কের পুষ্টি ও স্মৃতিশক্তি বৃদ্ধিতে দারুণ উপকারী"
+    ],
+    "variants": [
+      {
+        "size": "৫০০ গ্রাম",
+        "regularPrice": 1050,
+        "price": 890,
+        "popular": true
+      },
+      {
+        "size": "১ কেজি",
+        "regularPrice": 1950,
+        "price": 1690,
+        "popular": false
+      }
+    ],
+    "stock": 75,
+    "inStock": true
+  },
+  {
+    "id": 3,
+    "name": "সুন্দরবনের প্রাকৃতিক খাঁটি মধু (Pure Sundarban Wild Honey)",
+    "slug": "sundarban-pure-wild-honey",
+    "category": "honey",
+    "categoryName": "মধু",
+    "tag": "১০০% কাঁচা ও বিশুদ্ধ",
+    "image": "images/kalo_shona_jar.png",
+    "gallery": [
+      "images/kalo_shona_jar.png"
+    ],
+    "rating": 5,
+    "reviewCount": 340,
+    "description": "সুন্দরবনের গভীর জঙ্গল থেকে মোয়ালদের দ্বারা সরাসরি সংগৃহীত ১০০% কাঁচা ও বিশুদ্ধ খলিশা ও গরান ফুলের মধু। কোনো চিনি বা কৃত্রিম তরল মিশ্রণমুক্ত।",
+    "ingredients": "১০০% সুন্দরবনের প্রাকৃতিক কাঁচা মধু।",
+    "benefits": [
+      "কাশি, ঠান্ডা ও শ্বাসকষ্টের প্রাকৃতিক উপশম",
+      "শারীরিক বল ও মেধা শক্তি বৃদ্ধি করে",
+      "শরীরের রোগ প্রতিরোধ ব্যবস্থা সুদৃঢ় করে"
+    ],
+    "variants": [
+      {
+        "size": "৫০০ গ্রাম",
+        "regularPrice": 750,
+        "price": 650,
+        "popular": true
+      },
+      {
+        "size": "১ কেজি",
+        "regularPrice": 1400,
+        "price": 1200,
+        "popular": false
+      }
+    ],
+    "stock": 120,
+    "inStock": true
+  },
+  {
+    "id": 4,
+    "name": "খাঁটি সরিষা ফুলের মধু (Mustard Flower Honey)",
+    "slug": "mustard-flower-pure-honey",
+    "category": "honey",
+    "categoryName": "মধু",
+    "tag": "প্রাকৃতিক পুষ্টি",
+    "image": "images/kalo_shona_jar.png",
+    "gallery": [
+      "images/kalo_shona_jar.png"
+    ],
+    "rating": 4.9,
+    "reviewCount": 165,
+    "description": "শীতকালে সরিষা ক্ষেত থেকে সংগৃহীত হালকা সোনালী রঙের শতভাগ খাঁটি সরিষা ফুলের মধু। পুষ্টি ও মিষ্টি স্বাদে অতুলনীয়।",
+    "ingredients": "১০০% প্রাকৃতিক সরিষা ফুলের মধু।",
+    "benefits": [
+      "সহজে হজম হয় ও প্রাকৃতিক মিষ্টির স্বাস্থ্যকর উৎস",
+      "শিশুদের শারীরিক বিকাশ ও মেধা বৃদ্ধিতে সাহায্য করে"
+    ],
+    "variants": [
+      {
+        "size": "৫০০ গ্রাম",
+        "regularPrice": 550,
+        "price": 450,
+        "popular": true
+      },
+      {
+        "size": "১ কেজি",
+        "regularPrice": 990,
+        "price": 850,
+        "popular": false
+      }
+    ],
+    "stock": 90,
+    "inStock": true
+  },
+  {
+    "id": 5,
+    "name": "প্রিমিয়াম ইলিশ মাছের আচার (Authentic Hilsa Fish Pickle)",
+    "slug": "premium-hilsa-fish-pickle",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "প্রিমি ফার্ম সিগনেচার স্পেশাল",
+    "image": "images/hero_banner_1.png",
+    "gallery": [
+      "images/hero_banner_1.png"
+    ],
+    "rating": 5,
+    "reviewCount": 389,
+    "description": "তাজা খাঁটি ইলিশ মাছ, খাঁটি ঘানিভাঙা সরিষার তেল, কাঁচা মরিচ ও ঘরোয়া বিশেষ মশলায় প্রস্তুত ঐতিহ্যবাহী জিভে জল আনা ইলিশ আচার। কোনো রাসায়নিক প্রিজারভেটিভ নেই।",
+    "ingredients": "তাজা ইলিশ মাছের টুকরো, খাঁটি সরিষার তেল, পাঁচফোড়ন, মেথি, রসুন, কাঁচা মরিচ, সিরকা ও খাঁটি মশলা।",
+    "benefits": [
+      "ঘরোয়া রেসিপিতে তৈরি খাঁটি বাঙ্গালি স্বাদ",
+      "শতভাগ প্রিজারভেটিভ ও কেমিক্যালমুক্ত",
+      "খিচুড়ি, পোলাও বা গরম ভাতের সাথে অনন্য রসনা তৃপ্তি"
+    ],
+    "variants": [
+      {
+        "size": "২০০ গ্রাম",
+        "regularPrice": 650,
+        "price": 580,
+        "popular": false
+      },
+      {
+        "size": "৪০০ গ্রাম",
+        "regularPrice": 980,
+        "price": 880,
+        "popular": true
+      },
+      {
+        "size": "৮০০ গ্রাম",
+        "regularPrice": 1650,
+        "price": 1480,
+        "popular": false
+      }
+    ],
+    "stock": 95,
+    "inStock": true
+  },
+  {
+    "id": 6,
+    "name": "৬ ধরনের ঘরোয়া খাঁটি আচার কম্বো (6-Pickle Feast Combo)",
+    "slug": "6-pickle-feast-combo",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "ফ্যামিলি ফেস্ট কম্বো",
+    "image": "images/hero_banner_2.png",
+    "gallery": [
+      "images/hero_banner_2.png"
+    ],
+    "rating": 4.9,
+    "reviewCount": 174,
+    "description": "আম, তেঁতুল, জলপাই, চালতা, বরই এবং রসুনের খাঁটি সরিষার তেলে তৈরি ৬টি ঐতিহ্যবাহী স্পেশাল আচারের সম্পূর্ণ ফ্যামিলি প্যাক।",
+    "ingredients": "আম, মিষ্টি তেঁতুল, জলপাই, চালতা, টক বরই, দেশি রসুন, খাঁটি সরিষার তেল ও মসলা।",
+    "benefits": [
+      "একসাথে ৬টি ভিন্ন স্বাদের প্রিমিয়াম আচার",
+      "রুচি বৃদ্ধি ও হজমে চমৎকার সহায়ক",
+      "১০০% খাঁটি ও স্বাস্থ্যসম্মত ঘরোয়া প্রক্রিয়া"
+    ],
+    "variants": [
+      {
+        "size": "৬টি স্পেশাল আচার কম্বো সেট",
+        "regularPrice": 1500,
+        "price": 1300,
+        "popular": true
+      }
+    ],
+    "stock": 50,
+    "inStock": true
+  },
+  {
+    "id": 7,
+    "name": "রসুনের খাঁটি সরিষার তেলের আচার (Garlic Pickle)",
+    "slug": "pure-garlic-pickle",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "স্বাস্থ্যকর ভেষজ আচার",
+    "image": "images/hero_banner_1.png",
+    "gallery": [
+      "images/hero_banner_1.png"
+    ],
+    "rating": 4.8,
+    "reviewCount": 112,
+    "description": "বাছাইকৃত দেশি রসুনের কোয়া, খাঁটি সরিষার তেল ও সুস্বাদু মসলার সমন্বয়ে তৈরি স্বাস্থ্যকর আচার। কোলেস্টেরল ও রক্তচাপ নিয়ন্ত্রণে সাহায্য করে।",
+    "ingredients": "দেশি রসুন, খাঁটি সরিষার তেল, সরিষা দানা, মেথি, জিরা, ধনে, শুকনো মরিচ।",
+    "benefits": [
+      "হার্ট ভালো রাখতে ও কোলেস্টেরল কমাতে সহায়ক",
+      "ভাতের সাথে অনন্য সুস্বাদু ও রুচিকর"
+    ],
+    "variants": [
+      {
+        "size": "৩৫০ গ্রাম",
+        "regularPrice": 450,
+        "price": 380,
+        "popular": true
+      }
+    ],
+    "stock": 60,
+    "inStock": true
+  },
+  {
+    "id": 8,
+    "name": "রোজেলা টি / চুকাই চা (Premium Rosella Herbal Tea)",
+    "slug": "premium-rosella-tea",
+    "category": "tea",
+    "categoryName": "চা ও হারবাল",
+    "tag": "হার্বাল ওয়েলনেস",
+    "image": "images/wellness_model.png",
+    "gallery": [
+      "images/wellness_model.png",
+      "images/hero_banner_3.png"
+    ],
+    "rating": 4.9,
+    "reviewCount": 192,
+    "description": "১০০% প্রাকৃতিক রোজেলা (হিবিস্কাস/চুকাই) ফুলের পাপড়ি দিয়ে তৈরি প্রিমিয়াম ভেষজ চা। প্রচুর অ্যান্টিঅক্সিডেন্ট ও ভিটামিন সি সমৃদ্ধ যা রক্তচাপ ও ওজন নিয়ন্ত্রণে অতুলনীয়। ক্যাফেইনমুক্ত সতেজ পানীয়।",
+    "ingredients": "১০০% প্রাকৃতিক রোজেলা (চুকাই/হিবিস্কাস) শুকনো ফুল।",
+    "benefits": [
+      "উচ্চ রক্তচাপ ও হাইপারটেনশন নিয়ন্ত্রণে সাহায্য করে",
+      "শরীরের মেদ কমাতে ও ওজন নিয়ন্ত্রণে সহায়ক",
+      "প্রচুর ভিটামিন সি ও অ্যান্টিঅক্সিডেন্ট রোগ প্রতিরোধ বাড়ায়",
+      "হৃদযন্ত্র সুস্থ রাখে ও লিভার ডিটক্সে সাহায্য করে"
+    ],
+    "variants": [
+      {
+        "size": "১০০ গ্রাম",
+        "regularPrice": 350,
+        "price": 290,
+        "popular": true
+      }
+    ],
+    "stock": 80,
+    "inStock": true
+  },
+  {
+    "id": 9,
+    "name": "প্রিমিয়াম সীড মিক্স (Superfood Seed Mix - 5 Seeds Blend)",
+    "slug": "superfood-seed-mix",
+    "category": "seeds",
+    "categoryName": "সিড ও সুপারফুড",
+    "tag": "সুপারফুড • ওমেগা-৩ সমৃদ্ধ",
+    "image": "images/morning_model.png",
+    "gallery": [
+      "images/morning_model.png",
+      "images/hero_banner_2.png"
+    ],
+    "rating": 4.9,
+    "reviewCount": 235,
+    "description": "চিয়া সিড, সূর্যমুখী বীজ, কুমড়ার বীজ, অর্গানিক তিসি এবং সাদা তিলের সুষম ও পুষ্টিকর সুপারফুড মিশ্রণ। ওমেগা-৩, ফাইবার ও প্রোটিনে ভরপুর যা প্রতিদিনের পুষ্টির চাহিদা মেটায়।",
+    "ingredients": "চিয়া সিড, সূর্যমুখী বীজ, কুমড়ার বীজ, তিসি (Flaxseed), সাদা তিল।",
+    "benefits": [
+      "ওমেগা-৩ ফ্যাটি এসিড হার্ট ও রক্তনালী সুস্থ রাখে",
+      "উচ্চ খাদ্য আঁশ বা ফাইবার হজমপ্রক্রিয়া সহজ করে",
+      "শরীরের শক্তি ও কর্মক্ষমতা সারাদিন ধরে রাখে"
+    ],
+    "variants": [
+      {
+        "size": "৫০০ গ্রাম",
+        "regularPrice": 590,
+        "price": 500,
+        "popular": true
+      }
+    ],
+    "stock": 110,
+    "inStock": true
+  },
+  {
+    "id": 10,
+    "name": "সীড মিক্স (৫০০g) + রোজেলা টি (১০০g) স্পেশাল হেলথ কম্বো",
+    "slug": "seed-mix-rosella-tea-health-combo",
+    "category": "combo",
+    "categoryName": "কম্বো অফার",
+    "tag": "স্পেশাল সেভার কম্বো • বেস্ট ভ্যালু",
+    "image": "images/hero_banner_3.png",
+    "gallery": [
+      "images/hero_banner_3.png",
+      "images/wellness_model.png"
+    ],
+    "rating": 5,
+    "reviewCount": 310,
+    "description": "সুস্থ ও চনমনে জীবনযাপনের সেরা স্বাস্থ্যকর জুড়ি — ৫০০ গ্রাম সুপারফুড সীড মিক্স এবং ১০০ গ্রাম অ্যান্টিঅক্সিডেন্ট সমৃদ্ধ রোজেলা টি একসাথে বিশেষ ছাড়ে।",
+    "ingredients": "৫০০ গ্রাম প্রিমিয়াম সীড মিক্স + ১০০ গ্রাম রোজেলা টি।",
+    "benefits": [
+      "সম্পূর্ণ প্রাকৃতিক পুষ্টি ও অ্যান্টিঅক্সিডেন্টের সংমিশ্রণ",
+      "হৃদযন্ত্রের সুরক্ষা ও ওজন নিয়ন্ত্রণে কার্যকর জুড়ি",
+      "একসাথে দুটি সুপারফুড বিশেষ সাশ্রয়ী মূল্যে"
+    ],
+    "variants": [
+      {
+        "size": "কম্বো সেট (সীড মিক্স ৫০০g + রোজেলা টি ১০০g)",
+        "regularPrice": 850,
+        "price": 750,
+        "popular": true
+      }
+    ],
+    "stock": 65,
+    "inStock": true
+  },
+  {
+    "id": 11,
+    "name": "৩টি আচার + ১টি উপহার মেগা প্যাক (3 Pickle + 1 Free Gift Offer)",
+    "slug": "3-pickle-plus-free-gift-pack",
+    "category": "combo",
+    "categoryName": "কম্বো অফার",
+    "tag": "মেগা অফার • ফ্রি গিফট",
+    "image": "images/hero_banner_1.png",
+    "gallery": [
+      "images/hero_banner_1.png"
+    ],
+    "rating": 4.9,
+    "reviewCount": 210,
+    "description": "পছন্দের ৩টি স্পেশাল আচার কিনলে পাচ্ছেন আরও ১টি আকর্ষণীয় উপহার প্যাক সম্পূর্ণ ফ্রি! পরিবারের সবার পছন্দমতো সেরা স্বাদের অফার।",
+    "ingredients": "৩টি প্রিমিয়াম সিলেকশন আচার + ১টি সারপ্রাইজ গিফট প্যাক।",
+    "benefits": [
+      "৩টি আচার কিনলে ১টি সম্পূর্ণ ফ্রি",
+      "অসাধারণ খাঁটি স্বাদ ও সেরা ভ্যালু অফার"
+    ],
+    "variants": [
+      {
+        "size": "৩টি আচার + ১টি ফ্রি প্যাক",
+        "regularPrice": 1300,
+        "price": 1090,
+        "popular": true
+      }
+    ],
+    "stock": 70,
+    "inStock": true
+  }
+]

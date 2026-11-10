@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>এডমিন প্যানেল | Preme Farm (প্রিমি ফার্ম)</title>
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    *, *::before, *::after, html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span {
+      font-family: 'Hind Siliguri', 'Noto Sans Bengali', system-ui, sans-serif !important;
+    }
+    .badge-role {
+      background: #eef5f0;
+      color: #0d4d29;
+      padding: 3px 10px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid #c9decb;
+    }
+    .template-card {
+      border: 2px solid #e2ece4;
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.2s;
+    }
+    .template-card:hover, .template-card.selected {
+      border-color: #0d4d29;
+      background: #f7faf8;
+      box-shadow: 0 4px 14px rgba(13, 77, 41, 0.12);
+    }
+    .btn-ai-sparkle {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+    .btn-ai-sparkle:hover {
+      opacity: 0.95;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc; transition: .3s; border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: white; transition: .3s; border-radius: 50%;
+    }
+    input:checked + .slider { background-color: #10b981; }
+    input:checked + .slider:before { transform: translateX(20px); }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Header Bar (Visible on mobile only) -->
+  <div class="admin-mobile-header">
+    <button class="btn-sidebar-toggle" onclick="AdminApp.toggleSidebar()" aria-label="Toggle Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <img src="images/logo.png" alt="Preme Farm" style="width: 32px; height: 32px; border-radius: 50%;">
+      <span style="font-weight: 800; font-size: 16px; color: #0d4d29;">Preme Farm Admin</span>
+    </div>
+  </div>
+  <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="AdminApp.closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-header">
+      <img src="images/logo.png" alt="Preme Farm">
+      <div>
+        <h2 data-i18n="sidebar_title">Preme Farm</h2>
+        <span data-i18n="sidebar_sub">CONTROL PANEL</span>
+      </div>
+    </div>
+
+    <!-- Active User Pill -->
+    <div style="padding: 10px 16px; margin: 0 12px 14px; background: rgba(255,255,255,0.08); border-radius: 10px; font-size: 13px;">
+      <div style="color: #94a3b8; font-size: 11px;" data-i18n="sidebar_user_label">লগইন কৃত একাউন্ট:</div>
+      <b style="color: #ffd875;" id="sidebar-user-name">সুপার এডমিন</b>
+      <span class="badge-role" style="float: right;" id="sidebar-user-role">Super Admin</span>
+    </div>
+
+    <!-- Navigation without Emojis -->
+    <ul class="sidebar-nav">
+      <li><a href="#" class="active" data-tab="orders" data-i18n="nav_orders">অর্ডার ম্যানেজমেন্ট</a></li>
+      <li><a href="#" data-tab="audit" data-i18n="nav_audit">এজেন্ট অ্যাক্টিভিটি লগ</a></li>
+      <li><a href="#" data-tab="blacklist" data-i18n="nav_blacklist">ব্ল্যাকলিস্ট ও সিকিউরিটি</a></li>
+      <li><a href="#" data-tab="landing" data-i18n="nav_landing">ল্যান্ডিং পেজ বিল্ডার</a></li>
+      <li><a href="#" data-tab="products" data-i18n="nav_products">প্রোডাক্ট ও স্টক</a></li>
+      <li><a href="#" data-tab="coupons" data-i18n="nav_coupons">কুপন ও ডিসকাউন্ট</a></li>
+      <li><a href="#" data-tab="cms" data-i18n="nav_cms">ব্যানার ও CMS</a></li>
+      <li><a href="#" data-tab="roles" data-i18n="nav_roles">স্টাফ ও পারমিশন</a></li>
+      <li><a href="#" data-tab="courier" data-i18n="nav_courier">কুরিয়ার এপিআই</a></li>
+      <li><a href="#" data-tab="store" data-i18n="nav_store">স্টোর ও ডেলিভারি</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <a href="/" class="btn-visit-store" target="_blank" data-i18n="nav_visit">মূল ওয়েবসাইট দেখুন ➔</a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="admin-main">
+    <!-- Topbar -->
+    <div class="admin-topbar">
+      <div>
+        <h1 data-i18n="topbar_title">প্রিমি ফার্ম এডমিন ড্যাশবোর্ড</h1>
+        <p style="color: #6b7280; font-size: 14px;" data-i18n="topbar_sub">কল সেন্টার অর্ডার ম্যানেজমেন্ট, কুরিয়ার এপিআই ও সেলস কন্ট্রোল প্যানেল</p>
+      </div>
+
+      <!-- Controls: Agent Select, Theme Toggle, Language Toggle, CSV Export -->
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <!-- Agent Switcher (RBAC) -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="font-size: 13px; color: #64748b; font-weight: 700;" data-i18n="agent_label">এজেন্ট:</span>
+          <select id="active-agent-select" onchange="AdminApp.setActiveAgent(this.value)" style="padding: 6px 10px; border-radius: 6px; border: 1.5px solid #cedcd0; font-weight: 700; font-size: 13px; outline: none; cursor: pointer;">
+            <option value="সুপার এডমিন">সুপার এডমিন (Super Admin)</option>
+            <option value="তানভীর (Agent-01)">তানভীর (Agent-01)</option>
+            <option value="সাদিয়া (Agent-02)">সাদিয়া (Agent-02)</option>
+            <option value="রফিক (Supervisor)">রফিক (Supervisor)</option>
+            <option value="মার্কেটিং স্পেশালিস্ট">মার্কেটিং স্পেশালিস্ট</option>
+          </select>
+        </div>
+
+        <!-- Language Switcher (Admin Only) -->
+        <div class="lang-switch-wrap" style="display: flex; border: 1.5px solid #cedcd0; border-radius: 20px; overflow: hidden; background: #fff;">
+          <button id="lang-btn-bn" onclick="AdminApp.setLanguage('bn')" style="padding: 5px 12px; font-size: 12.5px; font-weight: 800; border: none; cursor: pointer; background: #0d4d29; color: #fff;">বাংলা</button>
+          <button id="lang-btn-en" onclick="AdminApp.setLanguage('en')" style="padding: 5px 12px; font-size: 12.5px; font-weight: 800; border: none; cursor: pointer; background: transparent; color: #64748b;">English</button>
+        </div>
+
+        <!-- Theme Switcher -->
+        <button id="theme-toggle-btn" onclick="AdminApp.toggleTheme()" style="padding: 6px 12px; border-radius: 20px; border: 1.5px solid #cedcd0; font-weight: 800; font-size: 12.5px; background: #fff; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
+        </button>
+
+        <!-- CSV Export -->
+        <button onclick="AdminApp.exportOrdersCSV()" class="btn-white" style="padding: 6px 14px; font-size: 13px; border: 1.5px solid #cedcd0; border-radius: 20px; font-weight: 800; cursor: pointer;" data-i18n="btn_csv">
+          অর্ডার রিপোর্ট (CSV)
+        </button>
+
+        <span style="background: #eef5f0; color: #0d4d29; padding: 6px 12px; border-radius: 20px; font-weight: 800; font-size: 12.5px; border: 1px solid #cce3d1;" data-i18n="status_live">
+          লাইভ সিস্টেম
+        </span>
+      </div>
+    </div>
+
+    <!-- KPI Stats Cards (Clean Cut) -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon green">৳</div>
+        <div class="stat-info">
+          <span data-i18n="stat_sales">মোট বিক্রি (COD)</span>
+          <h3 id="stat-revenue">৳০</h3>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue">#</div>
+        <div class="stat-info">
+          <span data-i18n="stat_orders">মোট অর্ডার</span>
+          <h3 id="stat-orders">0</h3>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon amber">P</div>
+        <div class="stat-info">
+          <span data-i18n="stat_pending">পেন্ডিং অর্ডার</span>
+          <h3 id="stat-pending">0</h3>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">C</div>
+        <div class="stat-info">
+          <span data-i18n="stat_courier">ইন কুরিয়ার</span>
+          <h3 id="stat-shipped">0</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 1: ORDERS MANAGEMENT (CALL CENTER WORKFLOW) -->
+    <div class="tab-content active" id="tab-orders">
+      <div class="admin-card">
+        <div class="card-title-row" style="flex-wrap: wrap; gap: 14px;">
+          <div>
+            <h3 data-i18n="card_orders_title">অর্ডার ম্যানেজমেন্ট</h3>
+            <p style="font-size: 13px; color: #64748b; margin: 4px 0 0;" data-i18n="card_orders_sub">ল্যান্ডিং পেজ ও ওয়েবসাইট থেকে আসা সকল অর্ডার পরিচালনা, ফ্রড চেক এবং কুরিয়ার বুকিং</p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="text" id="order-search-input" placeholder="মোবাইল বা Order ID দিয়ে খুঁজুন..." data-i18n-placeholder="search_placeholder" oninput="AdminApp.searchOrders(this.value)" style="padding: 8px 16px; border: 1.5px solid #cedcd0; border-radius: 20px; font-size: 13.5px; outline: none; width: 230px;">
+            <button onclick="AdminApp.openNewOrderModal()" class="btn-courier-action" style="padding: 8px 18px; font-size: 13.5px;" data-i18n="btn_new_order">
+              + নতুন অর্ডার তৈরি করুন
+            </button>
+          </div>
+        </div>
+
+        <!-- Clean Status Tabs with Live Counters (No Emojis) -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1.5px solid #eef3ee;">
+          <button class="filter-pill active" onclick="AdminApp.filterOrders('all', this)" id="tab-pill-all" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #0d4d29; background: #0d4d29; color: #fff; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_all">সব অর্ডার</span> (<span id="count-all">0</span>)
+          </button>
+          <button class="filter-pill" onclick="AdminApp.filterOrders('Pending', this)" id="tab-pill-pending" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #cedcd0; background: #fff; color: #b45309; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_pending">পেন্ডিং</span> (<span id="count-pending">0</span>)
+          </button>
+          <button class="filter-pill" onclick="AdminApp.filterOrders('Hold', this)" id="tab-pill-hold" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #cedcd0; background: #fff; color: #4338ca; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_hold">হোল্ড</span> (<span id="count-hold">0</span>)
+          </button>
+          <button class="filter-pill" onclick="AdminApp.filterOrders('Confirmed', this)" id="tab-pill-confirmed" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #cedcd0; background: #fff; color: #1e40af; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_confirmed">কনফার্ম</span> (<span id="count-confirmed">0</span>)
+          </button>
+          <button class="filter-pill" onclick="AdminApp.filterOrders('In Courier', this)" id="tab-pill-incourier" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #cedcd0; background: #fff; color: #065f46; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_incourier">ইন কুরিয়ার</span> (<span id="count-incourier">0</span>)
+          </button>
+          <button class="filter-pill" onclick="AdminApp.filterOrders('Delivered', this)" id="tab-pill-delivered" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #cedcd0; background: #fff; color: #15803d; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_delivered">ডেলিভার্ড</span> (<span id="count-delivered">0</span>)
+          </button>
+          <button class="filter-pill" onclick="AdminApp.filterOrders('Return', this)" id="tab-pill-return" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #cedcd0; background: #fff; color: #c2410c; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_return">রিটার্ন</span> (<span id="count-return">0</span>)
+          </button>
+          <button class="filter-pill" onclick="AdminApp.filterOrders('Cancelled', this)" id="tab-pill-cancelled" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #cedcd0; background: #fff; color: #b91c1c; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_cancelled">বাতিল</span> (<span id="count-cancelled">0</span>)
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th data-i18n="th_id_source">অর্ডার ID ও সোর্স</th>
+                <th data-i18n="th_customer">গ্রাহক তথ্য ও ফ্রড চেক</th>
+                <th data-i18n="th_address">ডেলিভারি ঠিকানা</th>
+                <th data-i18n="th_items">অর্ডারকৃত পণ্য</th>
+                <th data-i18n="th_bill">বিল (COD)</th>
+                <th data-i18n="th_status">স্ট্যাটাস</th>
+                <th data-i18n="th_courier">কুরিয়ার একশন</th>
+                <th data-i18n="th_note">কল সেন্টার নোট</th>
+                <th data-i18n="th_agent">হালনাগাদ করেছেন</th>
+                <th data-i18n="th_actions">একশন</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <!-- Injected by AdminApp.renderOrdersTable() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 1B: AGENT ACTIVITY AUDIT LOG -->
+    <div class="tab-content" id="tab-audit">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <div>
+            <h3 data-i18n="audit_title">কল সেন্টার এজেন্ট অ্যাক্টিভিটি লগ</h3>
+            <p style="font-size: 13px; color: #64748b; margin: 4px 0 0;" data-i18n="audit_sub">কোন এজেন্ট কোন অর্ডারে কি পরিবর্তন করেছেন তার সম্পূর্ণ ইতিহাস</p>
+          </div>
+          <button onclick="AdminApp.fetchAuditLogs()" class="btn-white" style="padding: 6px 14px; border: 1.5px solid #cedcd0; border-radius: 20px; font-weight: 800; cursor: pointer;">
+            রিলোড লগ
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th data-i18n="th_audit_time">তারিখ ও সময়</th>
+                <th data-i18n="th_audit_order">অর্ডার ID</th>
+                <th data-i18n="th_audit_agent">এজেন্ট নাম</th>
+                <th data-i18n="th_audit_action">সম্পাদিত কাজের বিবরণ</th>
+              </tr>
+            </thead>
+            <tbody id="audit-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 1C: BLACKLIST & SECURITY -->
+    <div class="tab-content" id="tab-blacklist">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <div>
+            <h3 data-i18n="bl_title">ব্ল্যাকলিস্ট ও ফ্রড কাস্টমার ম্যানেজমেন্ট</h3>
+            <p style="font-size: 13px; color: #64748b; margin: 4px 0 0;" data-i18n="bl_sub">যেসব ফোন নম্বর ও আইপি থেকে ফেক অর্ডার এসেছে তাদের তালিকা ও পরিচালনা</p>
+          </div>
+        </div>
+
+        <!-- Manual Block Form -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin-bottom: 24px;">
+          <h4 style="font-size: 15px; font-weight: 700; color: #0d4d29; margin-bottom: 12px;" data-i18n="bl_form_title">নতুন নম্বর বা আইপি ব্লক করুন</h4>
+          <form onsubmit="AdminApp.handleManualBlockSubmit(event)" style="display: grid; grid-template-columns: 140px 1.5fr 2fr 160px; gap: 12px; align-items: flex-end;">
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;" data-i18n="bl_type">ধরন</label>
+              <select id="bl-input-type" style="width: 100%; padding: 8px 10px; border: 1.5px solid #cedcd0; border-radius: 6px; font-size: 13px;">
+                <option value="phone">Phone (মোবাইল)</option>
+                <option value="ip">IP Address (আইপি)</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;" data-i18n="bl_value">নম্বর / আইপি এড্রেস</label>
+              <input type="text" id="bl-input-val" required placeholder="017XXXXXXXX বা 103.XXX" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cedcd0; border-radius: 6px; font-size: 13px;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;" data-i18n="bl_reason">ব্লক করার কারণ</label>
+              <input type="text" id="bl-input-reason" placeholder="বারবার রিটার্ন / ফেক অর্ডার" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cedcd0; border-radius: 6px; font-size: 13px;">
+            </div>
+            <div>
+              <button type="submit" class="btn-courier-action" style="width: 100%; padding: 9px 12px; font-size: 13px;" data-i18n="btn_block_submit">
+                ব্ল্যাকলিস্টে যুক্ত করুন
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th data-i18n="th_bl_type">ধরন</th>
+                <th data-i18n="th_bl_value">ব্লকড নম্বর / আইপি</th>
+                <th data-i18n="th_bl_reason">কারণ</th>
+                <th data-i18n="th_bl_by">কে ব্লক করেছেন</th>
+                <th data-i18n="th_bl_date">তারিখ</th>
+                <th data-i18n="th_bl_action">একশন</th>
+              </tr>
+            </thead>
+            <tbody id="blacklist-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: LANDING PAGE BUILDER -->
+    <div class="tab-content" id="tab-landing">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <div>
+            <h3>ল্যান্ডিং পেজ বিল্ডার</h3>
+            <p style="font-size: 13px; color: #64748b; margin: 4px 0 0;">হাই-কনভার্টিং সেলস ল্যান্ডিং পেজ তৈরি ও পরিচালনা করুন</p>
+          </div>
+          <button onclick="AdminApp.openLandingModal()" class="btn-courier-action" style="padding: 8px 18px; font-size: 14px;">
+            + নতুন ল্যান্ডিং পেজ তৈরি করুন
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ছবি</th>
+                <th>ল্যান্ডিং পেজের শিরোনাম</th>
+                <th>টেমপ্লেট</th>
+                <th>অফার মূল্য</th>
+                <th>সরাসরি URL</th>
+                <th>অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="landing-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: PRODUCTS & STOCK WITH AI ASSISTANT -->
+    <div class="tab-content" id="tab-products">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <div>
+            <h3>প্রোডাক্ট ও ইনভেন্টরি ম্যানেজমেন্ট</h3>
+            <p style="font-size: 13px; color: #64748b; margin: 4px 0 0;">প্রোডাক্ট যোগ, এডিট, ডিলিট এবং AI অ্যাসিস্ট্যান্ট দিয়ে বর্ণনা তৈরি করুন</p>
+          </div>
+          <button onclick="AdminApp.openProductModal()" class="btn-courier-action" style="padding: 8px 18px; font-size: 14px;">
+            + নতুন প্রোডাক্ট যোগ করুন
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ছবি</th>
+                <th>প্রোডাক্টের নাম</th>
+                <th>ক্যাটাগরি</th>
+                <th>মূল্য (অফার / রেগুলার)</th>
+                <th>স্টক ও স্ট্যাটাস</th>
+                <th>ইন স্টক টগল</th>
+                <th>অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: COUPONS & DISCOUNTS -->
+    <div class="tab-content" id="tab-coupons">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <div>
+            <h3>কুপন কোড ও প্রমোশন ডিসকাউন্ট</h3>
+            <p style="font-size: 13px; color: #64748b; margin: 4px 0 0;">গ্রাহকদের চেকআউটে স্পেশাল ডিসকাউন্ট কোড পরিচালনা করুন</p>
+          </div>
+          <button onclick="AdminApp.openCouponModal()" class="btn-courier-action" style="padding: 8px 18px; font-size: 14px;">
+            + নতুন কুপন কোড
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>কুপন কোড</th>
+                <th>ছাড়ের ধরণ</th>
+                <th>ছাড়ের পরিমাণ</th>
+                <th>সর্বনিম্ন অর্ডার</th>
+                <th>বিবরণ</th>
+                <th>স্ট্যাটাস</th>
+                <th>অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="coupons-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: SITE CONTENT & CMS -->
+    <div class="tab-content" id="tab-cms">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <h3>ব্যানার, হেডার ও ফুটার CMS কন্ট্রোল</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div>
+            <h4 style="color: #0d4d29; margin-bottom: 12px; border-bottom: 2px solid #eef5f0; padding-bottom: 6px;">হেডার ও হটলাইন কনফিগারেশন</h4>
+            <div style="margin-bottom: 14px;">
+              <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">হটলাইন নম্বর</label>
+              <input type="text" id="cms-hotline" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" value="01872170476">
+            </div>
+            <div style="margin-bottom: 14px;">
+              <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">ব্র্যান্ডের স্লোগান</label>
+              <input type="text" id="cms-tagline" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" value="সুখী জীবনের জন্য স্বাস্থ্যকর খাবার">
+            </div>
+          </div>
+
+          <div>
+            <h4 style="color: #0d4d29; margin-bottom: 12px; border-bottom: 2px solid #eef5f0; padding-bottom: 6px;">ফুটার কনটেন্ট ও বিবরণ</h4>
+            <div style="margin-bottom: 14px;">
+              <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">আমাদের সম্পর্কে (ফুটার টেক্সট)</label>
+              <textarea id="cms-footer-about" rows="3" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;">প্রকৃতির শ্রেষ্ঠ উপহার খাঁটি ভেষজ, সুন্দরবনের মধু, গাওয়া ঘি ও পুষ্টিকর খাবার আপনার পরিবারে পৌঁছে দিতে প্রিমি ফার্ম নিবেদিতপ্রাণ।</textarea>
+            </div>
+            <div style="margin-bottom: 14px;">
+              <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">কপিরাইট লাইন</label>
+              <input type="text" id="cms-footer-copy" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" value="© ২০২৬ Preme Farm (প্রিমি ফার্ম)। সর্বস্বত্ব সংরক্ষিত।">
+            </div>
+          </div>
+        </div>
+        <button onclick="AdminApp.saveCmsContent()" class="btn-courier-action" style="margin-top: 18px; padding: 10px 24px;">
+          ওয়েবসাইট কনটেন্ট সংরক্ষণ করুন
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 6: STAFF ROLES & PERMISSIONS -->
+    <div class="tab-content" id="tab-roles">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <div>
+            <h3>অ্যাডমিন ও সাব-এডমিন রোল পারমিশন</h3>
+            <p style="font-size: 13px; color: #64748b; margin: 4px 0 0;">সাব-এডমিনদের নির্দিষ্ট কাজের এক্সেস দিন (অর্ডার, প্রোডাক্ট, ল্যান্ডিং পেজ, রিপোর্ট)</p>
+          </div>
+          <button onclick="AdminApp.openStaffModal()" class="btn-courier-action" style="padding: 8px 18px; font-size: 14px;">
+            + নতুন সাব-এডমিন যোগ করুন
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>নাম</th>
+                <th>ইউজারনেম</th>
+                <th>রোল</th>
+                <th>অনুমোদিত পারমিশন সমূহ</th>
+                <th>অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="staff-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 7: COURIER API SETTINGS (Steadfast, Pathao, RedX) -->
+    <div class="tab-content" id="tab-courier">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <h3>কুরিয়ার এপিআই ইন্টিগ্রেশন সেটিংস</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div style="background: #f8faf8; padding: 20px; border-radius: 12px; border: 1px solid #dce8dd;">
+            <h4 style="color: #0d4d29; margin-bottom: 12px;">Steadfast Courier API (স্ট্যাডফাস্ট)</h4>
+            <div style="margin-bottom: 10px;">
+              <label style="font-size: 13px; font-weight:700;">API Key</label>
+              <input type="text" id="courier-steadfast-key" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" value="live_api_key_steadfast_9812">
+            </div>
+            <div>
+              <label style="font-size: 13px; font-weight:700;">Secret Key</label>
+              <input type="password" id="courier-steadfast-secret" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" value="••••••••••••••••">
+            </div>
+          </div>
+          <div style="background: #f8faf8; padding: 20px; border-radius: 12px; border: 1px solid #dce8dd;">
+            <h4 style="color: #0d4d29; margin-bottom: 12px;">Pathao Courier API (পাঠাও)</h4>
+            <div style="margin-bottom: 10px;">
+              <label style="font-size: 13px; font-weight:700;">Store ID</label>
+              <input type="text" id="courier-pathao-store" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" value="PF_STORE_101">
+            </div>
+            <div>
+              <label style="font-size: 13px; font-weight:700;">Client Secret</label>
+              <input type="password" id="courier-pathao-secret" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" value="••••••••••••••••">
+            </div>
+          </div>
+        </div>
+        <button onclick="AdminApp.saveSettings()" class="btn-courier-action" style="margin-top: 18px; padding: 10px 24px;">
+          কুরিয়ার সেটিংস সংরক্ষণ করুন
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 8: STORE SETTINGS -->
+    <div class="tab-content" id="tab-store">
+      <div class="admin-card">
+        <div class="card-title-row">
+          <h3>ডেলিভারি চার্জ ও কনফিগারেশন</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 600px;">
+          <div>
+            <label style="display: block; font-size: 14px; font-weight: 700; margin-bottom: 4px;">ঢাকার ভেতরে ডেলিভারি চার্জ (৳)</label>
+            <input type="number" id="store-dhaka-charge" style="width: 100%; padding: 10px 14px; border: 1px solid #cedcd0; border-radius: 6px;" value="70">
+          </div>
+          <div>
+            <label style="display: block; font-size: 14px; font-weight: 700; margin-bottom: 4px;">ঢাকার বাইরে ডেলিভারি চার্জ (৳)</label>
+            <input type="number" id="store-outside-charge" style="width: 100%; padding: 10px 14px; border: 1px solid #cedcd0; border-radius: 6px;" value="130">
+          </div>
+        </div>
+        <button onclick="AdminApp.saveSettings()" class="btn-courier-action" style="margin-top: 18px; padding: 10px 24px;">
+          স্টোর তথ্য আপডেট করুন
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL: COURIER DISPATCH -->
+  <div class="admin-modal-overlay" id="courier-modal">
+    <div class="admin-modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 900; color: #0d4d29;">কুরিয়ারে পার্সেল বুকিং</h3>
+        <button onclick="AdminApp.closeCourierModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+      <div style="background: #f9fafb; padding: 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px;">
+        <div>অর্ডার ID: <b id="modal-dispatch-id" style="color:#0d4d29;">#PF-0000</b></div>
+        <div>গ্রাহক: <b id="modal-dispatch-name">-</b> (<span id="modal-dispatch-phone">-</span>)</div>
+        <div>ক্যাশ অন ডেলিভারি (COD): <b id="modal-dispatch-amount" style="color: #e67e22;">৳০</b></div>
+      </div>
+      <div style="margin-bottom: 14px;">
+        <label style="display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;">কুরিয়ার সার্ভিস</label>
+        <select id="select-courier-provider" style="width: 100%; padding: 10px 14px; border: 1px solid #cedcd0; border-radius: 6px; font-weight: 700;">
+          <option value="Steadfast">Steadfast Courier (স্ট্যাডফাস্ট এপিআই)</option>
+          <option value="Pathao">Pathao Courier (পাঠাও এপিআই)</option>
+          <option value="RedX">RedX Courier (রেডএক্স এপিআই)</option>
+        </select>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button onclick="AdminApp.closeCourierModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer;">বাতিল</button>
+        <button onclick="AdminApp.dispatchToCourier()" class="btn-courier-action" style="padding: 9px 20px;">বুকিং নিশ্চিত করুন ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT PRODUCT -->
+  <div class="admin-modal-overlay" id="product-modal">
+    <div class="admin-modal-box" style="max-width: 680px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 19px; font-weight: 900; color: #0d4d29;" id="prod-modal-title">নতুন প্রোডাক্ট যোগ করুন</h3>
+        <button onclick="AdminApp.closeProductModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <form id="product-form" onsubmit="AdminApp.handleProductSubmit(event)">
+        <input type="hidden" id="prod-id">
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div>
+            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">প্রোডাক্টের নাম *</label>
+            <input type="text" id="prod-name" required style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: প্রিমি ফার্ম কালো সোনা">
+          </div>
+          <div>
+            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">ক্যাটাগরি</label>
+            <select id="prod-category" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;">
+              <option value="kalo-shona">কালো সোনা</option>
+              <option value="ghee">গাওয়া ঘি</option>
+              <option value="honey">খাঁটি মধু</option>
+              <option value="pickle">আচার</option>
+              <option value="tea">চা ও হারবাল</option>
+              <option value="seeds">সীড মিক্স</option>
+              <option value="combo">কম্বো অফার</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">বিক্রয় মূল্য (৳) *</label>
+            <input type="number" id="prod-price" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="950">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">রেগুলার মূল্য (৳)</label>
+            <input type="number" id="prod-reg-price" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="1150">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">স্টক পরিমাণ</label>
+            <input type="number" id="prod-stock" value="50" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+        </div>
+
+        <!-- AI Assistant Box -->
+        <div style="background: #f5f3ff; border: 1.5px solid #ddd6fe; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <b style="color: #4f46e5; font-size: 14px;">AI কন্টেন্ট রাইটার (এক ক্লিকে বিবরণ তৈরি করুন)</b>
+            <button type="button" onclick="AdminApp.generateAiDescription()" class="btn-ai-sparkle">
+              AI দিয়ে তৈরি করুন
+            </button>
+          </div>
+          <input type="text" id="ai-keywords" placeholder="সংক্ষিপ্ত কি-ওয়ার্ড লিখুন (যেমন: কালো সোনা, মধু, শারীরিক ক্লান্তি দূর)" style="width:100%; padding:8px 12px; border:1px solid #c4b5fd; border-radius:6px; font-size:13px; background:#fff;">
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">বিস্তারিত বিবরণ</label>
+          <textarea id="prod-desc" rows="3" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="প্রোডাক্টের বিবরণ লিখুন বা AI দিয়ে তৈরি করুন"></textarea>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">স্বাস্থ্য উপকারিতা (প্রতি লাইনে ১টি পয়েন্ট)</label>
+          <textarea id="prod-benefits" rows="3" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="উপকারিতা সমূহ"></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" onclick="AdminApp.closeProductModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 9px 24px;">প্রোডাক্ট সেভ করুন ➔</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE LANDING PAGE -->
+  <div class="admin-modal-overlay" id="landing-modal">
+    <div class="admin-modal-box" style="max-width: 740px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 19px; font-weight: 900; color: #0d4d29;">নতুন ল্যান্ডিং পেজ তৈরি করুন</h3>
+        <button onclick="AdminApp.closeLandingModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <form id="landing-form" onsubmit="AdminApp.handleLandingSubmit(event)">
+        <!-- Product Selector Dropdown -->
+        <div style="background: #f8faf8; border: 1.5px solid #dce8dd; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+          <label style="display:block; font-size:13.5px; font-weight:800; color:#0d4d29; margin-bottom:6px;">
+            🛒 স্টোরের প্রোডাক্ট সিলেক্ট করুন (অটো-ফিল হবে)
+          </label>
+          <select id="lp-form-product" onchange="AdminApp.onSelectLandingProduct(this.value)" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px; font-weight:700; font-size:13.5px; background:#fff;">
+            <option value="">-- প্রোডাক্ট নির্বাচন করুন --</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:6px;">ল্যান্ডিং পেজ টেমপ্লেট নির্বাচন করুন *</label>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px;" id="template-options-grid">
+            <div class="template-card selected" onclick="AdminApp.selectTemplate('template-1', this)">
+              <b>১. সিঙ্গেল প্রোডাক্ট হিরো</b>
+              <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">বড় ইমেজ, অফার প্রাইস ও ইনস্ট্যান্ট COD ফর্ম</div>
+            </div>
+            <div class="template-card" onclick="AdminApp.selectTemplate('template-2', this)">
+              <b>২. ফ্ল্যাশ সেল কাউন্টডাউন</b>
+              <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">লাইভ টাইমার, স্টক মিটার ও ডিসকাউন্ট অফার</div>
+            </div>
+            <div class="template-card" onclick="AdminApp.selectTemplate('template-3', this)">
+              <b>৩. মেগা কম্বো সেভার প্যাক</b>
+              <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">২ বা ততোধিক প্যাক নিলে ফ্রি ডেলিভারি অফার</div>
+            </div>
+            <div class="template-card" onclick="AdminApp.selectTemplate('template-4', this)">
+              <b>৪. সোশ্যাল প্রুফ ও রিভিউ</b>
+              <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">কাস্টমারদের ৫-স্টার মতামত ও বিশ্বস্ততা</div>
+            </div>
+            <div class="template-card" onclick="AdminApp.selectTemplate('template-5', this)">
+              <b>৫. ন্যাচারাল ভেষজ ওয়েলনেস</b>
+              <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">উপাদান ও স্বাস্থ্য উপকারিতার নিখাদ গল্প</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">পেজের আকর্ষণীয় হেডলাইন *</label>
+          <input type="text" id="lp-form-title" required style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: কাজের ক্লান্তি দূর করার ন্যাচারাল ফর্মুলা — প্রিমি ফার্ম মধুময় কালো সোনা">
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">সাব-টাইটেল</label>
+          <input type="text" id="lp-form-subtitle" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="১০০% প্রাকৃতিক উপাদানে তৈরি বিশেষ পথ্য • সারা দেশে ফ্রি হোম ডেলিভারি">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">অফার মূল্য (৳) *</label>
+            <input type="number" id="lp-form-price" value="950" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">রেগুলার মূল্য (৳)</label>
+            <input type="number" id="lp-form-reg-price" value="1150" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">প্রোডাক্ট ইমেজ পাথ</label>
+            <input type="text" id="lp-form-image" value="images/kalo_shona_jar.png" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">ছাড়ের ব্যাজ টেক্সট</label>
+          <input type="text" id="lp-form-badge" value="বিশেষ মেগা অফার • ক্যাশ অন ডেলিভারি" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button type="button" onclick="AdminApp.closeLandingModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 9px 24px;">ল্যান্ডিং পেজ তৈরি করুন ➔</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD COUPON -->
+  <div class="admin-modal-overlay" id="coupon-modal">
+    <div class="admin-modal-box" style="max-width: 480px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 900; color: #0d4d29;">নতুন কুপন কোড তৈরি করুন</h3>
+        <button onclick="AdminApp.closeCouponModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <form id="coupon-form" onsubmit="AdminApp.handleCouponSubmit(event)">
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">কুপন কোড *</label>
+          <input type="text" id="cpn-code" required placeholder="যেমন: PREME10 বা EID50" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px; text-transform:uppercase;">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">ছাড়ের পরিমাণ (৳) *</label>
+            <input type="number" id="cpn-amount" required value="100" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">সর্বনিম্ন অর্ডার (৳)</label>
+            <input type="number" id="cpn-min" value="800" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">বিবরণ</label>
+          <input type="text" id="cpn-desc" placeholder="যেমন: ১০০ টাকা ক্যাশ ডিসকাউন্ট" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="AdminApp.closeCouponModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 9px 20px;">কুপন সেভ করুন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD SUB-ADMIN / STAFF -->
+  <div class="admin-modal-overlay" id="staff-modal">
+    <div class="admin-modal-box" style="max-width: 520px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 900; color: #0d4d29;">সাব-এডমিন / স্টাফ একাউন্ট তৈরি</h3>
+        <button onclick="AdminApp.closeStaffModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <form id="staff-form" onsubmit="AdminApp.handleStaffSubmit(event)">
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">স্টাফের পূর্ণ নাম *</label>
+          <input type="text" id="stf-name" required placeholder="যেমন: ফাহিম আহমেদ" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">ইউজারনেম (লগইন) *</label>
+            <input type="text" id="stf-username" required placeholder="fahim" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">সিক্রেট পিন / পাসওয়ার্ড *</label>
+            <input type="password" id="stf-pin" required placeholder="1234" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:6px;">অনুমোদিত পারমিশন নির্বাচন করুন:</label>
+          <div style="display: flex; flex-direction: column; gap: 8px; background: #f8faf8; padding: 12px; border-radius: 8px; border: 1px solid #cedcd0;">
+            <label style="cursor:pointer;"><input type="checkbox" id="perm-orders" checked> অর্ডার ম্যানেজমেন্ট ও কুরিয়ার বুকিং</label>
+            <label style="cursor:pointer;"><input type="checkbox" id="perm-landing" checked> ফেসবুক বুস্ট ল্যান্ডিং পেজ তৈরি</label>
+            <label style="cursor:pointer;"><input type="checkbox" id="perm-products" checked> প্রোডাক্ট ও স্টক পরিচালনা</label>
+            <label style="cursor:pointer;"><input type="checkbox" id="perm-cms"> ওয়েবসাইট ব্যানার ও কনটেন্ট CMS</label>
+            <label style="cursor:pointer;"><input type="checkbox" id="perm-reports"> সেলস রিপোর্ট ও ডেটা এক্সপোর্ট</label>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="AdminApp.closeStaffModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 9px 20px;">স্টাফ সংরক্ষণ করুন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 1: NEW MANUAL ORDER (CALL CENTER) -->
+  <div class="admin-modal-overlay" id="new-order-modal">
+    <div class="admin-modal-box" style="max-width: 620px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 19px; font-weight: 900; color: #0d4d29;">নতুন ম্যানুয়াল অর্ডার তৈরি করুন</h3>
+        <button onclick="AdminApp.closeNewOrderModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <form id="new-order-form" onsubmit="AdminApp.handleNewOrderSubmit(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">গ্রাহকের নাম *</label>
+            <input type="text" id="new-ord-name" required placeholder="যেমন: তানভীর আহমেদ" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">মোবাইল নম্বর *</label>
+            <input type="tel" id="new-ord-phone" required placeholder="01872170476" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">সম্পূর্ণ ডেলিভারি ঠিকানা *</label>
+          <textarea id="new-ord-address" required rows="2" placeholder="বাড়ি, রোড, এলাকা, থানা, জেলা" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">প্রোডাক্ট সিলেক্ট করুন *</label>
+            <select id="new-ord-product" onchange="AdminApp.onNewOrderProductChange(this.value)" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+              <!-- Injected dynamically -->
+            </select>
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">পরিমাণ</label>
+            <input type="number" id="new-ord-qty" value="1" min="1" onchange="AdminApp.recalcNewOrder()" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">মূল্য (৳)</label>
+            <input type="number" id="new-ord-price" value="950" onchange="AdminApp.recalcNewOrder()" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">ডেলিভারি এলাকা</label>
+            <select id="new-ord-city" onchange="AdminApp.onNewOrderCityChange(this.value)" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+              <option value="Dhaka">ঢাকা শহর (চার্জ ৳৭০)</option>
+              <option value="Outside Dhaka">ঢাকার বাইরে (চার্জ ৳১৩০)</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">সর্বমোট বিল (COD)</label>
+            <input type="text" id="new-ord-total" readonly style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-weight:900; color:#0d4d29; background:#f8faf8;" value="৳১০২০">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">কল সেন্টার অভ্যন্তরীণ নোট</label>
+          <input type="text" id="new-ord-note" placeholder="যেমন: কাস্টমার বিকেলে ডেলিভারি চান" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="AdminApp.closeNewOrderModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 9px 22px;">অর্ডার সেভ করুন ➔</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ORDER DETAILS & UPDATE POPUP (CLICK ON ORDER ID) -->
+  <div class="admin-modal-overlay" id="order-details-modal">
+    <div class="admin-modal-box" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
+      <!-- Top Title with Close Icon on Top-Right -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2ebe4; padding-bottom: 12px; margin-bottom: 16px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: 20px; font-weight: 900; color: #0d4d29; margin: 0;">অর্ডার বিস্তারিত</h3>
+            <span id="detail-ord-id-title" style="font-size: 18px; font-weight: 900; color: #15803d; background: #eef5f0; padding: 2px 10px; border-radius: 6px;">#PF-0000</span>
+          </div>
+          <div style="font-size: 12.5px; color: #64748b; margin-top: 4px;">
+            <span>তারিখ: <b id="detail-ord-date">-</b></span> • 
+            <span>সোর্স: <b id="detail-ord-source" style="color: #0d4d29;">Website</b></span>
+          </div>
+        </div>
+        <button onclick="AdminApp.closeOrderDetailsModal()" style="background: none; border: none; font-size: 26px; color: #64748b; cursor: pointer; font-weight: bold; padding: 0 4px; line-height: 1;" title="Close (✕)">✕</button>
+      </div>
+
+      <!-- Fraud & Security Alert Bar -->
+      <div id="detail-fraud-banner" style="background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span id="detail-fraud-pill" style="background: #22c55e; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 800;">নিরাপদ গ্রাহক</span>
+          <span style="font-size: 13px; color: #1e293b;" id="detail-fraud-text">কুরিয়ার ডেলিভারি রেট ৯২% • ফ্রড রিস্ক নেই</span>
+        </div>
+        <button type="button" onclick="AdminApp.checkModalCustomerFraud()" style="background: #ffffff; border: 1px solid #c9decb; color: #0d4d29; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
+          ফ্রড হিস্ট্রি চেক ➔
+        </button>
+      </div>
+
+      <form id="order-details-form" onsubmit="AdminApp.handleSaveOrderDetails(event)">
+        <input type="hidden" id="detail-ord-id">
+
+        <!-- Status & Delivery Area -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; background: #f8faf8; padding: 12px; border-radius: 8px; border: 1px solid #e2ebe4;">
+          <div>
+            <label style="display:block; font-size:13.5px; font-weight:800; color:#0d4d29; margin-bottom:4px;">অর্ডার স্ট্যাটাস পরিবর্তন *</label>
+            <select id="detail-ord-status" style="width:100%; padding:9px 12px; border:2px solid #0d4d29; border-radius:6px; font-weight:800; font-size:13.5px; background:#fff; color:#0d4d29; outline:none; cursor:pointer;">
+              <option value="Pending">Pending (পেন্ডিং)</option>
+              <option value="Hold">Hold (হোল্ড)</option>
+              <option value="Confirmed">Confirmed (নিশ্চিত)</option>
+              <option value="In Courier">In Courier (কুরিয়ারে প্রেরিত)</option>
+              <option value="Delivered">Delivered (ডেলিভারড)</option>
+              <option value="Return">Return (রিটার্ন)</option>
+              <option value="Cancelled">Cancelled (বাতিল)</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; color:#475569; margin-bottom:4px;">ডেলিভারি শহর / এলাকা</label>
+            <input type="text" id="detail-ord-city" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
+          </div>
+        </div>
+
+        <!-- Customer Info -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">গ্রাহকের নাম *</label>
+            <input type="text" id="detail-ord-name" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">মোবাইল নম্বর *</label>
+            <input type="tel" id="detail-ord-phone" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">সম্পূর্ণ ডেলিভারি ঠিকানা *</label>
+          <textarea id="detail-ord-address" required rows="2" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;"></textarea>
+        </div>
+
+        <!-- Ordered Items Summary Table -->
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13px; font-weight:800; color:#0d4d29; margin-bottom:4px;">অর্ডারকৃত পণ্যের তালিকা</label>
+          <div style="border: 1px solid #e2ebe4; border-radius: 8px; overflow: hidden;">
+            <table style="width:100%; border-collapse: collapse; font-size: 13px;">
+              <thead style="background: #f1f5f9; text-align: left;">
+                <tr>
+                  <th style="padding: 8px 10px;">প্রোডাক্ট</th>
+                  <th style="padding: 8px 10px;">সাইজ/প্যাক</th>
+                  <th style="padding: 8px 10px; text-align: center;">পরিমাণ</th>
+                  <th style="padding: 8px 10px; text-align: right;">মূল্য (৳)</th>
+                </tr>
+              </thead>
+              <tbody id="detail-items-table-body">
+                <!-- Items list -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Billing Summary Editable -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-bottom: 14px; background: #fdfefe; padding: 12px; border-radius: 8px; border: 1px solid #cedcd0;">
+          <div>
+            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:4px;">পণ্য মূল্য (৳)</label>
+            <input type="number" id="detail-ord-subtotal" onchange="AdminApp.recalcOrderDetails()" style="width:100%; padding:8px 10px; border:1px solid #cedcd0; border-radius:6px; font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:4px;">ডেলিভারি চার্জ (৳)</label>
+            <input type="number" id="detail-ord-delivery" onchange="AdminApp.recalcOrderDetails()" style="width:100%; padding:8px 10px; border:1px solid #cedcd0; border-radius:6px; font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block; font-size:12.5px; font-weight:800; color:#0d4d29; margin-bottom:4px;">সর্বমোট প্রদেয় COD (৳)</label>
+            <input type="number" id="detail-ord-total" readonly style="width:100%; padding:8px 10px; border:1.5px solid #0d4d29; border-radius:6px; font-size:14px; font-weight:900; color:#0d4d29; background:#f4faf5;">
+          </div>
+        </div>
+
+        <!-- Internal Call Center Note -->
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">কল সেন্টার অভ্যন্তরীণ নোট</label>
+          <textarea id="detail-ord-note" rows="2" placeholder="নোট লিখুন: যেমন- কাস্টমার কাল দুপুরে ডেলিভারি নিশ্চিত করতে বলেছেন, ঠিকানা ভেরিফাইড..." style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;"></textarea>
+        </div>
+
+        <!-- Courier Booking Information / Dispatch Button -->
+        <div id="detail-courier-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <span style="font-size: 13px; font-weight: 800; color: #1e293b;">কুরিয়ার অবস্থা:</span>
+              <span id="detail-courier-info" style="font-size: 13px; color: #64748b; margin-left: 6px;">এখনও কুরিয়ারে বুক করা হয়নি</span>
+            </div>
+            <button type="button" id="detail-courier-btn" onclick="AdminApp.openCourierFromModal()" class="btn-courier-action" style="padding: 6px 14px; font-size: 12px;">
+              কুরিয়ারে পাঠান ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- Last updated audit notice -->
+        <div style="font-size: 12px; color: #64748b; margin-bottom: 16px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+          সর্বশেষ হালনাগাদ করেছেন: <b id="detail-ord-agent" style="color: #0d4d29;">সিস্টেম</b> (<span id="detail-ord-timestamp">-</span>)
+        </div>
+
+        <!-- Bottom Action Buttons -->
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="AdminApp.closeOrderDetailsModal()" style="padding: 10px 20px; border-radius: 6px; border: 1.5px solid #cbd5e1; background: #fff; cursor: pointer; font-weight: 700;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 10px 28px; font-size: 14.5px; font-weight: 800; background: linear-gradient(135deg, #0d4d29 0%, #15803d 100%);">
+            আপডেট করুন ➔
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: FRAUD CHECK & BLACKLIST ACTION -->
+  <div class="admin-modal-overlay" id="fraud-modal">
+    <div class="admin-modal-box" style="max-width: 540px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 19px; font-weight: 900; color: #0d4d29;">গ্রাহক ফ্রড ও কুরিয়ার ডেলিভারি রেকর্ড</h3>
+        <button onclick="AdminApp.closeFraudModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="text-align: center; padding: 18px; background: #f8faf8; border-radius: 12px; margin-bottom: 18px; border: 1px solid #dce8dd;">
+        <div style="font-size: 13px; color: #64748b;">গ্রাহকের মোবাইল নম্বর:</div>
+        <h2 style="font-size: 24px; color: #0d4d29; margin: 4px 0 10px;" id="fraud-phone">-</h2>
+        <div>
+          <span id="fraud-risk-badge" style="font-size: 14px; font-weight: 800; padding: 6px 18px; border-radius: 20px; color: #fff; background: #10b981;">
+            নিরাপদ গ্রাহক (Safe)
+          </span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px; text-align: center;">
+        <div style="background: #ffffff; padding: 12px; border: 1px solid #e2ece4; border-radius: 10px;">
+          <div style="font-size: 12px; color: #64748b;">ডেলিভারি সাকসেস রেট</div>
+          <b style="font-size: 22px; color: #0d4d29;" id="fraud-success-rate">১০০%</b>
+        </div>
+        <div style="background: #ffffff; padding: 12px; border: 1px solid #e2ece4; border-radius: 10px;">
+          <div style="font-size: 12px; color: #64748b;">মোট পার্সেল হিস্টোরি</div>
+          <b style="font-size: 22px; color: #1e293b;" id="fraud-total-parcels">0</b>
+        </div>
+        <div style="background: #ffffff; padding: 12px; border: 1px solid #e2ece4; border-radius: 10px;">
+          <div style="font-size: 12px; color: #64748b;">পূর্ববর্তী রিটার্ন</div>
+          <b style="font-size: 22px; color: #ef4444;" id="fraud-returns">0</b>
+        </div>
+      </div>
+
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px; margin-bottom: 18px; font-size: 13.5px; line-height: 1.5; color: #1e40af;">
+        <b>কল সেন্টার পরামর্শ:</b><br>
+        <span id="fraud-advice">-</span>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button id="btn-fraud-block-action" class="btn-white" style="color: #dc2626; border-color: #fecaca; padding: 8px 16px; border-radius: 6px; font-weight: 800; cursor: pointer;">
+          ব্লক করুন (Block)
+        </button>
+        <button onclick="AdminApp.closeFraudModal()" class="btn-courier-action" style="padding: 8px 20px;">ঠিক আছে</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: CALL CENTER NOTE -->
+  <div class="admin-modal-overlay" id="note-modal">
+    <div class="admin-modal-box" style="max-width: 500px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 900; color: #0d4d29;">কল সেন্টার অভ্যন্তরীণ নোট (<span id="modal-note-order-id"></span>)</h3>
+        <button onclick="AdminApp.closeNoteModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:6px;">নোট লিখুন:</label>
+        <textarea id="modal-note-text" rows="4" style="width:100%; padding:10px 12px; border:1.5px solid #cedcd0; border-radius:6px; font-size:14px;" placeholder="যেমন: কাস্টমার কাল দুপুরে কল দিতে বলেছেন, ঠিকানা নিশ্চিত করা হয়েছে..."></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button onclick="AdminApp.closeNoteModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer;">বাতিল</button>
+        <button onclick="AdminApp.saveOrderNote()" class="btn-courier-action" style="padding: 9px 22px;">নোট সেভ করুন ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
