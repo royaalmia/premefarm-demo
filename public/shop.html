@@ -658,12 +658,12 @@
         const variant = p.variants && p.variants[0] ? p.variants[0] : { price: 850, regularPrice: 990, size: 'স্ট্যান্ডার্ড' };
         return `
           <div class="shop-card">
-            <div class="shop-card-img-wrap">
+            <div class="shop-card-img-wrap" onclick="PremeStore.openProductModal(${p.id})" style="cursor: pointer;">
               <span class="shop-card-badge">${p.tag || 'প্রিমিয়াম'}</span>
               <img src="${p.image}" alt="${p.name}" loading="lazy">
             </div>
             <div class="shop-card-body">
-              <h3 class="shop-card-title">${p.name}</h3>
+              <h3 class="shop-card-title" onclick="PremeStore.openProductModal(${p.id})" style="cursor: pointer;">${p.name}</h3>
               <div style="font-size: 13px; color: #64748b; margin-bottom: 8px;">
                 প্যাক সাইজ: <b style="color: #0d4d29;">${variant.size}</b>
               </div>
@@ -672,10 +672,10 @@
                 ${variant.regularPrice ? `<span class="price-regular">৳${variant.regularPrice}</span>` : ''}
               </div>
               <div class="shop-card-actions">
-                <button onclick="instantBuyProduct(${p.id}, '${variant.size}', ${variant.price})" class="btn-buy-instant">
-                  <span>🛍️</span> অর্ডার করুন
+                <button onclick="PremeStore.openProductModal(${p.id})" class="btn-buy-instant">
+                  <span>🛍️</span> অপশন ও অর্ডার
                 </button>
-                <button onclick="PremeStore.addToCart(${p.id}, '${variant.size}', ${variant.price}, 1)" class="btn-cart-icon" title="কার্টে যোগ করুন">
+                <button onclick="PremeStore.addToCart(${p.id}, 0, 1, true)" class="btn-cart-icon" title="কার্টে যোগ করুন">
                   🛒
                 </button>
               </div>
@@ -729,5 +729,15 @@
       window.location.href = '/cart';
     }
   </script>
+
+  <!-- PRODUCT QUICKVIEW MODAL WITH RELEVANT PRODUCTS -->
+  <div class="product-modal-overlay" id="product-quickview-modal" onclick="PremeStore.handleModalBackdropClick(event)">
+    <div class="product-modal-dialog">
+      <button class="product-modal-close" onclick="PremeStore.closeProductModal()" title="বন্ধ করুন">✕</button>
+      <div class="product-modal-content" id="product-quickview-content">
+        <!-- Injected dynamically via PremeStore.renderProductModal() -->
+      </div>
+    </div>
+  </div>
 </body>
 </html>

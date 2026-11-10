@@ -18,6 +18,7 @@ const LANDING_FILE = path.join(DATA_DIR, 'landing_pages.json');
 const COUPONS_FILE = path.join(DATA_DIR, 'coupons.json');
 const BLACKLIST_FILE = path.join(DATA_DIR, 'blacklist.json');
 const AUDIT_FILE = path.join(DATA_DIR, 'audit_logs.json');
+const FAILED_ORDERS_FILE = path.join(DATA_DIR, 'failed_orders.json');
 
 app.use(cors());
 app.use(express.json());
@@ -239,6 +240,58 @@ app.delete('/api/staff/:id', (req, res) => {
   res.json({ success: true, message: 'স্টাফ ডিলিট হয়েছে।' });
 });
 
+// Admin / Staff Authentication API (Master Admin: admin@premefarm.com / Admin@PremeFarm)
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ success: false, message: 'ইউজারনেম/ইমেইল এবং পাসওয়ার্ড আবশ্যক।' });
+  }
+
+  const cleanUser = username.trim().toLowerCase();
+  const cleanPass = password.trim();
+
+  // 1. Master Admin check
+  if (cleanUser === 'admin@premefarm.com' && cleanPass === 'Admin@PremeFarm') {
+    return res.json({
+      success: true,
+      message: 'মাস্টার এডমিন সফলভাবে লগইন করেছেন!',
+      user: {
+        id: 'super-admin-01',
+        name: 'মাস্টার এডমিন (Preme Farm)',
+        username: 'admin@premefarm.com',
+        role: 'Super Admin',
+        permissions: ['all']
+      }
+    });
+  }
+
+  // 2. Staff & Sub-admin check
+  const content = readJson(CONTENT_FILE, {});
+  const staffList = content.staff || [];
+  const staff = staffList.find(s => 
+    s.username.toLowerCase() === cleanUser || (s.email && s.email.toLowerCase() === cleanUser)
+  );
+
+  if (staff && (staff.pin === cleanPass || staff.password === cleanPass)) {
+    return res.json({
+      success: true,
+      message: `${staff.name} সফলভাবে লগইন করেছেন!`,
+      user: {
+        id: staff.id,
+        name: staff.name,
+        username: staff.username,
+        role: staff.role || 'Sub-Admin',
+        permissions: staff.permissions || ['orders']
+      }
+    });
+  }
+
+  return res.status(401).json({
+    success: false,
+    message: 'ভুল ইমেইল বা পাসওয়ার্ড! অনুগ্রহ করে সঠিক তথ্য প্রদান করুন।'
+  });
+});
+
 
 // 4. CUSTOMER AUTH & USER PROFILE API
 app.post('/api/auth/register', (req, res) => {
@@ -438,6 +491,19 @@ app.post('/api/orders', (req, res) => {
   });
   writeJson(PRODUCTS_FILE, products);
 
+  // Auto-remove any pending failed order for this customer phone
+  try {
+    let failedOrders = readJson(FAILED_ORDERS_FILE, []);
+    const updatedFailed = failedOrders.filter(f => 
+      !f.customer || f.customer.phone.replace(/[\s-]/g, '') !== cleanPhone
+    );
+    if (updatedFailed.length !== failedOrders.length) {
+      writeJson(FAILED_ORDERS_FILE, updatedFailed);
+    }
+  } catch (err) {
+    console.error('Failed orders cleanup error:', err);
+  }
+
   recordAuditLog(
     newOrder.id,
     actingAgent,
@@ -613,6 +679,145 @@ app.delete('/api/orders/:id', (req, res) => {
   }
   writeJson(ORDERS_FILE, orders);
   res.json({ success: true, message: 'অর্ডার সফলভাবে ডিলিট করা হয়েছে।' });
+});
+
+// ================= FAILED ORDERS / ABANDONED LEADS API =================
+app.get('/api/failed-orders', (req, res) => {
+  const failed = readJson(FAILED_ORDERS_FILE, []);
+  res.json({ success: true, count: failed.length, data: failed });
+});
+
+app.post('/api/failed-orders', (req, res) => {
+  const { customer, product, price, quantity, total, deliveryCharge, source, notes } = req.body;
+  if (!customer || !customer.phone) {
+    return res.status(400).json({ success: false, message: 'মোবাইল নম্বর দেওয়া আবশ্যক।' });
+  }
+
+  const cleanPhone = customer.phone.replace(/[\s-]/g, '');
+  if (cleanPhone.length < 10) {
+    return res.status(400).json({ success: false, message: 'সঠিক মোবাইল নম্বর প্রয়োজন।' });
+  }
+
+  const failedOrders = readJson(FAILED_ORDERS_FILE, []);
+  const existingIdx = failedOrders.findIndex(f => 
+    f.customer && f.customer.phone.replace(/[\s-]/g, '') === cleanPhone
+  );
+
+  const payload = {
+    customer: {
+      name: (customer.name || 'অজ্ঞাত ক্রেতা').trim(),
+      phone: customer.phone.trim(),
+      address: (customer.address || '').trim(),
+      city: customer.city || 'ঢাকা'
+    },
+    product: product || 'প্রিমি ফার্ম প্রাকৃতিক পণ্য',
+    price: price || 950,
+    quantity: quantity || 1,
+    deliveryCharge: deliveryCharge || 70,
+    total: total || (price ? price * (quantity || 1) + (deliveryCharge || 70) : 1020),
+    source: source || 'Landing Page',
+    status: 'Abandoned',
+    notes: notes || 'অর্ডার ফর্ম পূরণ করে সাবমিট করার আগেই পৃষ্ঠা ত্যাগ করেছেন।',
+    updatedAt: new Date().toISOString()
+  };
+
+  if (existingIdx !== -1) {
+    failedOrders[existingIdx] = {
+      ...failedOrders[existingIdx],
+      ...payload
+    };
+    writeJson(FAILED_ORDERS_FILE, failedOrders);
+    return res.json({ success: true, message: 'ব্যর্থ অর্ডার আপডেট হয়েছে।', id: failedOrders[existingIdx].id });
+  } else {
+    payload.id = `FAIL-${Math.floor(1000 + Math.random() * 9000)}`;
+    payload.createdAt = new Date().toISOString();
+    failedOrders.unshift(payload);
+    writeJson(FAILED_ORDERS_FILE, failedOrders);
+    return res.json({ success: true, message: 'ব্যর্থ অর্ডার সংরক্ষিত হয়েছে।', id: payload.id });
+  }
+});
+
+app.delete('/api/failed-orders/:id', (req, res) => {
+  let failedOrders = readJson(FAILED_ORDERS_FILE, []);
+  const initialLen = failedOrders.length;
+  failedOrders = failedOrders.filter(f => f.id !== req.params.id);
+  if (failedOrders.length === initialLen) {
+    return res.status(404).json({ success: false, message: 'ব্যর্থ অর্ডার পাওয়া যায়নি।' });
+  }
+  writeJson(FAILED_ORDERS_FILE, failedOrders);
+  res.json({ success: true, message: 'ব্যর্থ অর্ডার ডিলিট করা হয়েছে।' });
+});
+
+// Convert Failed Order into Confirmed Order
+app.post('/api/failed-orders/convert/:id', (req, res) => {
+  const { id } = req.params;
+  const { agent } = req.body;
+  const failedOrders = readJson(FAILED_ORDERS_FILE, []);
+  const fIndex = failedOrders.findIndex(f => f.id === id);
+
+  if (fIndex === -1) {
+    return res.status(404).json({ success: false, message: 'ব্যর্থ অর্ডার পাওয়া যায়নি।' });
+  }
+
+  const failed = failedOrders[fIndex];
+  const actingAgent = agent || 'তানভীর (Agent-01)';
+  const orders = readJson(ORDERS_FILE, []);
+
+  const newOrder = {
+    id: `PF-${Math.floor(1000 + Math.random() * 9000)}`,
+    createdAt: new Date().toISOString(),
+    customer: {
+      name: failed.customer?.name || 'গ্রাহক',
+      phone: failed.customer?.phone || '',
+      address: failed.customer?.address || 'অসম্পূর্ণ ঠিকানা',
+      city: failed.customer?.city || 'Dhaka'
+    },
+    customerIp: '127.0.0.1',
+    items: [
+      {
+        id: 1,
+        name: failed.product || 'প্রিমি ফার্ম মধুময় কালো সোনা',
+        variant: 'রেগুলার',
+        price: failed.price || 950,
+        quantity: failed.quantity || 1
+      }
+    ],
+    subtotal: (failed.price || 950) * (failed.quantity || 1),
+    deliveryCharge: failed.deliveryCharge || 70,
+    total: failed.total || 1020,
+    paymentMethod: 'Cash on Delivery (ক্যাশ অন ডেলিভারি)',
+    status: 'Pending',
+    source: `Recovered: ${failed.source || 'Landing Page'}`,
+    callCenterNote: `ব্যর্থ অর্ডার রূপান্তর করা হয়েছে। এজেন্টের মাধ্যমে কনফার্মড।`,
+    lastUpdatedBy: {
+      agent: actingAgent,
+      action: `ব্যর্থ অর্ডার রূপান্তর করা হয়েছে (পূর্বের ID: ${failed.id})`,
+      actionEn: `Failed order converted to confirmed order (Prev ID: ${failed.id})`,
+      timestamp: new Date().toISOString()
+    },
+    courier: null,
+    notes: failed.notes || ''
+  };
+
+  orders.unshift(newOrder);
+  writeJson(ORDERS_FILE, orders);
+
+  // Remove from failed orders
+  failedOrders.splice(fIndex, 1);
+  writeJson(FAILED_ORDERS_FILE, failedOrders);
+
+  recordAuditLog(
+    newOrder.id,
+    actingAgent,
+    `ব্যর্থ অর্ডার সফল অর্ডারে রূপান্তর (${newOrder.id}, কাস্টমার: ${newOrder.customer.name})`,
+    `Failed order converted to confirmed order (${newOrder.id}, Customer: ${newOrder.customer.name})`
+  );
+
+  res.json({
+    success: true,
+    message: `ব্যর্থ অর্ডার সফলভাবে নতুন কনফার্মড অর্ডারে (${newOrder.id}) রূপান্তর করা হয়েছে!`,
+    order: newOrder
+  });
 });
 
 // Courier Dispatch API

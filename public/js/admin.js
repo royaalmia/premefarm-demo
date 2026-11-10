@@ -177,6 +177,7 @@ const I18N = {
 
 const AdminApp = {
   orders: [],
+  failedOrders: [],
   landingPages: [],
   products: [],
   coupons: [],
@@ -185,17 +186,26 @@ const AdminApp = {
   blacklist: { phones: [], ips: [] },
   
   currentFilter: 'all',
+  currentPage: 1,
+  pageSize: 10,
   currentLang: localStorage.getItem('premefarm_admin_lang') || 'bn',
   currentTheme: localStorage.getItem('premefarm_admin_theme') || 'light',
-  activeAgent: localStorage.getItem('premefarm_active_agent') || 'তানভীর (Agent-01)',
+  activeAgent: localStorage.getItem('premefarm_active_agent') || 'সুপার এডমিন',
+  currentUser: null,
 
   activeDispatchOrderId: null,
   activeNoteOrderId: null,
 
   async init() {
+    // 1. Check Authentication gate
+    if (!this.checkAuth()) {
+      return;
+    }
+
     this.applyTheme(this.currentTheme);
     this.applyLanguage(this.currentLang);
     this.setupTabs();
+    this.setupModalDismissal();
 
     // Populate active agent dropdown
     const agentSelect = document.getElementById('active-agent-select');
@@ -205,6 +215,7 @@ const AdminApp = {
 
     await this.fetchStats();
     await this.fetchOrders();
+    await this.fetchFailedOrders();
     await this.fetchAuditLogs();
     await this.fetchBlacklist();
     await this.fetchLandingPages();
@@ -216,6 +227,131 @@ const AdminApp = {
 
     // Enforce active agent's role & permissions
     this.setActiveAgent(this.activeAgent);
+  },
+
+  // ================= AUTHENTICATION & LOGIN GATE =================
+  checkAuth() {
+    const sessionStr = localStorage.getItem('pf_admin_session');
+    const loginScreen = document.getElementById('admin-login-screen');
+
+    if (!sessionStr) {
+      if (loginScreen) loginScreen.style.display = 'flex';
+      return false;
+    }
+
+    try {
+      this.currentUser = JSON.parse(sessionStr);
+      if (loginScreen) loginScreen.style.display = 'none';
+
+      const userBadge = document.getElementById('sidebar-user-name');
+      const roleBadge = document.getElementById('sidebar-user-role');
+      if (userBadge) userBadge.textContent = this.currentUser.name || 'এডমিন';
+      if (roleBadge) roleBadge.textContent = this.currentUser.role || 'Super Admin';
+
+      if (this.currentUser.role === 'Super Admin') {
+        this.activeAgent = 'সুপার এডমিন';
+      } else {
+        this.activeAgent = this.currentUser.name;
+      }
+      return true;
+    } catch (e) {
+      if (loginScreen) loginScreen.style.display = 'flex';
+      return false;
+    }
+  },
+
+  async handleLogin(e) {
+    if (e) e.preventDefault();
+    const user = document.getElementById('admin-login-user').value.trim();
+    const pass = document.getElementById('admin-login-pass').value.trim();
+    const errBox = document.getElementById('admin-login-error');
+    const btn = document.getElementById('admin-login-btn');
+
+    if (errBox) errBox.style.display = 'none';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'লগইন যাচাই হচ্ছে...';
+    }
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user, password: pass })
+      });
+      const data = await res.json();
+
+      if (data.success && data.user) {
+        localStorage.setItem('pf_admin_session', JSON.stringify(data.user));
+        this.currentUser = data.user;
+        const loginScreen = document.getElementById('admin-login-screen');
+        if (loginScreen) loginScreen.style.display = 'none';
+        this.init();
+      } else {
+        if (errBox) {
+          errBox.textContent = data.message || 'ভুল ইমেইল বা পাসওয়ার্ড!';
+          errBox.style.display = 'block';
+        }
+      }
+    } catch (err) {
+      // Fallback offline check
+      if (user.toLowerCase() === 'admin@premefarm.com' && pass === 'Admin@PremeFarm') {
+        const u = { name: 'মাস্টার এডমিন', username: 'admin@premefarm.com', role: 'Super Admin', permissions: ['all'] };
+        localStorage.setItem('pf_admin_session', JSON.stringify(u));
+        this.currentUser = u;
+        const loginScreen = document.getElementById('admin-login-screen');
+        if (loginScreen) loginScreen.style.display = 'none';
+        this.init();
+      } else {
+        if (errBox) {
+          errBox.textContent = 'ভুল তথ্য প্রদান করেছেন। সার্ভারে যোগাযোগ ব্যর্থ।';
+          errBox.style.display = 'block';
+        }
+      }
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'লগইন করুন ➔';
+      }
+    }
+  },
+
+  handleLogout() {
+    if (confirm('আপনি কি নিশ্চিত যে এডমিন প্যানেল থেকে লগআউট করতে চান?')) {
+      localStorage.removeItem('pf_admin_session');
+      this.currentUser = null;
+      const loginScreen = document.getElementById('admin-login-screen');
+      if (loginScreen) {
+        loginScreen.style.display = 'flex';
+        const userInp = document.getElementById('admin-login-user');
+        const passInp = document.getElementById('admin-login-pass');
+        if (userInp) userInp.value = '';
+        if (passInp) passInp.value = '';
+      }
+    }
+  },
+
+  setupModalDismissal() {
+    // Backdrop click closes any modal
+    document.querySelectorAll('.admin-modal-overlay').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          this.closeAllModals();
+        }
+      });
+    });
+
+    // ESC key closes any modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closeAllModals();
+      }
+    });
+  },
+
+  closeAllModals() {
+    document.querySelectorAll('.admin-modal-overlay').forEach(m => m.classList.remove('active'));
+    document.body.style.overflow = '';
   },
 
   // ================= THEME SWITCHER =================
@@ -445,6 +581,18 @@ const AdminApp = {
     this.renderOrdersTable();
   },
 
+  async fetchFailedOrders() {
+    try {
+      const res = await fetch('/api/failed-orders');
+      if (res.ok) {
+        const json = await res.json();
+        this.failedOrders = json.data || [];
+        const badge = document.getElementById('count-failed');
+        if (badge) badge.textContent = this.failedOrders.length;
+      }
+    } catch (e) {}
+  },
+
   updateTabCounters() {
     const counts = {
       all: this.orders.length,
@@ -454,7 +602,8 @@ const AdminApp = {
       incourier: 0,
       delivered: 0,
       return: 0,
-      cancelled: 0
+      cancelled: 0,
+      failed: this.failedOrders.length
     };
 
     this.orders.forEach(o => {
@@ -476,21 +625,35 @@ const AdminApp = {
 
   filterOrders(status, btn) {
     this.currentFilter = status;
+    this.currentPage = 1;
     document.querySelectorAll('.filter-pill').forEach(b => {
       b.style.background = '#fff';
       b.style.color = '#334155';
       b.style.borderColor = '#cedcd0';
     });
     if (btn) {
-      btn.style.background = '#0d4d29';
+      btn.style.background = status === 'Failed' ? '#dc2626' : '#0d4d29';
       btn.style.color = '#fff';
-      btn.style.borderColor = '#0d4d29';
+      btn.style.borderColor = status === 'Failed' ? '#dc2626' : '#0d4d29';
+    } else {
+      const activeBtn = document.getElementById(`tab-pill-${status.toLowerCase()}`);
+      if (activeBtn) {
+        activeBtn.style.background = status === 'Failed' ? '#dc2626' : '#0d4d29';
+        activeBtn.style.color = '#fff';
+        activeBtn.style.borderColor = status === 'Failed' ? '#dc2626' : '#0d4d29';
+      }
     }
-    this.renderOrdersTable();
+
+    if (status === 'Failed') {
+      this.renderFailedOrders();
+    } else {
+      this.renderOrdersTable();
+    }
   },
 
   searchOrders(q) {
     const query = q.toLowerCase().trim();
+    this.currentPage = 1;
     if (!query) {
       this.renderOrdersTable();
       return;
@@ -504,8 +667,35 @@ const AdminApp = {
     this.renderOrdersTable(filtered);
   },
 
+  goToOrdersPage(page) {
+    this.currentPage = page;
+    this.renderOrdersTable();
+    const card = document.querySelector('.admin-card');
+    if (card) card.scrollIntoView({ behavior: 'smooth' });
+  },
+
   renderOrdersTable(list) {
     const tbody = document.getElementById('orders-table-body');
+    const bar = document.getElementById('orders-pagination-bar');
+    if (bar) bar.style.display = 'flex';
+
+    // Reset table header
+    const theadRow = document.getElementById('orders-table-head-row');
+    if (theadRow) {
+      theadRow.innerHTML = `
+        <th data-i18n="th_id_source">অর্ডার ID ও সোর্স</th>
+        <th data-i18n="th_customer">গ্রাহক তথ্য ও ফ্রড চেক</th>
+        <th data-i18n="th_address">ডেলিভারি ঠিকানা</th>
+        <th data-i18n="th_items">অর্ডারকৃত পণ্য</th>
+        <th data-i18n="th_bill">বিল (COD)</th>
+        <th data-i18n="th_status">স্ট্যাটাস</th>
+        <th data-i18n="th_courier">কুরিয়ার একশন</th>
+        <th data-i18n="th_note">কল সেন্টার নোট</th>
+        <th data-i18n="th_agent">হালনাগাদ করেছেন</th>
+        <th data-i18n="th_actions">একশন</th>
+      `;
+    }
+
     const items = list || (this.currentFilter === 'all' ? this.orders : this.orders.filter(o => {
       if (this.currentFilter === 'In Courier') {
         return o.status === 'In Courier' || o.status === 'Shipped';
@@ -515,12 +705,18 @@ const AdminApp = {
 
     if (!items || items.length === 0) {
       tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 40px; color:#64748b;">${this.currentLang === 'bn' ? 'কোনো অর্ডার পাওয়া যায়নি।' : 'No orders found.'}</td></tr>`;
+      this.renderPagination(0);
       return;
     }
 
+    // Paginate items (10 per page)
+    const totalItems = items.length;
+    const start = (this.currentPage - 1) * this.pageSize;
+    const pageItems = items.slice(start, start + this.pageSize);
+
     const t = I18N[this.currentLang] || I18N.bn;
 
-    tbody.innerHTML = items.map(o => {
+    tbody.innerHTML = pageItems.map(o => {
       const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString(this.currentLang === 'bn' ? 'bn-BD' : 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
       const itemsList = (o.items || []).map(i => `${i.name} (x${i.quantity || 1})`).join('<br>');
       const phone = o.customer?.phone || '';
@@ -640,6 +836,168 @@ const AdminApp = {
         </tr>
       `;
     }).join('');
+
+    this.renderPagination(totalItems);
+  },
+
+  renderPagination(totalItems) {
+    const bar = document.getElementById('orders-pagination-bar');
+    const info = document.getElementById('orders-pagination-info');
+    const btns = document.getElementById('orders-pagination-btns');
+    if (!bar || !info || !btns) return;
+
+    if (totalItems <= this.pageSize) {
+      info.textContent = `মোট ${totalItems} টি অর্ডার দেখাচ্ছে`;
+      btns.innerHTML = '';
+      return;
+    }
+
+    const totalPages = Math.ceil(totalItems / this.pageSize);
+    const startIdx = (this.currentPage - 1) * this.pageSize + 1;
+    const endIdx = Math.min(this.currentPage * this.pageSize, totalItems);
+
+    info.textContent = `দেখাচ্ছে ${startIdx}-${endIdx} / মোট ${totalItems} টি অর্ডার (পৃষ্ঠা ${this.currentPage} এর ${totalPages})`;
+
+    let html = `
+      <button class="admin-page-btn" ${this.currentPage === 1 ? 'disabled' : ''} onclick="AdminApp.goToOrdersPage(${this.currentPage - 1})">
+        ◀ পূর্ববর্তী
+      </button>
+    `;
+
+    for (let p = 1; p <= totalPages; p++) {
+      if (totalPages > 7 && Math.abs(p - this.currentPage) > 2 && p !== 1 && p !== totalPages) {
+        if (p === 2 || p === totalPages - 1) html += `<span style="padding:0 4px; color:#94a3b8;">...</span>`;
+        continue;
+      }
+      html += `
+        <button class="admin-page-btn ${p === this.currentPage ? 'active' : ''}" onclick="AdminApp.goToOrdersPage(${p})">
+          ${p}
+        </button>
+      `;
+    }
+
+    html += `
+      <button class="admin-page-btn" ${this.currentPage === totalPages ? 'disabled' : ''} onclick="AdminApp.goToOrdersPage(${this.currentPage + 1})">
+        পরবর্তী ▶
+      </button>
+    `;
+
+    btns.innerHTML = html;
+  },
+
+  renderFailedOrders() {
+    const tbody = document.getElementById('orders-table-body');
+    const theadRow = document.getElementById('orders-table-head-row');
+    const bar = document.getElementById('orders-pagination-bar');
+    if (bar) bar.style.display = 'none';
+
+    if (theadRow) {
+      theadRow.innerHTML = `
+        <th>ড্রপ-অফের তারিখ ও ID</th>
+        <th>গ্রাহক তথ্য (মোবাইল)</th>
+        <th>ডেলিভারি ঠিকানা</th>
+        <th>পণ্যের বিবরণ</th>
+        <th>সম্ভাব্য বিল</th>
+        <th>উৎস ও স্ট্যাটাস</th>
+        <th>ড্রপ-অফ নোট</th>
+        <th>অ্যাকশন বাটন</th>
+      `;
+    }
+
+    if (!this.failedOrders || this.failedOrders.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 40px; color:#64748b;">কোনো ব্যর্থ অর্ডার পাওয়া যায়নি। সকল কাস্টমার সফলভাবে অর্ডার সম্পন্ন করেছেন।</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = this.failedOrders.map(f => {
+      const date = f.createdAt ? new Date(f.createdAt).toLocaleDateString('bn-BD', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+      const phone = f.customer?.phone || '';
+      return `
+        <tr style="background: #fff8f8;">
+          <td>
+            <b style="color: #dc2626; font-size: 13.5px;">${f.id}</b><br>
+            <span style="color: #64748b; font-size: 12px;">${date}</span>
+          </td>
+          <td>
+            <b style="font-size: 14px; color: #1e293b;">${f.customer?.name || 'অজ্ঞাত ক্রেতা'}</b><br>
+            <a href="tel:${phone}" style="color: #0d4d29; font-weight: 900; font-size: 14px; text-decoration: none;">
+              📞 ${phone}
+            </a>
+          </td>
+          <td style="font-size: 13px; max-width: 180px;">
+            ${f.customer?.address || 'অসম্পূর্ণ ঠিকানা'}<br>
+            <span style="color: #64748b; font-size: 11px;">${f.customer?.city || 'Dhaka'}</span>
+          </td>
+          <td style="font-size: 13px;">
+            <b>${f.product}</b><br>
+            <span style="color: #64748b; font-size: 11.5px;">পরিমাণ: ${f.quantity || 1}টি</span>
+          </td>
+          <td>
+            <b style="color: #0d4d29; font-size: 15px;">৳${f.total || 0}</b><br>
+            <span style="font-size: 11px; color: #64748b;">ক্যাশ অন ডেলিভারি</span>
+          </td>
+          <td>
+            <span style="background: #fee2e2; color: #b91c1c; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 800; display: inline-block;">
+              ড্রপ-অফ (Abandoned)
+            </span><br>
+            <span style="font-size: 11px; color: #64748b;">${f.source || 'Landing Page'}</span>
+          </td>
+          <td style="font-size: 12px; color: #92400e; max-width: 160px;">
+            ${f.notes || '-'}
+          </td>
+          <td>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <a href="tel:${phone}" style="background: #0d4d29; color: #fff; text-align: center; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                <span>📞</span> কল দিন
+              </a>
+              <button onclick="AdminApp.convertFailedOrder('${f.id}')" style="background: #eef5f0; color: #0d4d29; border: 1.5px solid #0d4d29; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
+                ✓ কনফার্ম করুন
+              </button>
+              <button onclick="AdminApp.deleteFailedOrder('${f.id}')" style="background: #fff; color: #dc2626; border: 1px solid #fca5a5; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">
+                🗑️ ডিলিট
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  async convertFailedOrder(id) {
+    if (!confirm('এই ব্যর্থ অর্ডারটিকে কি কনফার্মড অর্ডারে রূপান্তর করতে চান?')) return;
+    try {
+      const res = await fetch(`/api/failed-orders/convert/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agent: this.activeAgent })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(data.message);
+        await this.fetchOrders();
+        await this.fetchFailedOrders();
+        this.filterOrders('all');
+      } else {
+        alert(data.message || 'রূপান্তর করা সম্ভব হয়নি।');
+      }
+    } catch (e) {
+      alert('সার্ভার এরর');
+    }
+  },
+
+  async deleteFailedOrder(id) {
+    if (!confirm('এই ব্যর্থ অর্ডার রেকর্ডটি কি ডিলিট করতে চান?')) return;
+    try {
+      const res = await fetch(`/api/failed-orders/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        await this.fetchFailedOrders();
+        this.renderFailedOrders();
+      }
+    } catch (e) {
+      alert('ডিলিট ব্যর্থ হয়েছে।');
+    }
+  },
   },
 
   async updateStatus(id, status) {

@@ -773,6 +773,65 @@
       document.getElementById('lp-bill-total').textContent = `৳${total}`;
     }
 
+    let orderPlaced = false;
+    let failedOrderCaptureTimer = null;
+
+    function captureLandingFailedLead() {
+      if (orderPlaced) return;
+      const name = document.getElementById('lp-name')?.value?.trim();
+      const phone = document.getElementById('lp-phone')?.value?.trim();
+      const address = document.getElementById('lp-address')?.value?.trim();
+
+      if (!phone || phone.replace(/[\s-]/g, '').length < 11) return;
+
+      const payload = {
+        customer: {
+          name: name || 'সম্ভাব্য ক্রেতা (ল্যান্ডিং পেজ)',
+          phone: phone,
+          address: address || '',
+          city: currentDeliveryCharge === 70 ? 'ঢাকা' : 'ঢাকার বাইরে'
+        },
+        product: currentPageData?.productName || document.getElementById('lp-title')?.textContent || 'প্রিমি ফার্ম পণ্য',
+        price: currentProductPrice,
+        quantity: selectedPackageCount,
+        deliveryCharge: currentDeliveryCharge,
+        total: currentProductPrice + currentDeliveryCharge,
+        source: `Landing Page (${currentPageData?.templateName || 'Direct'})`,
+        notes: 'ল্যান্ডিং পেজে নাম ও নম্বর পূরণ করার পর অর্ডার কনফার্ম করার আগে পৃষ্ঠা ত্যাগ করেছেন।'
+      };
+
+      try {
+        if (navigator.sendBeacon) {
+          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+          navigator.sendBeacon('/api/failed-orders', blob);
+        } else {
+          fetch('/api/failed-orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }).catch(() => {});
+        }
+      } catch (e) {}
+    }
+
+    // Attach listeners on inputs
+    ['lp-phone', 'lp-name', 'lp-address'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', () => {
+          clearTimeout(failedOrderCaptureTimer);
+          failedOrderCaptureTimer = setTimeout(captureLandingFailedLead, 1200);
+        });
+        el.addEventListener('blur', captureLandingFailedLead);
+      }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      if (!orderPlaced) {
+        captureLandingFailedLead();
+      }
+    });
+
     async function handleLpOrder(e) {
       e.preventDefault();
       const name = document.getElementById('lp-name').value.trim();
@@ -805,6 +864,7 @@
         });
         const data = await res.json();
         if (data.success && data.order) {
+          orderPlaced = true;
           alert(`ধন্যবাদ ${name}! আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে (অর্ডার ID: ${data.order.id})। আমাদের প্রতিনিধি শীঘ্রই কল করে কনফার্ম করবেন।`);
           window.location.href = `/profile?track=${data.order.id}`;
         } else if (res.status === 403) {
@@ -817,6 +877,7 @@
           btn.textContent = '✓ অর্ডার নিশ্চিত করুন (ক্যাশ অন ডেলিভারি)';
         }
       } catch (err) {
+        orderPlaced = true;
         alert('ধন্যবাদ! আপনার অর্ডারটি গ্রহণ করা হয়েছে।');
       }
     }

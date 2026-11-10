@@ -438,6 +438,190 @@ const PremeStore = {
     setTimeout(() => {
       toast.style.opacity = '0';
     }, 2800);
+  },
+
+  // ================= PRODUCT QUICKVIEW MODAL & RELEVANT PRODUCTS =================
+  currentModalProduct: null,
+  currentModalVariantIdx: 0,
+  currentModalQty: 1,
+
+  openProductModal(productId) {
+    const product = (this.products || []).find(p => String(p.id) === String(productId));
+    if (!product) return;
+
+    this.currentModalProduct = product;
+    this.currentModalVariantIdx = 0;
+    this.currentModalQty = 1;
+
+    this.renderProductModal();
+    const modal = document.getElementById('product-quickview-modal');
+    if (modal) {
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  },
+
+  closeProductModal() {
+    const modal = document.getElementById('product-quickview-modal');
+    if (modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  },
+
+  handleModalBackdropClick(e) {
+    if (e.target && e.target.id === 'product-quickview-modal') {
+      this.closeProductModal();
+    }
+  },
+
+  selectModalVariant(idx) {
+    this.currentModalVariantIdx = idx;
+    this.renderProductModal();
+  },
+
+  updateModalQty(delta) {
+    this.currentModalQty = Math.max(1, (this.currentModalQty || 1) + delta);
+    const qtyVal = document.getElementById('modal-qty-val');
+    if (qtyVal) qtyVal.textContent = this.currentModalQty;
+  },
+
+  buyModalProductNow() {
+    if (!this.currentModalProduct) return;
+    const pId = this.currentModalProduct.id;
+    const vIdx = this.currentModalVariantIdx;
+    const qty = this.currentModalQty;
+    this.closeProductModal();
+    this.buyNow(pId, vIdx, qty);
+  },
+
+  addModalProductToCart() {
+    if (!this.currentModalProduct) return;
+    this.addToCart(this.currentModalProduct.id, this.currentModalVariantIdx, this.currentModalQty, true);
+    this.closeProductModal();
+  },
+
+  renderProductModal() {
+    const container = document.getElementById('product-quickview-content');
+    if (!container || !this.currentModalProduct) return;
+
+    const p = this.currentModalProduct;
+    const v = (p.variants && p.variants[this.currentModalVariantIdx]) || (p.variants && p.variants[0]) || { price: 950, regularPrice: 1150, size: 'রেগুলার' };
+    const discount = v.regularPrice && v.regularPrice > v.price ? Math.round(((v.regularPrice - v.price) / v.regularPrice) * 100) : 0;
+    const savings = v.regularPrice && v.regularPrice > v.price ? (v.regularPrice - v.price) : 0;
+
+    // Relevant products
+    const related = (this.products || []).filter(item => String(item.id) !== String(p.id)).slice(0, 4);
+
+    let html = `
+      <div class="modal-product-top">
+        <div class="modal-img-col">
+          <div class="modal-main-img-box">
+            ${discount > 0 ? `<span class="modal-discount-badge">-${discount}%</span>` : ''}
+            <img src="${p.image}" alt="${p.name}" id="modal-main-view-img">
+          </div>
+          ${p.gallery && p.gallery.length > 1 ? `
+            <div class="modal-gallery-thumbs">
+              ${p.gallery.map((g, idx) => `
+                <img src="${g}" class="modal-thumb ${idx === 0 ? 'active' : ''}" onclick="document.getElementById('modal-main-view-img').src='${g}'; document.querySelectorAll('.modal-thumb').forEach(t=>t.classList.remove('active')); this.classList.add('active');" alt="thumb">
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="modal-info-col">
+          <span class="modal-cat-tag">${p.categoryName || '১০০% খাঁটি ও প্রাকৃতিক'}</span>
+          <h2 class="modal-prod-title">${p.name}</h2>
+          <div class="modal-prod-rating">
+            <span>★★★★★</span>
+            <span style="color:#64748b; font-size:13px; font-weight:700;">${p.rating || 5.0} (${p.reviewCount || 100}+ কাস্টমার রিভিউ)</span>
+          </div>
+
+          <div class="modal-pricing-box">
+            <span class="modal-current-price">৳${v.price}</span>
+            ${v.regularPrice ? `<span class="modal-regular-price">৳${v.regularPrice}</span>` : ''}
+            ${savings > 0 ? `<span class="modal-save-pill">৳${savings} সাশ্রয়</span>` : ''}
+          </div>
+
+          <label class="modal-section-label">প্যাকেজিং / সাইজ নির্বাচন করুন:</label>
+          <div class="modal-variants-list">
+            ${(p.variants || []).map((varItem, idx) => `
+              <div class="modal-var-pill ${idx === this.currentModalVariantIdx ? 'active' : ''}" onclick="PremeStore.selectModalVariant(${idx})">
+                <span>${varItem.size}</span>
+                <b style="font-size:12.5px;">৳${varItem.price}</b>
+              </div>
+            `).join('')}
+          </div>
+
+          <label class="modal-section-label">পরিমাণ (Quantity):</label>
+          <div class="modal-qty-actions">
+            <div class="modal-qty-box">
+              <button type="button" class="modal-qty-btn" onclick="PremeStore.updateModalQty(-1)">-</button>
+              <span class="modal-qty-val" id="modal-qty-val">${this.currentModalQty}</span>
+              <button type="button" class="modal-qty-btn" onclick="PremeStore.updateModalQty(1)">+</button>
+            </div>
+            <button type="button" class="btn-modal-buy-now" onclick="PremeStore.buyModalProductNow()">
+              <span>⚡</span> এখনই অর্ডার করুন
+            </button>
+            <button type="button" class="btn-modal-add-cart" onclick="PremeStore.addModalProductToCart()">
+              <span>🛒</span> কার্টে রাখুন
+            </button>
+          </div>
+
+          <div style="display:flex; gap:12px; font-size:12px; color:#475569; font-weight:700; flex-wrap:wrap; padding-top:10px; border-top:1px dashed #e2ebe4;">
+            <span>🛡️ ১০০% খাঁটি পণ্য নিশ্চয়তা</span>
+            <span>🚚 সারা দেশে ক্যাশ অন ডেলিভারি</span>
+            <span>📦 নিরাপদ সুরক্ষিত প্যাকেজিং</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-desc-box">
+        <h4 class="modal-desc-title">পণ্যের বিবরণ:</h4>
+        <p class="modal-desc-text">${p.description || 'প্রিমি ফার্মের প্রতিটি পণ্য সম্পূর্ণ নিজস্ব তত্ত্বাবধানে স্বাস্থ্যসম্মত উপায়ে প্রক্রিয়াজাত ও প্যাকেজিং করা হয়।'}</p>
+
+        ${p.benefits && p.benefits.length > 0 ? `
+          <h4 class="modal-desc-title" style="margin-top:14px;">স্বাস্থ্য উপকারিতা:</h4>
+          <ul class="modal-benefits-list">
+            ${p.benefits.map(b => `<li>${b}</li>`).join('')}
+          </ul>
+        ` : ''}
+
+        ${p.ingredients ? `
+          <h4 class="modal-desc-title" style="margin-top:14px;">উপাদানসমূহ:</h4>
+          <p class="modal-desc-text" style="color:#334155; font-weight:600;">${p.ingredients}</p>
+        ` : ''}
+      </div>
+
+      <!-- Relevant Products Section -->
+      ${related.length > 0 ? `
+        <div class="modal-relevant-section">
+          <div class="modal-relevant-header">
+            <h3>সংশ্লিষ্ট অন্যান্য পণ্য (Relevant Products)</h3>
+            <span style="font-size:13px; color:#0d4d29; font-weight:700;">গ্রাহকরা এর সাথে আরও যা দেখছেন ➔</span>
+          </div>
+          <div class="modal-relevant-grid">
+            ${related.map(rel => {
+              const relVar = rel.variants[0];
+              const relDisc = relVar.regularPrice && relVar.regularPrice > relVar.price ? Math.round(((relVar.regularPrice - relVar.price)/relVar.regularPrice)*100) : 0;
+              return `
+                <div class="modal-rel-card" onclick="PremeStore.openProductModal(${rel.id})">
+                  <div style="position:relative;">
+                    ${relDisc > 0 ? `<span style="position:absolute; top:4px; left:4px; background:#0d4d29; color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:10px;">-${relDisc}%</span>` : ''}
+                    <img src="${rel.image}" alt="${rel.name}">
+                  </div>
+                  <div class="modal-rel-title">${rel.name}</div>
+                  <div class="modal-rel-price">৳${relVar.price}</div>
+                  <button type="button" class="modal-rel-btn">অপশন দেখুন</button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      ` : ''}
+    `;
+
+    container.innerHTML = html;
   }
 };
 
@@ -515,6 +699,38 @@ function initSearchPlaceholderAnimation() {
     input.setAttribute('placeholder', suggestions[currentIdx]);
   }, 2600);
 }
+
+function toggleMobileNav() {
+  const drawer = document.getElementById('mobile-nav-drawer');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  if (drawer && overlay) {
+    const isOpen = drawer.classList.contains('active');
+    if (isOpen) {
+      drawer.classList.remove('active');
+      overlay.classList.remove('active');
+    } else {
+      drawer.classList.add('active');
+      overlay.classList.add('active');
+    }
+  }
+}
+
+function closeMobileNav() {
+  const drawer = document.getElementById('mobile-nav-drawer');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  if (drawer && overlay) {
+    drawer.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    PremeStore.closeProductModal();
+    PremeStore.closeCartDrawer();
+    closeMobileNav();
+  }
+});
 
 document.addEventListener('click', (e) => {
   const searchWrap = document.querySelector('.header-search-wrap');

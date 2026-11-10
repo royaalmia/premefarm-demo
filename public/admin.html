@@ -80,15 +80,50 @@
       <span style="font-weight: 800; font-size: 16px; color: #0d4d29;">Preme Farm Admin</span>
     </div>
   </div>
+  <!-- ADMIN AUTHENTICATION GATE SCREEN -->
+  <div id="admin-login-screen" style="position: fixed; inset: 0; background: linear-gradient(135deg, #09130c 0%, #0d4d29 100%); z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #ffffff; width: 100%; max-width: 420px; border-radius: 20px; padding: 36px 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); border: 1.5px solid #D4AF37; text-align: center;">
+      <div class="logo-circle" style="width: 72px; height: 72px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; border: 2.5px solid #0d4d29; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+        <img src="images/logo.png" alt="Preme Farm" style="width: 50px; height: 50px; object-fit: contain;">
+      </div>
+      <h2 style="font-size: 22px; font-weight: 900; color: #0d4d29; margin-bottom: 4px;">Preme Farm এডমিন প্যানেল</h2>
+      <p style="font-size: 13.5px; color: #64748b; margin-bottom: 24px;">কল সেন্টার, অর্ডার ও সেলস কন্ট্রোল ড্যাশবোর্ড</p>
+      
+      <form id="admin-login-form" onsubmit="AdminApp.handleLogin(event)">
+        <div style="text-align: left; margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; font-weight: 800; color: #374151; margin-bottom: 6px;">এডমিন আইডি / ইমেইল *</label>
+          <input type="text" id="admin-login-user" required placeholder="admin@premefarm.com" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
+        </div>
+
+        <div style="text-align: left; margin-bottom: 20px;">
+          <label style="display: block; font-size: 13px; font-weight: 800; color: #374151; margin-bottom: 6px;">পাসওয়ার্ড *</label>
+          <input type="password" id="admin-login-pass" required placeholder="••••••••" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
+        </div>
+
+        <div id="admin-login-error" style="display: none; padding: 10px; background: #fee2e2; border: 1px solid #f87171; color: #b91c1c; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 16px; text-align: left;"></div>
+
+        <button type="submit" id="admin-login-btn" style="width: 100%; padding: 12px; background: #0d4d29; color: #ffffff; border: none; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.2s;">
+          লগইন করুন ➔
+        </button>
+      </form>
+      
+      <div style="margin-top: 20px; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; padding-top: 14px;">
+        <span>অনুমোদিত কর্মী ব্যতীত প্রবেশ সম্পূর্ণ নিষিদ্ধ।</span>
+      </div>
+    </div>
+  </div>
+
   <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="AdminApp.closeSidebar()"></div>
 
   <!-- Sidebar -->
   <aside class="admin-sidebar" id="admin-sidebar">
-    <div class="sidebar-header">
-      <img src="images/logo.png" alt="Preme Farm">
+    <div class="sidebar-header" style="display: flex; align-items: center; gap: 12px; padding: 18px 16px;">
+      <div class="logo-circle" style="width: 44px; height: 44px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 4px; border: 2px solid #D4AF37; flex-shrink: 0;">
+        <img src="images/logo.png" alt="Preme Farm" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+      </div>
       <div>
-        <h2 data-i18n="sidebar_title">Preme Farm</h2>
-        <span data-i18n="sidebar_sub">CONTROL PANEL</span>
+        <h2 style="font-size: 17.5px; margin: 0; color: #ffd875; font-weight: 900; letter-spacing: 0.5px;">Preme Farm</h2>
+        <span style="font-size: 11px; color: #cbd5e1; display: block; font-weight: 600;">প্রিমি ফার্ম • ১০০% খাঁটি ও নিরাপদ</span>
       </div>
     </div>
 
@@ -115,6 +150,9 @@
 
     <div class="sidebar-footer">
       <a href="/" class="btn-visit-store" target="_blank" data-i18n="nav_visit">মূল ওয়েবসাইট দেখুন ➔</a>
+      <button type="button" onclick="AdminApp.handleLogout()" class="btn-admin-logout" style="width: 100%; margin-top: 10px; padding: 10px 14px; background: rgba(239, 68, 68, 0.15); border: 1.5px solid #ef4444; color: #fca5a5; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+        <span style="font-size: 16px;">🚪</span> <span data-i18n="btn_logout">লগআউট (Logout)</span>
+      </button>
     </div>
   </aside>
 
@@ -237,12 +275,15 @@
           <button class="filter-pill" onclick="AdminApp.filterOrders('Cancelled', this)" id="tab-pill-cancelled" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #cedcd0; background: #fff; color: #b91c1c; font-weight: 800; cursor: pointer;">
             <span data-i18n="tab_cancelled">বাতিল</span> (<span id="count-cancelled">0</span>)
           </button>
+          <button class="filter-pill" onclick="AdminApp.filterOrders('Failed', this)" id="tab-pill-failed" style="padding: 7px 16px; border-radius: 20px; border: 1.5px solid #f87171; background: #fff; color: #dc2626; font-weight: 800; cursor: pointer;">
+            <span data-i18n="tab_failed">ব্যর্থ অর্ডার</span> (<span id="count-failed">0</span>)
+          </button>
         </div>
 
         <div class="table-responsive">
           <table class="admin-table">
             <thead>
-              <tr>
+              <tr id="orders-table-head-row">
                 <th data-i18n="th_id_source">অর্ডার ID ও সোর্স</th>
                 <th data-i18n="th_customer">গ্রাহক তথ্য ও ফ্রড চেক</th>
                 <th data-i18n="th_address">ডেলিভারি ঠিকানা</th>
@@ -259,6 +300,16 @@
               <!-- Injected by AdminApp.renderOrdersTable() -->
             </tbody>
           </table>
+        </div>
+
+        <!-- Pagination controls -->
+        <div class="admin-pagination-bar" id="orders-pagination-bar">
+          <div id="orders-pagination-info" style="font-size: 13.5px; color: #64748b; font-weight: 700;">
+            দেখাচ্ছে 0-0 / মোট 0 টি অর্ডার
+          </div>
+          <div id="orders-pagination-btns" style="display: flex; gap: 6px; align-items: center;">
+            <!-- Buttons injected by JS -->
+          </div>
         </div>
       </div>
     </div>
@@ -607,71 +658,73 @@
   <!-- MODAL: ADD / EDIT PRODUCT -->
   <div class="admin-modal-overlay" id="product-modal">
     <div class="admin-modal-box" style="max-width: 680px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 16px;">
-        <h3 style="font-size: 19px; font-weight: 900; color: #0d4d29;" id="prod-modal-title">নতুন প্রোডাক্ট যোগ করুন</h3>
-        <button onclick="AdminApp.closeProductModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      <div class="admin-modal-header">
+        <h3 id="prod-modal-title">নতুন প্রোডাক্ট যোগ করুন</h3>
+        <button type="button" class="admin-modal-close-btn" onclick="AdminApp.closeProductModal()" title="বন্ধ করুন">✕</button>
       </div>
 
-      <form id="product-form" onsubmit="AdminApp.handleProductSubmit(event)">
+      <form id="product-form" onsubmit="AdminApp.handleProductSubmit(event)" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
         <input type="hidden" id="prod-id">
 
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 14px;">
-          <div>
-            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">প্রোডাক্টের নাম *</label>
-            <input type="text" id="prod-name" required style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: প্রিমি ফার্ম কালো সোনা">
+        <div class="admin-modal-body">
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div>
+              <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">প্রোডাক্টের নাম *</label>
+              <input type="text" id="prod-name" required style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: প্রিমি ফার্ম কালো সোনা">
+            </div>
+            <div>
+              <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">ক্যাটাগরি</label>
+              <select id="prod-category" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;">
+                <option value="kalo-shona">কালো সোনা</option>
+                <option value="ghee">গাওয়া ঘি</option>
+                <option value="honey">খাঁটি মধু</option>
+                <option value="pickle">আচার</option>
+                <option value="tea">চা ও হারবাল</option>
+                <option value="seeds">সীড মিক্স</option>
+                <option value="combo">কম্বো অফার</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">ক্যাটাগরি</label>
-            <select id="prod-category" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;">
-              <option value="kalo-shona">কালো সোনা</option>
-              <option value="ghee">গাওয়া ঘি</option>
-              <option value="honey">খাঁটি মধু</option>
-              <option value="pickle">আচার</option>
-              <option value="tea">চা ও হারবাল</option>
-              <option value="seeds">সীড মিক্স</option>
-              <option value="combo">কম্বো অফার</option>
-            </select>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">বিক্রয় মূল্য (৳) *</label>
+              <input type="number" id="prod-price" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="950">
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">রেগুলার মূল্য (৳)</label>
+              <input type="number" id="prod-reg-price" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="1150">
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">স্টক পরিমাণ</label>
+              <input type="number" id="prod-stock" value="50" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+            </div>
+          </div>
+
+          <!-- AI Assistant Box -->
+          <div style="background: #f5f3ff; border: 1.5px solid #ddd6fe; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <b style="color: #4f46e5; font-size: 14px;">AI কন্টেন্ট রাইটার (এক ক্লিকে বিবরণ তৈরি করুন)</b>
+              <button type="button" onclick="AdminApp.generateAiDescription()" class="btn-ai-sparkle">
+                AI দিয়ে তৈরি করুন
+              </button>
+            </div>
+            <input type="text" id="ai-keywords" placeholder="সংক্ষিপ্ত কি-ওয়ার্ড লিখুন (যেমন: কালো সোনা, মধু, শারীরিক ক্লান্তি দূর)" style="width:100%; padding:8px 12px; border:1px solid #c4b5fd; border-radius:6px; font-size:13px; background:#fff;">
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">বিস্তারিত বিবরণ</label>
+            <textarea id="prod-desc" rows="3" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="প্রোডাক্টের বিবরণ লিখুন বা AI দিয়ে তৈরি করুন"></textarea>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">স্বাস্থ্য উপকারিতা (প্রতি লাইনে ১টি পয়েন্ট)</label>
+            <textarea id="prod-benefits" rows="3" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="উপকারিতা সমূহ"></textarea>
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px;">
-          <div>
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">বিক্রয় মূল্য (৳) *</label>
-            <input type="number" id="prod-price" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="950">
-          </div>
-          <div>
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">রেগুলার মূল্য (৳)</label>
-            <input type="number" id="prod-reg-price" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="1150">
-          </div>
-          <div>
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">স্টক পরিমাণ</label>
-            <input type="number" id="prod-stock" value="50" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
-          </div>
-        </div>
-
-        <!-- AI Assistant Box -->
-        <div style="background: #f5f3ff; border: 1.5px solid #ddd6fe; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <b style="color: #4f46e5; font-size: 14px;">AI কন্টেন্ট রাইটার (এক ক্লিকে বিবরণ তৈরি করুন)</b>
-            <button type="button" onclick="AdminApp.generateAiDescription()" class="btn-ai-sparkle">
-              AI দিয়ে তৈরি করুন
-            </button>
-          </div>
-          <input type="text" id="ai-keywords" placeholder="সংক্ষিপ্ত কি-ওয়ার্ড লিখুন (যেমন: কালো সোনা, মধু, শারীরিক ক্লান্তি দূর)" style="width:100%; padding:8px 12px; border:1px solid #c4b5fd; border-radius:6px; font-size:13px; background:#fff;">
-        </div>
-
-        <div style="margin-bottom: 14px;">
-          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">বিস্তারিত বিবরণ</label>
-          <textarea id="prod-desc" rows="3" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="প্রোডাক্টের বিবরণ লিখুন বা AI দিয়ে তৈরি করুন"></textarea>
-        </div>
-
-        <div style="margin-bottom: 14px;">
-          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">স্বাস্থ্য উপকারিতা (প্রতি লাইনে ১টি পয়েন্ট)</label>
-          <textarea id="prod-benefits" rows="3" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="উপকারিতা সমূহ"></textarea>
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
-          <button type="button" onclick="AdminApp.closeProductModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer;">বাতিল</button>
+        <div class="admin-modal-footer">
+          <button type="button" onclick="AdminApp.closeProductModal()" style="padding: 9px 18px; border-radius: 6px; border: 1.5px solid #cbd5e1; background:#fff; cursor:pointer; font-weight:700;">বাতিল</button>
           <button type="submit" class="btn-courier-action" style="padding: 9px 24px;">প্রোডাক্ট সেভ করুন ➔</button>
         </div>
       </form>
@@ -908,137 +961,140 @@
 
   <!-- MODAL: ORDER DETAILS & UPDATE POPUP (CLICK ON ORDER ID) -->
   <div class="admin-modal-overlay" id="order-details-modal">
-    <div class="admin-modal-box" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
-      <!-- Top Title with Close Icon on Top-Right -->
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2ebe4; padding-bottom: 12px; margin-bottom: 16px;">
+    <div class="admin-modal-box" style="max-width: 680px;">
+      <!-- Sticky Top Header with Close Icon -->
+      <div class="admin-modal-header">
         <div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <h3 style="font-size: 20px; font-weight: 900; color: #0d4d29; margin: 0;">অর্ডার বিস্তারিত</h3>
-            <span id="detail-ord-id-title" style="font-size: 18px; font-weight: 900; color: #15803d; background: #eef5f0; padding: 2px 10px; border-radius: 6px;">#PF-0000</span>
+            <h3 style="font-size: 19px; font-weight: 900; color: #0d4d29; margin: 0;">অর্ডার বিস্তারিত</h3>
+            <span id="detail-ord-id-title" style="font-size: 17px; font-weight: 900; color: #15803d; background: #eef5f0; padding: 2px 10px; border-radius: 6px;">#PF-0000</span>
           </div>
-          <div style="font-size: 12.5px; color: #64748b; margin-top: 4px;">
+          <div style="font-size: 12px; color: #64748b; margin-top: 3px;">
             <span>তারিখ: <b id="detail-ord-date">-</b></span> • 
             <span>সোর্স: <b id="detail-ord-source" style="color: #0d4d29;">Website</b></span>
           </div>
         </div>
-        <button onclick="AdminApp.closeOrderDetailsModal()" style="background: none; border: none; font-size: 26px; color: #64748b; cursor: pointer; font-weight: bold; padding: 0 4px; line-height: 1;" title="Close (✕)">✕</button>
+        <button type="button" class="admin-modal-close-btn" onclick="AdminApp.closeOrderDetailsModal()" title="বন্ধ করুন">✕</button>
       </div>
 
-      <!-- Fraud & Security Alert Bar -->
-      <div id="detail-fraud-banner" style="background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span id="detail-fraud-pill" style="background: #22c55e; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 800;">নিরাপদ গ্রাহক</span>
-          <span style="font-size: 13px; color: #1e293b;" id="detail-fraud-text">কুরিয়ার ডেলিভারি রেট ৯২% • ফ্রড রিস্ক নেই</span>
-        </div>
-        <button type="button" onclick="AdminApp.checkModalCustomerFraud()" style="background: #ffffff; border: 1px solid #c9decb; color: #0d4d29; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
-          ফ্রড হিস্ট্রি চেক ➔
-        </button>
-      </div>
-
-      <form id="order-details-form" onsubmit="AdminApp.handleSaveOrderDetails(event)">
+      <form id="order-details-form" onsubmit="AdminApp.handleSaveOrderDetails(event)" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
         <input type="hidden" id="detail-ord-id">
 
-        <!-- Status & Delivery Area -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; background: #f8faf8; padding: 12px; border-radius: 8px; border: 1px solid #e2ebe4;">
-          <div>
-            <label style="display:block; font-size:13.5px; font-weight:800; color:#0d4d29; margin-bottom:4px;">অর্ডার স্ট্যাটাস পরিবর্তন *</label>
-            <select id="detail-ord-status" style="width:100%; padding:9px 12px; border:2px solid #0d4d29; border-radius:6px; font-weight:800; font-size:13.5px; background:#fff; color:#0d4d29; outline:none; cursor:pointer;">
-              <option value="Pending">Pending (পেন্ডিং)</option>
-              <option value="Hold">Hold (হোল্ড)</option>
-              <option value="Confirmed">Confirmed (নিশ্চিত)</option>
-              <option value="In Courier">In Courier (কুরিয়ারে প্রেরিত)</option>
-              <option value="Delivered">Delivered (ডেলিভারড)</option>
-              <option value="Return">Return (রিটার্ন)</option>
-              <option value="Cancelled">Cancelled (বাতিল)</option>
-            </select>
-          </div>
-          <div>
-            <label style="display:block; font-size:13px; font-weight:700; color:#475569; margin-bottom:4px;">ডেলিভারি শহর / এলাকা</label>
-            <input type="text" id="detail-ord-city" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
-          </div>
-        </div>
-
-        <!-- Customer Info -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-          <div>
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">গ্রাহকের নাম *</label>
-            <input type="text" id="detail-ord-name" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
-          </div>
-          <div>
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">মোবাইল নম্বর *</label>
-            <input type="tel" id="detail-ord-phone" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
-          </div>
-        </div>
-
-        <div style="margin-bottom: 14px;">
-          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">সম্পূর্ণ ডেলিভারি ঠিকানা *</label>
-          <textarea id="detail-ord-address" required rows="2" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;"></textarea>
-        </div>
-
-        <!-- Ordered Items Summary Table -->
-        <div style="margin-bottom: 14px;">
-          <label style="display:block; font-size:13px; font-weight:800; color:#0d4d29; margin-bottom:4px;">অর্ডারকৃত পণ্যের তালিকা</label>
-          <div style="border: 1px solid #e2ebe4; border-radius: 8px; overflow: hidden;">
-            <table style="width:100%; border-collapse: collapse; font-size: 13px;">
-              <thead style="background: #f1f5f9; text-align: left;">
-                <tr>
-                  <th style="padding: 8px 10px;">প্রোডাক্ট</th>
-                  <th style="padding: 8px 10px;">সাইজ/প্যাক</th>
-                  <th style="padding: 8px 10px; text-align: center;">পরিমাণ</th>
-                  <th style="padding: 8px 10px; text-align: right;">মূল্য (৳)</th>
-                </tr>
-              </thead>
-              <tbody id="detail-items-table-body">
-                <!-- Items list -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Billing Summary Editable -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-bottom: 14px; background: #fdfefe; padding: 12px; border-radius: 8px; border: 1px solid #cedcd0;">
-          <div>
-            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:4px;">পণ্য মূল্য (৳)</label>
-            <input type="number" id="detail-ord-subtotal" onchange="AdminApp.recalcOrderDetails()" style="width:100%; padding:8px 10px; border:1px solid #cedcd0; border-radius:6px; font-size:13px;">
-          </div>
-          <div>
-            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:4px;">ডেলিভারি চার্জ (৳)</label>
-            <input type="number" id="detail-ord-delivery" onchange="AdminApp.recalcOrderDetails()" style="width:100%; padding:8px 10px; border:1px solid #cedcd0; border-radius:6px; font-size:13px;">
-          </div>
-          <div>
-            <label style="display:block; font-size:12.5px; font-weight:800; color:#0d4d29; margin-bottom:4px;">সর্বমোট প্রদেয় COD (৳)</label>
-            <input type="number" id="detail-ord-total" readonly style="width:100%; padding:8px 10px; border:1.5px solid #0d4d29; border-radius:6px; font-size:14px; font-weight:900; color:#0d4d29; background:#f4faf5;">
-          </div>
-        </div>
-
-        <!-- Internal Call Center Note -->
-        <div style="margin-bottom: 14px;">
-          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">কল সেন্টার অভ্যন্তরীণ নোট</label>
-          <textarea id="detail-ord-note" rows="2" placeholder="নোট লিখুন: যেমন- কাস্টমার কাল দুপুরে ডেলিভারি নিশ্চিত করতে বলেছেন, ঠিকানা ভেরিফাইড..." style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;"></textarea>
-        </div>
-
-        <!-- Courier Booking Information / Dispatch Button -->
-        <div id="detail-courier-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <div>
-              <span style="font-size: 13px; font-weight: 800; color: #1e293b;">কুরিয়ার অবস্থা:</span>
-              <span id="detail-courier-info" style="font-size: 13px; color: #64748b; margin-left: 6px;">এখনও কুরিয়ারে বুক করা হয়নি</span>
+        <!-- Scrollable Modal Body -->
+        <div class="admin-modal-body">
+          <!-- Fraud & Security Alert Bar -->
+          <div id="detail-fraud-banner" style="background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="detail-fraud-pill" style="background: #22c55e; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 800;">নিরাপদ গ্রাহক</span>
+              <span style="font-size: 13px; color: #1e293b;" id="detail-fraud-text">কুরিয়ার ডেলিভারি রেট ৯২% • ফ্রড রিস্ক নেই</span>
             </div>
-            <button type="button" id="detail-courier-btn" onclick="AdminApp.openCourierFromModal()" class="btn-courier-action" style="padding: 6px 14px; font-size: 12px;">
-              কুরিয়ারে পাঠান ➔
+            <button type="button" onclick="AdminApp.checkModalCustomerFraud()" style="background: #ffffff; border: 1px solid #c9decb; color: #0d4d29; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
+              ফ্রড হিস্ট্রি চেক ➔
             </button>
           </div>
+
+          <!-- Status & Delivery Area -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; background: #f8faf8; padding: 12px; border-radius: 8px; border: 1px solid #e2ebe4;">
+            <div>
+              <label style="display:block; font-size:13.5px; font-weight:800; color:#0d4d29; margin-bottom:4px;">অর্ডার স্ট্যাটাস পরিবর্তন *</label>
+              <select id="detail-ord-status" style="width:100%; padding:9px 12px; border:2px solid #0d4d29; border-radius:6px; font-weight:800; font-size:13.5px; background:#fff; color:#0d4d29; outline:none; cursor:pointer;">
+                <option value="Pending">Pending (পেন্ডিং)</option>
+                <option value="Hold">Hold (হোল্ড)</option>
+                <option value="Confirmed">Confirmed (নিশ্চিত)</option>
+                <option value="In Courier">In Courier (কুরিয়ারে প্রেরিত)</option>
+                <option value="Delivered">Delivered (ডেলিভারড)</option>
+                <option value="Return">Return (রিটার্ন)</option>
+                <option value="Cancelled">Cancelled (বাতিল)</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; color:#475569; margin-bottom:4px;">ডেলিভারি শহর / এলাকা</label>
+              <input type="text" id="detail-ord-city" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
+            </div>
+          </div>
+
+          <!-- Customer Info -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">গ্রাহকের নাম *</label>
+              <input type="text" id="detail-ord-name" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">মোবাইল নম্বর *</label>
+              <input type="tel" id="detail-ord-phone" required style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">সম্পূর্ণ ডেলিভারি ঠিকানা *</label>
+            <textarea id="detail-ord-address" required rows="2" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;"></textarea>
+          </div>
+
+          <!-- Ordered Items Summary Table -->
+          <div style="margin-bottom: 14px;">
+            <label style="display:block; font-size:13px; font-weight:800; color:#0d4d29; margin-bottom:4px;">অর্ডারকৃত পণ্যের তালিকা</label>
+            <div style="border: 1px solid #e2ebe4; border-radius: 8px; overflow: hidden;">
+              <table style="width:100%; border-collapse: collapse; font-size: 13px;">
+                <thead style="background: #f1f5f9; text-align: left;">
+                  <tr>
+                    <th style="padding: 8px 10px;">প্রোডাক্ট</th>
+                    <th style="padding: 8px 10px;">সাইজ/প্যাক</th>
+                    <th style="padding: 8px 10px; text-align: center;">পরিমাণ</th>
+                    <th style="padding: 8px 10px; text-align: right;">মূল্য (৳)</th>
+                  </tr>
+                </thead>
+                <tbody id="detail-items-table-body">
+                  <!-- Items list -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Billing Summary Editable -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-bottom: 14px; background: #fdfefe; padding: 12px; border-radius: 8px; border: 1px solid #cedcd0;">
+            <div>
+              <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:4px;">পণ্য মূল্য (৳)</label>
+              <input type="number" id="detail-ord-subtotal" onchange="AdminApp.recalcOrderDetails()" style="width:100%; padding:8px 10px; border:1px solid #cedcd0; border-radius:6px; font-size:13px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:4px;">ডেলিভারি চার্জ (৳)</label>
+              <input type="number" id="detail-ord-delivery" onchange="AdminApp.recalcOrderDetails()" style="width:100%; padding:8px 10px; border:1px solid #cedcd0; border-radius:6px; font-size:13px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12.5px; font-weight:800; color:#0d4d29; margin-bottom:4px;">সর্বমোট প্রদেয় COD (৳)</label>
+              <input type="number" id="detail-ord-total" readonly style="width:100%; padding:8px 10px; border:1.5px solid #0d4d29; border-radius:6px; font-size:14px; font-weight:900; color:#0d4d29; background:#f4faf5;">
+            </div>
+          </div>
+
+          <!-- Internal Call Center Note -->
+          <div style="margin-bottom: 14px;">
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">কল সেন্টার অভ্যন্তরীণ নোট</label>
+            <textarea id="detail-ord-note" rows="2" placeholder="নোট লিখুন: যেমন- কাস্টমার কাল দুপুরে ডেলিভারি নিশ্চিত করতে বলেছেন, ঠিকানা ভেরিফাইড..." style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;"></textarea>
+          </div>
+
+          <!-- Courier Booking Information / Dispatch Button -->
+          <div id="detail-courier-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <span style="font-size: 13px; font-weight: 800; color: #1e293b;">কুরিয়ার অবস্থা:</span>
+                <span id="detail-courier-info" style="font-size: 13px; color: #64748b; margin-left: 6px;">এখনও কুরিয়ারে বুক করা হয়নি</span>
+              </div>
+              <button type="button" id="detail-courier-btn" onclick="AdminApp.openCourierFromModal()" class="btn-courier-action" style="padding: 6px 14px; font-size: 12px;">
+                কুরিয়ারে পাঠান ➔
+              </button>
+            </div>
+          </div>
+
+          <!-- Last updated audit notice -->
+          <div style="font-size: 12px; color: #64748b; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+            সর্বশেষ হালনাগাদ করেছেন: <b id="detail-ord-agent" style="color: #0d4d29;">সিস্টেম</b> (<span id="detail-ord-timestamp">-</span>)
+          </div>
         </div>
 
-        <!-- Last updated audit notice -->
-        <div style="font-size: 12px; color: #64748b; margin-bottom: 16px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
-          সর্বশেষ হালনাগাদ করেছেন: <b id="detail-ord-agent" style="color: #0d4d29;">সিস্টেম</b> (<span id="detail-ord-timestamp">-</span>)
-        </div>
-
-        <!-- Bottom Action Buttons -->
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-          <button type="button" onclick="AdminApp.closeOrderDetailsModal()" style="padding: 10px 20px; border-radius: 6px; border: 1.5px solid #cbd5e1; background: #fff; cursor: pointer; font-weight: 700;">বাতিল</button>
-          <button type="submit" class="btn-courier-action" style="padding: 10px 28px; font-size: 14.5px; font-weight: 800; background: linear-gradient(135deg, #0d4d29 0%, #15803d 100%);">
+        <!-- Sticky Bottom Footer with Action Buttons -->
+        <div class="admin-modal-footer">
+          <button type="button" onclick="AdminApp.closeOrderDetailsModal()" style="padding: 9px 18px; border-radius: 6px; border: 1.5px solid #cbd5e1; background: #fff; cursor: pointer; font-weight: 700;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 9px 26px; font-size: 14.5px; font-weight: 800; background: linear-gradient(135deg, #0d4d29 0%, #15803d 100%);">
             আপডেট করুন ➔
           </button>
         </div>

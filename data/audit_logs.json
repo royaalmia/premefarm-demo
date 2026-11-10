@@ -1,5 +1,13 @@
 [
   {
+    "id": "LOG-1794343868994-669",
+    "timestamp": "2026-11-10T20:51:08.994Z",
+    "orderId": "PF-7270",
+    "agent": "????? ?????",
+    "action": "ব্যর্থ অর্ডার সফল অর্ডারে রূপান্তর (PF-7270, কাস্টমার: ???? ??????)",
+    "actionEn": "Failed order converted to confirmed order (PF-7270, Customer: ???? ??????)"
+  },
+  {
     "id": "LOG-1001",
     "timestamp": "2026-11-10T18:32:27.788Z",
     "orderId": "PF-4524",

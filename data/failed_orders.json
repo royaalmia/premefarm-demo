@@ -1,0 +1,38 @@
+[
+  {
+    "id": "FAIL-901",
+    "customer": {
+      "name": "মাহমুদুল হাসান",
+      "phone": "01712349876",
+      "address": "বাড়ি ১২, রোড ৪, সেক্টর ৭, উত্তরা, ঢাকা",
+      "city": "Dhaka"
+    },
+    "product": "প্রিমি ফার্ম মধুময় কালো সোনা (৫০০ গ্রাম)",
+    "price": 950,
+    "quantity": 1,
+    "deliveryCharge": 70,
+    "total": 1020,
+    "source": "Landing Page (FB Boost)",
+    "createdAt": "2026-11-10T22:15:00.000Z",
+    "status": "Abandoned",
+    "notes": "কাস্টমার নাম ও মোবাইল নম্বর পূরণ করার পর ব্রাউজার বন্ধ করেছে।"
+  },
+  {
+    "id": "FAIL-902",
+    "customer": {
+      "name": "কামরুল ইসলাম",
+      "phone": "01987654321",
+      "address": "মাস্টারপাড়া, সৈয়দপুর, নীলফামারী",
+      "city": "Outside Dhaka"
+    },
+    "product": "সুন্দরবনের প্রাকৃতিক খলিসা ফুলের মধু (১ কেজি)",
+    "price": 1400,
+    "quantity": 1,
+    "deliveryCharge": 130,
+    "total": 1530,
+    "source": "Main Website Checkout",
+    "createdAt": "2026-11-10T23:30:00.000Z",
+    "status": "Abandoned",
+    "notes": "চেকআউট পেজে ঠিকানা লিখে সাবমিট করার আগেই বের হয়ে গেছে।"
+  }
+]
