@@ -5,3 +5,8 @@ compatibility_date = "2024-01-01"
 [assets]
 directory = "./public"
 binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "premefarm-db"
+database_id = "1bd815e0-aaca-408f-aeba-e476e9634a18"
