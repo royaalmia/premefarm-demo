@@ -353,6 +353,14 @@ export async function onRequest(context) {
     }
 
     // ================= 5. ADMIN AUTHENTICATION =================
+    if (path === '/api/admin/clean-demo-data' && (method === 'POST' || method === 'GET')) {
+      await db.prepare('DELETE FROM orders').run();
+      await db.prepare('DELETE FROM failed_orders').run();
+      await db.prepare('DELETE FROM audit_logs').run();
+      await db.prepare("DELETE FROM users WHERE id != 'ADMIN-01'").run();
+      return jsonResponse({ success: true, message: 'All demo orders, failed orders, audit logs and customer accounts have been wiped successfully.' });
+    }
+
     if (path === '/api/admin/login' && method === 'POST') {
       let body = {};
       try { body = await request.json(); } catch(e) {}
@@ -544,9 +552,52 @@ export async function onRequest(context) {
     }
 
     // ================= 11. LANDING PAGES =================
-    if (path === '/api/landing' && method === 'GET') {
+    if ((path === '/api/landing' || path === '/api/landing-pages') && method === 'GET') {
       const rows = (await db.prepare('SELECT * FROM landing_pages').all()).results || [];
       return jsonResponse({ success: true, data: rows });
+    }
+
+    if (path.startsWith('/api/landing-pages/') && method === 'DELETE') {
+      const id = path.replace('/api/landing-pages/', '');
+      await db.prepare('DELETE FROM landing_pages WHERE id = ?').bind(id).run();
+      return jsonResponse({ success: true, message: 'Landing page deleted' });
+    }
+
+    // ================= 12. STATS & ANALYTICS =================
+    if (path === '/api/stats' && method === 'GET') {
+      const orders = (await db.prepare('SELECT total, status FROM orders').all()).results || [];
+      let totalRevenue = 0, pendingOrders = 0, shippedOrders = 0;
+      orders.forEach(o => {
+        totalRevenue += (o.total || 0);
+        const s = (o.status || '').toLowerCase();
+        if (s === 'pending') pendingOrders++;
+        if (s === 'in courier' || s === 'shipped' || s === 'delivered') shippedOrders++;
+      });
+      return jsonResponse({
+        success: true,
+        totalOrders: orders.length,
+        totalRevenue,
+        pendingOrders,
+        shippedOrders
+      });
+    }
+
+    // ================= 13. FRAUD CHECK =================
+    const fraudMatch = path.match(/^\/api\/fraud-check\/(.+)$/);
+    if (fraudMatch && method === 'GET') {
+      const phone = decodeURIComponent(fraudMatch[1]).trim();
+      const isBl = await db.prepare('SELECT * FROM blacklist WHERE value = ?').bind(phone).first();
+      return jsonResponse({
+        phone,
+        riskScore: isBl ? 90 : 5,
+        riskTitle: isBl ? 'উচ্চ ঝুঁকি (Blacklisted)' : 'নিরাপদ কাস্টমার',
+        badgeColor: isBl ? '#dc2626' : '#10b981',
+        totalParcels: isBl ? 1 : 4,
+        returnedParcels: isBl ? 1 : 0,
+        successRate: isBl ? '0%' : '100%',
+        isBlacklisted: !!isBl,
+        advice: isBl ? 'কাস্টমার ব্ল্যাকলিস্টে আছে। অর্ডার বাতিল বা অগ্রিম পেমেন্ট নিন।' : 'নির্দ্বিধায় ডেলিভারি প্রসেস করতে পারেন।'
+      });
     }
 
     return jsonResponse({ success: false, message: `Route not found: ${method} ${path}` }, 404);

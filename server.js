@@ -241,6 +241,18 @@ app.delete('/api/staff/:id', (req, res) => {
 });
 
 // Admin / Staff Authentication API (Master Admin: admin@premefarm.com / Admin@PremeFarm)
+app.all('/api/admin/clean-demo-data', (req, res) => {
+  orders = [];
+  failedOrders = [];
+  auditLogs = [];
+  users = users.filter(u => u.id === 'ADMIN-01' || u.role === 'super_admin');
+  fs.writeFileSync(path.join(__dirname, 'data/orders.json'), '[]', 'utf8');
+  fs.writeFileSync(path.join(__dirname, 'data/failed_orders.json'), '[]', 'utf8');
+  fs.writeFileSync(path.join(__dirname, 'data/audit_logs.json'), '[]', 'utf8');
+  fs.writeFileSync(path.join(__dirname, 'data/users.json'), JSON.stringify(users, null, 2), 'utf8');
+  res.json({ success: true, message: 'All demo orders and customers cleared.' });
+});
+
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {

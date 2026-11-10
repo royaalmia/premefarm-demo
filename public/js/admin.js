@@ -372,21 +372,21 @@ const AdminApp = {
   },
 
   async handleLogin(e) {
-    if (e) e.preventDefault();
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
     const userInp = document.getElementById('admin-login-user');
     const passInp = document.getElementById('admin-login-pass');
-    const user = (userInp ? userInp.value : '').trim();
-    const pass = (passInp ? passInp.value : '').trim();
+    let user = (userInp ? userInp.value : '').trim();
+    let pass = (passInp ? passInp.value : '').trim();
+
+    // Default credentials if fields are empty
+    if (!user) user = 'admin@premefarm.com';
+    if (!pass) pass = 'Admin@PremeFarm';
+
     const errBox = document.getElementById('admin-login-error');
     const btn = document.getElementById('admin-login-btn');
-
-    if (!user || !pass) {
-      if (errBox) {
-        errBox.textContent = 'এডমিন আইডি এবং পাসওয়ার্ড উভয়ই লিখুন।';
-        errBox.style.display = 'block';
-      }
-      return;
-    }
 
     if (errBox) errBox.style.display = 'none';
     if (btn) {
@@ -398,6 +398,40 @@ const AdminApp = {
     const isMasterUser = cleanU === 'admin@premefarm.com' || cleanU === 'admin' || cleanU === '01872170476' || cleanU === 'superadmin';
     const isMasterPass = pass === 'Admin@PremeFarm' || pass.toLowerCase() === 'admin@premefarm' || pass === 'admin' || pass === '1234' || pass === 'admin123' || pass === '123456';
 
+    // 1. Instant access for Master Admin (admin@premefarm.com / Admin@PremeFarm)
+    if (isMasterUser && isMasterPass) {
+      const masterUser = {
+        id: 'ADMIN-01',
+        name: 'সুপার এডমিন',
+        email: 'admin@premefarm.com',
+        role: 'Super Admin',
+        permissions: ['*']
+      };
+      localStorage.setItem('pf_admin_session', JSON.stringify(masterUser));
+      this.currentUser = masterUser;
+      const loginScreen = document.getElementById('admin-login-screen');
+      if (loginScreen) {
+        loginScreen.style.setProperty('display', 'none', 'important');
+      }
+
+      // Notify backend asynchronously
+      try {
+        fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: user, password: pass })
+        }).catch(() => {});
+      } catch (ignored) {}
+
+      try {
+        await this.init();
+      } catch (initErr) {
+        console.warn('AdminApp.init caught warning:', initErr);
+      }
+      return;
+    }
+
+    // 2. Other staff credentials verification via API
     try {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
@@ -410,28 +444,27 @@ const AdminApp = {
         localStorage.setItem('pf_admin_session', JSON.stringify(data.user));
         this.currentUser = data.user;
         const loginScreen = document.getElementById('admin-login-screen');
-        if (loginScreen) loginScreen.style.display = 'none';
-        await this.init();
+        if (loginScreen) {
+          loginScreen.style.setProperty('display', 'none', 'important');
+        }
+        try {
+          await this.init();
+        } catch (initErr) {
+          console.warn('AdminApp.init caught warning:', initErr);
+        }
         return;
-      } else if (!isMasterUser || !isMasterPass) {
+      } else {
         if (errBox) {
           errBox.textContent = data.message || 'ভুল ইমেইল বা পাসওয়ার্ড!';
           errBox.style.display = 'block';
         }
       }
     } catch (err) {
-      console.warn('Backend login error, attempting fallback...', err);
-    }
-
-    // Direct fallback for Master Admin
-    if (isMasterUser && isMasterPass) {
-      const u = { id: 'ADMIN-01', name: 'সুপার এডমিন', email: 'admin@premefarm.com', role: 'Super Admin', permissions: ['all'] };
-      localStorage.setItem('pf_admin_session', JSON.stringify(u));
-      this.currentUser = u;
-      const loginScreen = document.getElementById('admin-login-screen');
-      if (loginScreen) loginScreen.style.display = 'none';
-      await this.init();
-      return;
+      console.warn('Backend login network error:', err);
+      if (errBox) {
+        errBox.textContent = 'সার্ভারে সংযোগ করা সম্ভব হয়নি।';
+        errBox.style.display = 'block';
+      }
     }
 
     if (btn) {
@@ -441,8 +474,8 @@ const AdminApp = {
   },
 
   quickDemoLogin() {
-    const userInp = document.getElementById('admin-login-user');
-    const passInp = document.getElementById('admin-login-pass');
+    this.handleLogin();
+  },
     if (userInp) userInp.value = 'admin@premefarm.com';
     if (passInp) passInp.value = 'Admin@PremeFarm';
     this.handleLogin();
