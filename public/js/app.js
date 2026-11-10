@@ -502,43 +502,18 @@ function initSearchPlaceholderAnimation() {
   ];
 
   let currentIdx = 0;
-  let charIdx = 0;
-  let isDeleting = false;
   let isFocused = false;
 
   input.addEventListener('focus', () => { isFocused = true; });
   input.addEventListener('blur', () => { isFocused = false; });
 
-  function type() {
-    if (isFocused || (input.value && input.value.trim().length > 0)) {
-      setTimeout(type, 800);
-      return;
-    }
+  input.setAttribute('placeholder', suggestions[0]);
 
-    const currentText = suggestions[currentIdx];
-    if (isDeleting) {
-      input.setAttribute('placeholder', currentText.substring(0, charIdx - 1));
-      charIdx--;
-      if (charIdx <= 0) {
-        isDeleting = false;
-        currentIdx = (currentIdx + 1) % suggestions.length;
-        setTimeout(type, 350);
-        return;
-      }
-      setTimeout(type, 35);
-    } else {
-      input.setAttribute('placeholder', currentText.substring(0, charIdx + 1));
-      charIdx++;
-      if (charIdx === currentText.length) {
-        isDeleting = true;
-        setTimeout(type, 1800);
-        return;
-      }
-      setTimeout(type, 65);
-    }
-  }
-
-  setTimeout(type, 400);
+  setInterval(() => {
+    if (isFocused || (input.value && input.value.trim().length > 0)) return;
+    currentIdx = (currentIdx + 1) % suggestions.length;
+    input.setAttribute('placeholder', suggestions[currentIdx]);
+  }, 2600);
 }
 
 document.addEventListener('click', (e) => {

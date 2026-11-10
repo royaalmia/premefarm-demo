@@ -352,16 +352,22 @@
 
   <!-- Unified Store Header -->
   <header class="site-header">
-    <div class="header-inner">
-      <div class="header-left">
-        <a href="/" class="brand-logo-link">
-          <img src="images/logo.png" alt="Preme Farm Logo" class="brand-logo-img">
-        </a>
-      </div>
+    <div class="header-container">
+      <a href="/" class="brand-logo">
+        <div class="logo-circle">
+          <img src="images/logo.png" alt="Preme Farm Logo">
+        </div>
+        <div class="brand-text">
+          <h1>Preme Farm</h1>
+          <span>প্রিমি ফার্ম • ১০০% খাঁটি ও নিরাপদ</span>
+        </div>
+      </a>
 
-      <nav class="header-nav">
-        <a href="/" class="nav-item">হোম</a>
-        <a href="/shop" class="nav-item">শপ</a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">হোম</a></li>
+          <li><a href="/shop" class="nav-link">শপ</a></li>
+        </ul>
       </nav>
 
       <!-- Search Bar matching reference image -->
@@ -379,15 +385,19 @@
       </div>
 
       <div class="header-actions">
+        <a href="tel:01872170476" class="hotline-pill">
+          <span>📞</span> 01872170476
+        </a>
+
         <!-- Circular Profile Icon -->
-        <a href="/profile" class="header-profile-btn active" title="আমার একাউন্ট">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <a href="/profile" class="header-profile-circle active" title="আমার একাউন্ট">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
         </a>
 
-        <!-- Compact Lime Green Cart Pill -->
+        <!-- Exact Lime Green Cart Pill (Compact) -->
         <div class="header-cart-pill-wrap" onclick="PremeStore.openCartDrawer()" title="শপিং কার্ট">
           <div class="header-cart-pill">
             <div class="cart-pill-circle">
