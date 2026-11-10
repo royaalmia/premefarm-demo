@@ -379,6 +379,26 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+.admin-modal-body input,
+.admin-modal-body select,
+.admin-modal-body textarea {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+
+.grid-prod-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .grid-prod-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 .admin-modal-footer {
   padding: 14px 22px;
   background: #f8faf8;

@@ -87,7 +87,63 @@ const I18N = {
     th_bl_reason: 'কারণ',
     th_bl_by: 'কে ব্লক করেছেন',
     th_bl_date: 'তারিখ',
-    th_bl_action: 'একশন'
+    th_bl_action: 'একশন',
+
+    tab_failed: 'ব্যর্থ অর্ডার',
+    btn_logout: 'লগআউট (Logout)',
+    login_user_label: 'এডমিন আইডি / ইমেইল *',
+    login_pass_label: 'পাসওয়ার্ড *',
+    login_btn: 'লগইন করুন ➔',
+
+    // New Order Modal
+    new_order_title: 'নতুন অর্ডার তৈরি করুন',
+    new_ord_name: 'গ্রাহকের নাম *',
+    new_ord_phone: 'মোবাইল নম্বর *',
+    new_ord_address: 'সম্পূর্ণ ডেলিভারি ঠিকানা *',
+    new_ord_product: 'প্রোডাক্ট নির্বাচন করুন',
+    new_ord_qty: 'পরিমাণ',
+    new_ord_price: 'মূল্য (৳)',
+    new_ord_area: 'ডেলিভারি এলাকা',
+    new_ord_total: 'সর্বমোট বিল (COD)',
+    new_ord_note: 'কল সেন্টার অভ্যন্তরীণ নোট',
+    placeholder_note: 'যেমন: কাস্টমার বিকেলে ডেলিভারি চান',
+    placeholder_customer_name: 'গ্রাহকের পুরো নাম লিখুন',
+    placeholder_phone: '১১ ডিজিটের মোবাইল নম্বর',
+    placeholder_address: 'বাসা নং, রোড, থানা, জেলা...',
+    opt_city_dhaka: 'ঢাকা শহর (চার্জ ৳৭০)',
+    opt_city_outside: 'ঢাকার বাইরে (চার্জ ৳১৩০)',
+    btn_cancel: 'বাতিল',
+    btn_save_order: 'অর্ডার সেভ করুন ➔',
+
+    // Order Details Modal
+    ord_details_title: 'অর্ডার বিস্তারিত',
+    ord_details_date_label: 'তারিখ:',
+    ord_details_source_label: 'সোর্স:',
+    ord_status_change_label: 'অর্ডার স্ট্যাটাস পরিবর্তন *',
+    ord_city_label: 'ডেলিভারি শহর / এলাকা',
+    ord_customer_name_label: 'গ্রাহকের নাম *',
+    ord_phone_label: 'মোবাইল নম্বর *',
+    ord_address_label: 'সম্পূর্ণ ডেলিভারি ঠিকানা *',
+    ord_items_list_label: 'অর্ডারকৃত পণ্যের তালিকা',
+    th_modal_product: 'প্রোডাক্ট',
+    th_modal_pack: 'সাইজ/প্যাক',
+    th_modal_qty: 'পরিমাণ',
+    th_modal_price: 'মূল্য (৳)',
+    ord_subtotal_label: 'পণ্য মূল্য (৳)',
+    ord_delivery_label: 'ডেলিভারি চার্জ (৳)',
+    ord_total_label: 'সর্বমোট প্রদেয় COD (৳)',
+    ord_note_label: 'কল সেন্টার অভ্যন্তরীণ নোট',
+    placeholder_detail_note: 'নোট লিখুন: যেমন- কাস্টমার কাল দুপুরে ডেলিভারি নিশ্চিত করতে বলেছেন...',
+    ord_courier_status_label: 'কুরিয়ার অবস্থা:',
+    ord_courier_not_booked: 'এখনও কুরিয়ারে বুক করা হয়নি',
+    btn_dispatch_courier: 'কুরিয়ারে পাঠান ➔',
+    ord_updated_by_label: 'সর্বশেষ হালনাগাদ করেছেন:',
+    btn_update_order: 'আপডেট করুন ➔',
+    fraud_check_btn: 'ফ্রড হিস্ট্রি চেক ➔',
+    fraud_verified_pill: 'নিরাপদ গ্রাহক',
+    fraud_blacklisted_pill: 'ব্ল্যাকলিস্টেড গ্রাহক',
+    fraud_verified_msg: 'কুরিয়ার ডেলিভারি রেকর্ড স্বাভাবিক • অর্ডার প্রসেস করা নিরাপদ',
+    fraud_blacklisted_msg: 'সতর্কতা: এই ফোন নম্বরটি ব্ল্যাকলিস্টে রয়েছে!'
   },
   en: {
     sidebar_title: 'Preme Farm',
@@ -131,6 +187,11 @@ const I18N = {
     tab_delivered: 'Delivered',
     tab_return: 'Returned',
     tab_cancelled: 'Cancelled',
+    tab_failed: 'Failed Orders',
+    btn_logout: 'Logout',
+    login_user_label: 'Admin ID / Email *',
+    login_pass_label: 'Password *',
+    login_btn: 'Log In ➔',
 
     th_id_source: 'Order ID & Source',
     th_customer: 'Customer & Fraud Check',
@@ -171,7 +232,57 @@ const I18N = {
     th_bl_reason: 'Reason',
     th_bl_by: 'Blocked By',
     th_bl_date: 'Date',
-    th_bl_action: 'Action'
+    th_bl_action: 'Action',
+
+    // New Order Modal
+    new_order_title: 'Create New Order',
+    new_ord_name: 'Customer Name *',
+    new_ord_phone: 'Mobile Number *',
+    new_ord_address: 'Full Delivery Address *',
+    new_ord_product: 'Select Product',
+    new_ord_qty: 'Quantity',
+    new_ord_price: 'Price (৳)',
+    new_ord_area: 'Delivery Area',
+    new_ord_total: 'Total Bill (COD)',
+    new_ord_note: 'Call Center Internal Note',
+    placeholder_note: 'e.g., Customer requested afternoon delivery',
+    placeholder_customer_name: 'Enter customer full name',
+    placeholder_phone: '11-digit mobile number',
+    placeholder_address: 'House, Road, Area, District...',
+    opt_city_dhaka: 'Inside Dhaka (Charge ৳70)',
+    opt_city_outside: 'Outside Dhaka (Charge ৳130)',
+    btn_cancel: 'Cancel',
+    btn_save_order: 'Save Order ➔',
+
+    // Order Details Modal
+    ord_details_title: 'Order Details',
+    ord_details_date_label: 'Date:',
+    ord_details_source_label: 'Source:',
+    ord_status_change_label: 'Change Order Status *',
+    ord_city_label: 'Delivery City / Area',
+    ord_customer_name_label: 'Customer Name *',
+    ord_phone_label: 'Mobile Number *',
+    ord_address_label: 'Full Delivery Address *',
+    ord_items_list_label: 'Ordered Items List',
+    th_modal_product: 'Product',
+    th_modal_pack: 'Size/Pack',
+    th_modal_qty: 'Qty',
+    th_modal_price: 'Price (৳)',
+    ord_subtotal_label: 'Product Subtotal (৳)',
+    ord_delivery_label: 'Delivery Charge (৳)',
+    ord_total_label: 'Total Payable COD (৳)',
+    ord_note_label: 'Call Center Internal Note',
+    placeholder_detail_note: 'Write note: e.g. Customer verified address...',
+    ord_courier_status_label: 'Courier Status:',
+    ord_courier_not_booked: 'Not dispatched to courier yet',
+    btn_dispatch_courier: 'Dispatch to Courier ➔',
+    ord_updated_by_label: 'Last updated by:',
+    btn_update_order: 'Update Order ➔',
+    fraud_check_btn: 'Check Fraud History ➔',
+    fraud_verified_pill: 'Verified Customer',
+    fraud_blacklisted_pill: 'Blacklisted Customer',
+    fraud_verified_msg: 'Delivery history clean • Safe to process order',
+    fraud_blacklisted_msg: 'Warning: This phone number is blacklisted!'
   }
 };
 
@@ -432,6 +543,31 @@ const AdminApp = {
         ? (lang === 'bn' ? 'লাইট মোড' : 'Light Mode')
         : (lang === 'bn' ? 'ডার্ক মোড' : 'Dark Mode');
     }
+
+    // Update status dropdown options in order details modal
+    const statusSelect = document.getElementById('detail-ord-status');
+    if (statusSelect) {
+      const statusMap = {
+        'Pending': lang === 'bn' ? 'Pending (পেন্ডিং)' : 'Pending',
+        'Hold': lang === 'bn' ? 'Hold (হোল্ড)' : 'On Hold',
+        'Confirmed': lang === 'bn' ? 'Confirmed (নিশ্চিত)' : 'Confirmed',
+        'In Courier': lang === 'bn' ? 'In Courier (কুরিয়ারে প্রেরিত)' : 'In Courier (Dispatched)',
+        'Delivered': lang === 'bn' ? 'Delivered (ডেলিভারড)' : 'Delivered',
+        'Return': lang === 'bn' ? 'Return (রিটার্ন)' : 'Returned',
+        'Cancelled': lang === 'bn' ? 'Cancelled (বাতিল)' : 'Cancelled'
+      };
+      const curVal = statusSelect.value;
+      Array.from(statusSelect.options).forEach(opt => {
+        if (statusMap[opt.value]) opt.textContent = statusMap[opt.value];
+      });
+      if (curVal) statusSelect.value = curVal;
+    }
+
+    // Update city dropdown options in new order modal
+    const optDhaka = document.getElementById('opt-city-dhaka');
+    const optOutside = document.getElementById('opt-city-outside');
+    if (optDhaka && t.opt_city_dhaka) optDhaka.textContent = t.opt_city_dhaka;
+    if (optOutside && t.opt_city_outside) optOutside.textContent = t.opt_city_outside;
   },
 
   // ================= MOBILE SIDEBAR DRAWER =================
@@ -1106,6 +1242,7 @@ const AdminApp = {
 
   // ================= 4. NEW ORDER CREATION =================
   openNewOrderModal() {
+    this.applyLanguage(this.currentLang);
     const prodSelect = document.getElementById('new-ord-product');
     if (this.products.length > 0) {
       prodSelect.innerHTML = this.products.map(p => {
@@ -1212,28 +1349,29 @@ const AdminApp = {
     document.getElementById('detail-ord-city').value = order.customer?.city || 'Dhaka';
 
     // Fraud pill & verification
+    const isEn = this.currentLang === 'en';
     const fraudPill = document.getElementById('detail-fraud-pill');
     const fraudText = document.getElementById('detail-fraud-text');
     const isBlacklisted = (this.blacklist?.phones || []).includes(phone);
     if (isBlacklisted) {
       if (fraudPill) {
         fraudPill.style.background = '#dc2626';
-        fraudPill.textContent = 'ব্ল্যাকলিস্টেড গ্রাহক';
+        fraudPill.textContent = isEn ? 'Blacklisted Customer' : 'ব্ল্যাকলিস্টেড গ্রাহক';
       }
-      if (fraudText) fraudText.textContent = 'সতর্কতা: এই ফোন নম্বরটি ব্ল্যাকলিস্টে রয়েছে!';
+      if (fraudText) fraudText.textContent = isEn ? 'Warning: This phone number is on the blacklist!' : 'সতর্কতা: এই ফোন নম্বরটি ব্ল্যাকলিস্টে রয়েছে!';
     } else {
       if (fraudPill) {
         fraudPill.style.background = '#15803d';
-        fraudPill.textContent = 'ভেরিফাইড গ্রাহক';
+        fraudPill.textContent = isEn ? 'Verified Customer' : 'নিরাপদ গ্রাহক';
       }
-      if (fraudText) fraudText.textContent = 'পূর্ববর্তী ডেলিভারি রেকর্ড স্বাভাবিক • অর্ডার প্রসেস করা নিরাপদ';
+      if (fraudText) fraudText.textContent = isEn ? 'Delivery history clean • Safe to process order' : 'কুরিয়ার ডেলিভারি রেট ৯২% • ফ্রড রিস্ক নেই';
     }
 
     // Items table
     const itemsTbody = document.getElementById('detail-items-table-body');
     const items = order.items || [];
     if (!items || items.length === 0) {
-      if (itemsTbody) itemsTbody.innerHTML = '<tr><td colspan="4" style="padding:10px; text-align:center; color:#94a3b8;">কোনো পণ্য রেকর্ড নেই</td></tr>';
+      if (itemsTbody) itemsTbody.innerHTML = `<tr><td colspan="4" style="padding:10px; text-align:center; color:#94a3b8;">${isEn ? 'No items recorded' : 'কোনো পণ্য রেকর্ড নেই'}</td></tr>`;
     } else {
       if (itemsTbody) {
         itemsTbody.innerHTML = items.map(item => `
@@ -1260,10 +1398,10 @@ const AdminApp = {
     const courierInfo = document.getElementById('detail-courier-info');
     const courierBtn = document.getElementById('detail-courier-btn');
     if (order.courier && order.courier.trackingCode) {
-      if (courierInfo) courierInfo.innerHTML = `<b style="color:#0d4d29;">${order.courier.provider}</b> (ট্র্যাকিং কোড: <code style="font-weight:800; background:#eef5f0; padding:2px 6px; border-radius:4px;">${order.courier.trackingCode}</code>)`;
+      if (courierInfo) courierInfo.innerHTML = `<b style="color:#0d4d29;">${order.courier.provider}</b> (${isEn ? 'Tracking' : 'ট্র্যাকিং কোড'}: <code style="font-weight:800; background:#eef5f0; padding:2px 6px; border-radius:4px;">${order.courier.trackingCode}</code>)`;
       if (courierBtn) courierBtn.style.display = 'none';
     } else {
-      if (courierInfo) courierInfo.textContent = 'এখনও কুরিয়ারে বুক করা হয়নি';
+      if (courierInfo) courierInfo.textContent = isEn ? 'Not dispatched to courier yet' : 'এখনও কুরিয়ারে বুক করা হয়নি';
       if (courierBtn) courierBtn.style.display = 'inline-block';
     }
 
@@ -1274,9 +1412,11 @@ const AdminApp = {
         ? new Date(order.lastUpdatedBy.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         : '';
     } else {
-      document.getElementById('detail-ord-agent').textContent = 'সিস্টেম (Website)';
-      document.getElementById('detail-ord-timestamp').textContent = 'প্রাথমিক অর্ডার';
+      document.getElementById('detail-ord-agent').textContent = isEn ? 'System (Website)' : 'সিস্টেম (Website)';
+      document.getElementById('detail-ord-timestamp').textContent = isEn ? 'Initial Order' : 'প্রাথমিক অর্ডার';
     }
+
+    this.applyLanguage(this.currentLang);
 
     const modal = document.getElementById('order-details-modal');
     if (modal) modal.classList.add('active');

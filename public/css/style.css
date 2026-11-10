@@ -2135,18 +2135,119 @@ body {
   background: #062614;
 }
 
-/* Responsive Overrides */
-@media (max-width: 900px) {
-  .header-container {
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 12px 16px;
+/* ================= CLEAN RESPONSIVE HEADER & MOBILE VIEW ================= */
+@media (min-width: 769px) {
+  .site-header .header-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 14px !important;
   }
-  .header-search-wrap {
-    order: 3;
-    max-width: 100%;
-    margin: 6px 0 0 0;
-    width: 100%;
+  .site-header .brand-logo {
+    flex-shrink: 0 !important;
+  }
+  .site-header .nav-menu {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    flex-shrink: 0 !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .site-header .header-search-wrap {
+    flex: 1 !important;
+    min-width: 180px !important;
+    max-width: 420px !important;
+    margin: 0 12px !important;
+    order: unset !important;
+    width: auto !important;
+  }
+  .site-header .header-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-shrink: 0 !important;
+  }
+  .mobile-menu-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .site-header .brand-text span {
+    display: none;
+  }
+  .hotline-pill {
+    padding: 6px 12px;
+    font-size: 13.5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid #d1d5db;
+    background: #ffffff;
+    cursor: pointer;
+    order: 1 !important;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .site-header .header-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    padding: 10px 14px !important;
+    gap: 0 !important;
+  }
+  .site-header .brand-logo {
+    order: 2 !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .site-header .logo-circle {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  .site-header .brand-text {
+    display: none !important;
+  }
+  .site-header .header-actions {
+    order: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0;
+  }
+  .site-header .header-actions .hotline-pill,
+  .site-header .header-actions .header-profile-circle {
+    display: none !important;
+  }
+  .header-cart-pill-wrap {
+    margin-left: 0 !important;
+  }
+  .site-header .nav-menu {
+    display: none !important;
+  }
+  .site-header .header-search-wrap {
+    order: 4 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 8px 0 2px 0 !important;
+    flex-basis: 100% !important;
+  }
+  .header-search-form {
+    height: 38px !important;
   }
   .spotlight-card {
     grid-template-columns: 1fr;
@@ -2158,43 +2259,6 @@ body {
   .footer-container {
     grid-template-columns: 1fr 1fr;
     gap: 24px;
-  }
-  .nav-menu {
-    display: none;
-  }
-  .hero-slide {
-    padding: 40px 18px;
-  }
-  .hero-slide h1 {
-    font-size: 28px !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .mobile-menu-btn {
-    display: flex;
-  }
-  .site-header .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-  }
-  .site-header .brand-logo {
-    margin: 0 auto;
-  }
-  .site-header .brand-text span {
-    display: none;
-  }
-  .site-header .brand-text h1 {
-    font-size: 20px;
-  }
-  .site-header .header-actions .hotline-pill,
-  .site-header .header-actions .header-profile-circle {
-    display: none;
-  }
-  .header-cart-pill-wrap {
-    margin-left: 0;
   }
   .modal-product-top {
     grid-template-columns: 1fr;
