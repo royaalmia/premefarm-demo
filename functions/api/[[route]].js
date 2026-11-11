@@ -25,6 +25,17 @@ function parseJsonField(val, fallback = null) {
   }
 }
 
+function getBdOperator(phone) {
+  const p = (phone || '').replace(/[^0-9]/g, '');
+  const clean = p.length > 11 ? p.slice(-11) : p;
+  if (clean.startsWith('017') || clean.startsWith('013')) return 'Grameenphone (GP)';
+  if (clean.startsWith('019') || clean.startsWith('014')) return 'Banglalink';
+  if (clean.startsWith('018')) return 'Robi Axiata';
+  if (clean.startsWith('016')) return 'Airtel (Robi)';
+  if (clean.startsWith('015')) return 'Teletalk (Govt)';
+  return 'BD Mobile / Other';
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -574,13 +585,16 @@ export async function onRequest(context) {
     if (path === '/api/settings' && method === 'GET') {
       const r = await db.prepare('SELECT value FROM settings WHERE key = ?').bind('general').first();
       const settings = r ? parseJsonField(r.value, {}) : {};
-      return jsonResponse({ success: true, settings });
+      return jsonResponse({ success: true, settings, data: settings });
     }
 
-    if (path === '/api/settings' && method === 'POST') {
+    if (path === '/api/settings' && (method === 'POST' || method === 'PUT')) {
       const body = await request.json();
-      await db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)').bind('general', JSON.stringify(body)).run();
-      return jsonResponse({ success: true, message: 'সেটিংস আপডেট হয়েছে' });
+      const r = await db.prepare('SELECT value FROM settings WHERE key = ?').bind('general').first();
+      const existing = r ? parseJsonField(r.value, {}) : {};
+      const updated = { ...existing, ...body };
+      await db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)').bind('general', JSON.stringify(updated)).run();
+      return jsonResponse({ success: true, message: 'সেটিংস আপডেট হয়েছে', settings: updated, data: updated });
     }
 
     if (path === '/api/cms' && method === 'GET') {
@@ -626,21 +640,105 @@ export async function onRequest(context) {
       });
     }
 
-    // ================= 13. FRAUD CHECK =================
+    // ================= 13. 1000% GENUINE FRAUD CHECK =================
     const fraudMatch = path.match(/^\/api\/fraud-check\/(.+)$/);
     if (fraudMatch && method === 'GET') {
-      const phone = decodeURIComponent(fraudMatch[1]).trim();
-      const isBl = await db.prepare('SELECT * FROM blacklist WHERE value = ?').bind(phone).first();
+      const rawPhone = decodeURIComponent(fraudMatch[1]).trim();
+      const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+      const searchPhone = cleanPhone.length > 11 ? cleanPhone.slice(-11) : cleanPhone;
+      const phoneSuffix = searchPhone.length >= 10 ? searchPhone.slice(-10) : searchPhone;
+      const operator = getBdOperator(searchPhone);
+
+      // 1. Genuine Blacklist Query
+      const isBl = await db.prepare("SELECT * FROM blacklist WHERE value LIKE ? OR ? LIKE '%' || value || '%'").bind(`%${phoneSuffix}%`, rawPhone).first();
+
+      // 2. Genuine Database Orders History
+      const allOrders = (await db.prepare('SELECT id, customer, total, status, createdAt FROM orders').all()).results || [];
+      const customerOrders = allOrders.filter(o => {
+        const cust = parseJsonField(o.customer, {});
+        const p = (cust.phone || '').replace(/[^0-9]/g, '');
+        return p.includes(phoneSuffix) || phoneSuffix.includes(p);
+      });
+
+      const totalParcels = customerOrders.length;
+      const deliveredParcels = customerOrders.filter(o => (o.status || '').toLowerCase() === 'delivered').length;
+      const returnedParcels = customerOrders.filter(o => ['return', 'returned'].includes((o.status || '').toLowerCase())).length;
+      const cancelledParcels = customerOrders.filter(o => ['cancelled', 'cancel', 'failed'].includes((o.status || '').toLowerCase())).length;
+      const pendingParcels = customerOrders.filter(o => ['pending', 'confirmed', 'in courier', 'shipped', 'hold', 'on hold'].includes((o.status || '').toLowerCase())).length;
+      const totalSpent = customerOrders.filter(o => (o.status || '').toLowerCase() === 'delivered').reduce((sum, o) => sum + (o.total || 0), 0);
+
+      let riskScore = 10;
+      let riskTitle = 'নিরাপদ গ্রাহক (Safe)';
+      let badgeColor = '#10b981';
+      let customerType = 'সাধারণ গ্রাহক';
+      let successRate = '১০০%';
+      let advice = 'গ্রাহকের তথ্য যাচাই করে পার্সেল কুরিয়ারে বুকিং দিন।';
+
+      if (isBl) {
+        riskScore = 95;
+        riskTitle = 'ব্ল্যাকলিস্টেড গ্রাহক (Blacklisted)';
+        badgeColor = '#dc2626';
+        customerType = 'ফ্রড / প্রতারক তালিকাভুক্ত';
+        successRate = '০%';
+        advice = 'সতর্কতা! এই নম্বরটি ফ্রড ব্ল্যাকলিস্টে রয়েছে। অর্ডার পাঠাবেন না বা ১০০% অগ্রিম পেমেন্ট নিন।';
+      } else if (totalParcels === 0) {
+        riskScore = 15;
+        riskTitle = 'নতুন গ্রাহক (First Order)';
+        badgeColor = '#0284c7';
+        customerType = 'নতুন গ্রাহক (পূর্ব রেকর্ড নেই)';
+        successRate = 'নতুন গ্রাহক';
+        advice = 'গ্রাহক প্রিমি ফার্মে এই প্রথম অর্ডার করেছেন। কল সেন্টার থেকে ফোনে কথা বলে ঠিকানা ও পণ্যের নিশ্চয়তা নিয়ে পার্সেল পাঠান।';
+      } else {
+        const completed = deliveredParcels + returnedParcels + cancelledParcels;
+        if (completed === 0) {
+          riskScore = 20;
+          riskTitle = 'অর্ডার প্রক্রিয়াধীন (In Progress)';
+          badgeColor = '#0284c7';
+          customerType = 'চলমান অর্ডার গ্রাহক';
+          successRate = 'প্রক্রিয়াধীন';
+          advice = 'গ্রাহকের পূর্বের অর্ডার এখনও ডেলিভারির পথে আছে।';
+        } else {
+          const rate = Math.round((deliveredParcels / completed) * 100);
+          successRate = `${rate}%`;
+          if (rate >= 85) {
+            riskScore = 5;
+            riskTitle = 'অতি বিশ্বস্ত ও ভেরিফাইড (Verified Safe)';
+            badgeColor = '#10b981';
+            customerType = 'নিয়মিত ও বিশ্বস্ত গ্রাহক';
+            advice = '১০০% বিশ্বস্ত গ্রাহক। কোনো দ্বিধা ছাড়াই সরাসরি কুরিয়ারে বুকিং দিতে পারেন।';
+          } else if (rate >= 60) {
+            riskScore = 40;
+            riskTitle = 'মাঝারি ঝুঁকি (Moderate Risk)';
+            badgeColor = '#f59e0b';
+            customerType = 'মাঝারি গ্রাহক';
+            advice = 'ফোনে কথা বলে ডেলিভারির সময় ও পার্সেল গ্রহণের নিশ্চয়তা নিয়ে পাঠান।';
+          } else {
+            riskScore = 85;
+            riskTitle = 'উচ্চ ঝুঁকি (High Return Rate)';
+            badgeColor = '#ef4444';
+            customerType = 'উচ্চ রিটার্ন ঝুঁকিপূর্ণ';
+            advice = 'সতর্কতা! এই গ্রাহকের পূর্বে পার্সেল রিটার্ন বা বাতিলের হার বেশি। ডেলিভারি চার্জ অগ্রিম নিয়ে পার্সেল পাঠান।';
+          }
+        }
+      }
+
       return jsonResponse({
-        phone,
-        riskScore: isBl ? 90 : 5,
-        riskTitle: isBl ? 'উচ্চ ঝুঁকি (Blacklisted)' : 'নিরাপদ কাস্টমার',
-        badgeColor: isBl ? '#dc2626' : '#10b981',
-        totalParcels: isBl ? 1 : 4,
-        returnedParcels: isBl ? 1 : 0,
-        successRate: isBl ? '0%' : '100%',
+        success: true,
+        phone: rawPhone,
+        operator,
         isBlacklisted: !!isBl,
-        advice: isBl ? 'কাস্টমার ব্ল্যাকলিস্টে আছে। অর্ডার বাতিল বা অগ্রিম পেমেন্ট নিন।' : 'নির্দ্বিধায় ডেলিভারি প্রসেস করতে পারেন।'
+        riskScore,
+        riskTitle,
+        badgeColor,
+        successRate,
+        totalParcels,
+        deliveredParcels,
+        returnedParcels,
+        cancelledParcels,
+        pendingParcels,
+        totalSpent,
+        customerType,
+        advice
       });
     }
 
@@ -741,6 +839,117 @@ export async function onRequest(context) {
         trackingCode,
         consignmentId,
         courier: selectedCourier
+      });
+    }
+
+    // ================= 15A. COURIER WEBHOOK (LIVE AUTO-UPDATE) =================
+    if (path === '/api/courier/webhook' && (method === 'POST' || method === 'GET')) {
+      let payload = {};
+      try {
+        if (method === 'POST') payload = await request.json();
+      } catch (e) {}
+
+      const invoice = payload.invoice || payload.order_id || payload.orderId || url.searchParams.get('invoice') || url.searchParams.get('order_id');
+      const trackingCode = payload.tracking_code || payload.consignment_id || url.searchParams.get('tracking_code');
+      const rawStatus = (payload.status || payload.delivery_status || payload.event || url.searchParams.get('status') || '').toLowerCase();
+
+      if (!invoice && !trackingCode) {
+        return jsonResponse({ success: true, message: 'Steadfast Webhook listener active. No invoice provided in test ping.' });
+      }
+
+      // Find order by invoice ID or tracking code
+      let order = null;
+      if (invoice) {
+        order = await db.prepare('SELECT * FROM orders WHERE id = ?').bind(invoice).first();
+      }
+      if (!order && trackingCode) {
+        order = await db.prepare("SELECT * FROM orders WHERE courier LIKE ?").bind(`%"trackingCode":"${trackingCode}"%`).first();
+      }
+
+      if (!order) {
+        return jsonResponse({ success: false, message: `Order #${invoice || trackingCode} not found` }, 404);
+      }
+
+      let newStatus = null;
+      if (rawStatus.includes('deliver')) {
+        newStatus = 'Delivered';
+      } else if (rawStatus.includes('cancel')) {
+        newStatus = 'Cancelled';
+      } else if (rawStatus.includes('return')) {
+        newStatus = 'Return';
+      } else if (rawStatus.includes('transit') || rawStatus.includes('shipped') || rawStatus.includes('picked')) {
+        newStatus = 'In Courier';
+      }
+
+      if (newStatus && newStatus !== order.status) {
+        const curCourier = parseJsonField(order.courier, {});
+        curCourier.status = newStatus;
+        curCourier.updatedAt = new Date().toISOString();
+        if (payload.status_note) curCourier.note = payload.status_note;
+
+        const updatedBy = JSON.stringify({ agent: 'Steadfast Webhook', timestamp: new Date().toISOString() });
+        await db.prepare('UPDATE orders SET status = ?, courier = ?, lastUpdatedBy = ? WHERE id = ?').bind(
+          newStatus, JSON.stringify(curCourier), updatedBy, order.id
+        ).run();
+
+        await db.prepare('INSERT INTO audit_logs (orderId, agent, action, timestamp) VALUES (?, ?, ?, ?)').bind(
+          order.id, 'Steadfast Webhook', `কুরিয়ার থেকে স্বয়ংক্রিয় স্ট্যাটাস পরিবর্তন: ${newStatus}`, new Date().toISOString()
+        ).run();
+
+        return jsonResponse({ success: true, message: `Order #${order.id} status updated to ${newStatus}`, orderId: order.id, status: newStatus });
+      }
+
+      return jsonResponse({ success: true, message: `Order #${order.id} status is already ${order.status}` });
+    }
+
+    // ================= 15B. COURIER REAL-TIME STATUS SYNC =================
+    if (path === '/api/courier/sync-status' && (method === 'POST' || method === 'GET')) {
+      const allOrders = (await db.prepare('SELECT * FROM orders WHERE status IN ("In Courier", "Shipped", "Confirmed", "Pending") ORDER BY createdAt DESC').all()).results || [];
+      const updatedList = [];
+
+      for (const ord of allOrders) {
+        try {
+          const sfRes = await fetch(`https://portal.packzy.com/api/v1/status_by_invoice/${encodeURIComponent(ord.id)}`, {
+            headers: {
+              'Api-Key': 'o8pnudnvo70jpz6jgraykqdi9qnwvyjl',
+              'Secret-Key': '8ipxndp3quigmytzdk3jzzwu'
+            }
+          });
+          const sfData = await sfRes.json();
+          if (sfData && sfData.status === 200 && sfData.delivery_status) {
+            const st = sfData.delivery_status.toLowerCase();
+            let mapped = null;
+            if (st === 'delivered' || st === 'partial_delivered') mapped = 'Delivered';
+            else if (st === 'cancelled') mapped = 'Cancelled';
+            else if (st === 'return' || st === 'returned') mapped = 'Return';
+
+            if (mapped && mapped !== ord.status) {
+              const curCourier = parseJsonField(ord.courier, {});
+              curCourier.status = mapped;
+              curCourier.lastCheckedAt = new Date().toISOString();
+              const updatedBy = JSON.stringify({ agent: 'Steadfast Sync API', timestamp: new Date().toISOString() });
+
+              await db.prepare('UPDATE orders SET status = ?, courier = ?, lastUpdatedBy = ? WHERE id = ?').bind(
+                mapped, JSON.stringify(curCourier), updatedBy, ord.id
+              ).run();
+
+              await db.prepare('INSERT INTO audit_logs (orderId, agent, action, timestamp) VALUES (?, ?, ?, ?)').bind(
+                ord.id, 'Steadfast Sync', `কুরিয়ার লাইভ সিঙ্ক: স্ট্যাটাস পরিবর্তিত হয়ে ${mapped} হয়েছে`, new Date().toISOString()
+              ).run();
+
+              updatedList.push({ id: ord.id, oldStatus: ord.status, newStatus: mapped });
+            }
+          }
+        } catch (syncErr) {
+          console.warn(`Sync check error for ${ord.id}:`, syncErr.message);
+        }
+      }
+
+      return jsonResponse({
+        success: true,
+        totalChecked: allOrders.length,
+        updatedCount: updatedList.length,
+        updatedOrders: updatedList
       });
     }
 

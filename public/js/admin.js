@@ -1254,21 +1254,35 @@ const AdminApp = {
     this.fetchStats();
   },
 
-  // ================= 2. FRAUD CHECK =================
+  // ================= 2. FRAUD CHECK (1000% GENUINE BD OPERATOR & REAL DB HISTORY) =================
   async openFraudCheck(phone) {
     if (!phone) return;
     document.getElementById('fraud-phone').textContent = phone;
     document.getElementById('fraud-modal').classList.add('active');
 
     try {
-      const res = await fetch(`/api/fraud-check/${phone}`);
+      const res = await fetch(`/api/fraud-check/${encodeURIComponent(phone)}`);
       const data = await res.json();
       
-      const badge = document.getElementById('fraud-risk-badge');
-      badge.textContent = data.riskTitle;
-      badge.style.background = data.badgeColor || '#10b981';
+      const opBadge = document.getElementById('fraud-operator-badge');
+      if (opBadge) opBadge.textContent = data.operator || 'BD SIM';
 
-      document.getElementById('fraud-success-rate').textContent = data.successRate || '100%';
+      const badge = document.getElementById('fraud-risk-badge');
+      if (badge) {
+        badge.textContent = data.riskTitle || 'নিরাপদ গ্রাহক';
+        badge.style.background = data.badgeColor || '#10b981';
+      }
+
+      const custType = document.getElementById('fraud-customer-type');
+      if (custType) custType.textContent = data.customerType || 'সাধারণ গ্রাহক';
+
+      const delCount = document.getElementById('fraud-delivered-count');
+      if (delCount) delCount.textContent = (data.deliveredParcels || 0) + ' টি';
+
+      const totalSpent = document.getElementById('fraud-total-spent');
+      if (totalSpent) totalSpent.textContent = '৳' + (data.totalSpent || 0);
+
+      document.getElementById('fraud-success-rate').textContent = data.successRate || '১০০%';
       document.getElementById('fraud-total-parcels').textContent = data.totalParcels || '0';
       document.getElementById('fraud-returns').textContent = data.returnedParcels || '0';
       document.getElementById('fraud-advice').textContent = data.advice || '-';
@@ -1596,7 +1610,21 @@ const AdminApp = {
     } catch (e) {}
   },
 
-  // ================= 6. COURIER DISPATCH =================
+  // ================= 6. COURIER DISPATCH & REAL-TIME SYNC =================
+  defaultCourier: 'Steadfast',
+
+  setDefaultCourier(courier) {
+    this.defaultCourier = courier || 'Steadfast';
+    localStorage.setItem('premefarm_default_courier', this.defaultCourier);
+    fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ defaultCourier: this.defaultCourier })
+    }).catch(() => {});
+    const defSelect = document.getElementById('courier-default-select');
+    if (defSelect) defSelect.value = this.defaultCourier;
+  },
+
   openCourierModal(orderId) {
     const order = this.orders.find(o => o.id === orderId);
     if (!order) return;
@@ -1605,11 +1633,51 @@ const AdminApp = {
     document.getElementById('modal-dispatch-name').textContent = order.customer?.name || '';
     document.getElementById('modal-dispatch-phone').textContent = order.customer?.phone || '';
     document.getElementById('modal-dispatch-amount').textContent = `৳${order.total}`;
+
+    // Auto-select configured default courier
+    const provSelect = document.getElementById('select-courier-provider');
+    if (provSelect) {
+      provSelect.value = this.defaultCourier || 'Steadfast';
+    }
+
     document.getElementById('courier-modal').classList.add('active');
   },
 
   closeCourierModal() {
     document.getElementById('courier-modal').classList.remove('active');
+  },
+
+  async syncCourierStatus() {
+    const btn = document.getElementById('btn-sync-courier');
+    const origHtml = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '🔄 সিঙ্ক হচ্ছে...';
+    }
+
+    try {
+      const res = await fetch('/api/courier/sync-status', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        if (data.updatedCount > 0) {
+          alert(`কুরিয়ার স্ট্যাটাস সিঙ্ক সফল!\nমোট ${data.updatedCount} টি অর্ডারের ডেলিভারি বা ক্যানসেল স্ট্যাটাস স্বয়ংক্রিয়ভাবে আপডেট করা হয়েছে।`);
+        } else {
+          alert(`কুরিয়ার চেক সম্পন্ন হয়েছে। কোনো নতুন স্ট্যাটাস পরিবর্তন পাওয়া যায়নি (মোট সক্রিয় অর্ডার চেক: ${data.totalChecked || 0} টি)।`);
+        }
+        await this.fetchOrders();
+        await this.fetchStats();
+        await this.fetchAuditLogs();
+      } else {
+        alert('কুরিয়ার সিঙ্ক করতে সমস্যা হয়েছে: ' + (data.message || 'Error'));
+      }
+    } catch (e) {
+      alert('কুরিয়ার সার্ভারের সাথে যোগাযোগ করা যাচ্ছে না।');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+      }
+    }
   },
 
   async dispatchToCourier() {
@@ -2217,10 +2285,15 @@ const AdminApp = {
       const res = await fetch('/api/settings');
       if (res.ok) {
         const json = await res.json();
-        const s = json.data || {};
+        const s = json.data || json.settings || {};
         if (s.shipping) {
           if (document.getElementById('store-dhaka-charge')) document.getElementById('store-dhaka-charge').value = s.shipping.insideDhaka || 70;
           if (document.getElementById('store-outside-charge')) document.getElementById('store-outside-charge').value = s.shipping.outsideDhaka || 130;
+        }
+        if (s.defaultCourier || localStorage.getItem('premefarm_default_courier')) {
+          this.defaultCourier = s.defaultCourier || localStorage.getItem('premefarm_default_courier') || 'Steadfast';
+          const defSelect = document.getElementById('courier-default-select');
+          if (defSelect) defSelect.value = this.defaultCourier;
         }
       }
     } catch (e) {}

@@ -49,6 +49,17 @@ function writeJson(file, data) {
   }
 }
 
+function getBdOperator(phone) {
+  const p = (phone || '').replace(/[^0-9]/g, '');
+  const clean = p.length > 11 ? p.slice(-11) : p;
+  if (clean.startsWith('017') || clean.startsWith('013')) return 'Grameenphone (GP)';
+  if (clean.startsWith('019') || clean.startsWith('014')) return 'Banglalink';
+  if (clean.startsWith('018')) return 'Robi Axiata';
+  if (clean.startsWith('016')) return 'Airtel (Robi)';
+  if (clean.startsWith('015')) return 'Teletalk (Govt)';
+  return 'BD Mobile / Other';
+}
+
 // ================= API ENDPOINTS =================
 
 // 1. PRODUCTS API
@@ -596,48 +607,87 @@ app.put('/api/orders/:id/note', (req, res) => {
   res.json({ success: true, message: 'কল সেন্টার নোট সংরক্ষিত হয়েছে!', order });
 });
 
-// Fraud Check API (Courier Delivery History & Risk Assessment + Blacklist Check)
+// 1000% Genuine Fraud Check API (Database Orders History, Real BD Operator, Blacklist)
 app.get('/api/fraud-check/:phone', (req, res) => {
-  const phone = req.params.phone.replace(/[\s-]/g, '');
+  const rawPhone = (req.params.phone || '').trim();
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+  const searchPhone = cleanPhone.length > 11 ? cleanPhone.slice(-11) : cleanPhone;
+  const phoneSuffix = searchPhone.length >= 10 ? searchPhone.slice(-10) : searchPhone;
+  const operator = getBdOperator(searchPhone);
+
   const orders = readJson(ORDERS_FILE, []);
   const blacklist = readJson(BLACKLIST_FILE, { phones: [], ips: [] });
   
-  const isBlacklisted = (blacklist.phones || []).some(b => b.phone.replace(/[\s-]/g, '') === phone);
+  const isBlacklisted = (blacklist.phones || []).some(b => {
+    const bp = (b.phone || b.value || '').replace(/[^0-9]/g, '');
+    return bp.includes(phoneSuffix) || phoneSuffix.includes(bp);
+  });
 
-  const customerOrders = orders.filter(o => 
-    o.customer && o.customer.phone && o.customer.phone.replace(/[\s-]/g, '').includes(phone)
-  );
+  const customerOrders = orders.filter(o => {
+    const p = (o.customer?.phone || '').replace(/[^0-9]/g, '');
+    return p.includes(phoneSuffix) || phoneSuffix.includes(p);
+  });
 
-  const localDelivered = customerOrders.filter(o => o.status === 'Delivered').length;
-  const localReturned = customerOrders.filter(o => o.status === 'Return' || o.status === 'Cancelled').length;
-  
-  // Simulated Steadfast / Courier Hub API statistics for this phone
-  const seed = parseInt(phone.slice(-3)) || 42;
-  const simulatedTotal = 8 + (seed % 10);
-  const simulatedReturned = (phone.endsWith('9') || phone.endsWith('0')) ? 1 : 0;
-  const simulatedDelivered = simulatedTotal - simulatedReturned;
-  const successRate = Math.round((simulatedDelivered / simulatedTotal) * 100);
+  const totalParcels = customerOrders.length;
+  const deliveredParcels = customerOrders.filter(o => (o.status || '').toLowerCase() === 'delivered').length;
+  const returnedParcels = customerOrders.filter(o => ['return', 'returned'].includes((o.status || '').toLowerCase())).length;
+  const cancelledParcels = customerOrders.filter(o => ['cancelled', 'cancel', 'failed'].includes((o.status || '').toLowerCase())).length;
+  const pendingParcels = customerOrders.filter(o => ['pending', 'confirmed', 'in courier', 'shipped', 'hold', 'on hold'].includes((o.status || '').toLowerCase())).length;
+  const totalSpent = customerOrders.filter(o => (o.status || '').toLowerCase() === 'delivered').reduce((sum, o) => sum + (o.total || 0), 0);
 
-  let risk = 'Safe';
+  let riskScore = 10;
+  let riskTitle = 'নিরাপদ গ্রাহক (Safe)';
   let badgeColor = '#10b981';
-  let riskTitle = 'নিরাপদ কাস্টমার (Safe)';
-  let advice = 'অর্ডার কনফার্ম করে কুরিয়ারে পাঠাতে পারেন। সফল ডেলিভারির হার অনেক ভালো।';
+  let customerType = 'সাধারণ গ্রাহক';
+  let successRate = '১০০%';
+  let advice = 'গ্রাহকের তথ্য যাচাই করে পার্সেল কুরিয়ারে বুকিং দিন।';
 
   if (isBlacklisted) {
-    risk = 'Blacklisted';
-    badgeColor = '#b91c1c';
-    riskTitle = 'ব্ল্যাকলিস্টেড / ফ্রড ইউজার (Blocked)';
-    advice = 'সতর্কতা! এই গ্রাহক প্রিমি ফার্মের ফ্রড ব্ল্যাকলিস্টে তালিকাভুক্ত। অর্ডার গ্রহণ করবেন না।';
-  } else if (successRate < 75 || localReturned > 1) {
-    risk = 'High';
-    badgeColor = '#ef4444';
-    riskTitle = 'উচ্চ ঝুঁকি (High Risk)';
-    advice = 'সতর্কতা! পূর্বে পার্সেল রিটার্ন করার রেকর্ড রয়েছে। অগ্রিম ডেলিভারি চার্জ ছাড়া পার্সেল না পাঠানোর পরামর্শ দেওয়া হচ্ছে।';
-  } else if (successRate < 88) {
-    risk = 'Moderate';
-    badgeColor = '#f59e0b';
-    riskTitle = 'মাঝারি ঝুঁকি (Moderate)';
-    advice = 'কল সেন্টারের মাধ্যমে কথা বলে ডেলিভারির তারিখ ও সম্পূর্ণ ঠিকানা যাচাই করে কনফার্ম করুন।';
+    riskScore = 95;
+    riskTitle = 'ব্ল্যাকলিস্টেড গ্রাহক (Blacklisted)';
+    badgeColor = '#dc2626';
+    customerType = 'ফ্রড / প্রতারক তালিকাভুক্ত';
+    successRate = '০%';
+    advice = 'সতর্কতা! এই নম্বরটি ফ্রড ব্ল্যাকলিস্টে রয়েছে। অর্ডার পাঠাবেন না বা ১০০% অগ্রিম পেমেন্ট নিন।';
+  } else if (totalParcels === 0) {
+    riskScore = 15;
+    riskTitle = 'নতুন গ্রাহক (First Order)';
+    badgeColor = '#0284c7';
+    customerType = 'নতুন গ্রাহক (পূর্ব রেকর্ড নেই)';
+    successRate = 'নতুন গ্রাহক';
+    advice = 'গ্রাহক প্রিমি ফার্মে এই প্রথম অর্ডার করেছেন। কল সেন্টার থেকে ফোনে কথা বলে ঠিকানা ও পণ্যের নিশ্চয়তা নিয়ে পার্সেল পাঠান।';
+  } else {
+    const completed = deliveredParcels + returnedParcels + cancelledParcels;
+    if (completed === 0) {
+      riskScore = 20;
+      riskTitle = 'অর্ডার প্রক্রিয়াধীন (In Progress)';
+      badgeColor = '#0284c7';
+      customerType = 'চলমান অর্ডার গ্রাহক';
+      successRate = 'প্রক্রিয়াধীন';
+      advice = 'গ্রাহকের পূর্বের অর্ডার এখনও ডেলিভারির পথে আছে।';
+    } else {
+      const rate = Math.round((deliveredParcels / completed) * 100);
+      successRate = `${rate}%`;
+      if (rate >= 85) {
+        riskScore = 5;
+        riskTitle = 'অতি বিশ্বস্ত ও ভেরিফাইড (Verified Safe)';
+        badgeColor = '#10b981';
+        customerType = 'নিয়মিত ও বিশ্বস্ত গ্রাহক';
+        advice = '১০০% বিশ্বস্ত গ্রাহক। কোনো দ্বিধা ছাড়াই সরাসরি কুরিয়ারে বুকিং দিতে পারেন।';
+      } else if (rate >= 60) {
+        riskScore = 40;
+        riskTitle = 'মাঝারি ঝুঁকি (Moderate Risk)';
+        badgeColor = '#f59e0b';
+        customerType = 'মাঝারি গ্রাহক';
+        advice = 'ফোনে কথা বলে ডেলিভারির সময় ও পার্সেল গ্রহণের নিশ্চয়তা নিয়ে পাঠান।';
+      } else {
+        riskScore = 85;
+        riskTitle = 'উচ্চ ঝুঁকি (High Return Rate)';
+        badgeColor = '#ef4444';
+        customerType = 'উচ্চ রিটার্ন ঝুঁকিপূর্ণ';
+        advice = 'সতর্কতা! এই গ্রাহকের পূর্বে পার্সেল রিটার্ন বা বাতিলের হার বেশি। ডেলিভারি চার্জ অগ্রিম নিয়ে পার্সেল পাঠান।';
+      }
+    }
   }
 
   // Find customer IP if available from orders
@@ -645,18 +695,22 @@ app.get('/api/fraud-check/:phone', (req, res) => {
 
   res.json({
     success: true,
-    phone: phone,
+    phone: rawPhone,
+    operator,
     ip: foundIp,
-    isBlacklisted: isBlacklisted,
-    risk: risk,
-    badgeColor: badgeColor,
-    riskTitle: riskTitle,
-    successRate: `${successRate}%`,
-    totalParcels: simulatedTotal + customerOrders.length,
-    deliveredParcels: simulatedDelivered + localDelivered,
-    returnedParcels: simulatedReturned + localReturned,
-    localOrdersCount: customerOrders.length,
-    advice: advice
+    isBlacklisted,
+    riskScore,
+    riskTitle,
+    badgeColor,
+    successRate,
+    totalParcels,
+    deliveredParcels,
+    returnedParcels,
+    cancelledParcels,
+    pendingParcels,
+    totalSpent,
+    customerType,
+    advice
   });
 });
 
@@ -836,7 +890,7 @@ app.post('/api/failed-orders/convert/:id', (req, res) => {
 });
 
 // Courier Dispatch API
-app.post('/api/courier/send', (req, res) => {
+app.post('/api/courier/send', async (req, res) => {
   const { orderId, courier, weight, specialNote, agent } = req.body;
   const orders = readJson(ORDERS_FILE, []);
   const order = orders.find(o => o.id === orderId);
@@ -912,6 +966,120 @@ app.post('/api/courier/send', (req, res) => {
     trackingCode: trackingCode,
     consignmentId: consignmentId,
     courier: order.courier
+  });
+});
+
+// Courier Webhook (Live automatic update when courier delivers or cancels)
+app.all('/api/courier/webhook', (req, res) => {
+  const payload = req.method === 'POST' ? req.body : req.query;
+  const invoice = payload.invoice || payload.order_id || payload.orderId;
+  const trackingCode = payload.tracking_code || payload.consignment_id;
+  const rawStatus = (payload.status || payload.delivery_status || payload.event || '').toLowerCase();
+
+  if (!invoice && !trackingCode) {
+    return res.json({ success: true, message: 'Steadfast Webhook listener active. No invoice provided in test ping.' });
+  }
+
+  const orders = readJson(ORDERS_FILE, []);
+  let order = null;
+  if (invoice) {
+    order = orders.find(o => o.id === invoice);
+  }
+  if (!order && trackingCode) {
+    order = orders.find(o => o.courier?.trackingCode === trackingCode);
+  }
+
+  if (!order) {
+    return res.status(404).json({ success: false, message: `Order #${invoice || trackingCode} not found` });
+  }
+
+  let newStatus = null;
+  if (rawStatus.includes('deliver')) {
+    newStatus = 'Delivered';
+  } else if (rawStatus.includes('cancel')) {
+    newStatus = 'Cancelled';
+  } else if (rawStatus.includes('return')) {
+    newStatus = 'Return';
+  } else if (rawStatus.includes('transit') || rawStatus.includes('shipped') || rawStatus.includes('picked')) {
+    newStatus = 'In Courier';
+  }
+
+  if (newStatus && newStatus !== order.status) {
+    const prev = order.status;
+    order.status = newStatus;
+    if (order.courier) {
+      order.courier.status = newStatus;
+      order.courier.updatedAt = new Date().toISOString();
+      if (payload.status_note) order.courier.note = payload.status_note;
+    }
+    order.lastUpdatedBy = {
+      agent: 'Steadfast Webhook',
+      action: `কুরিয়ার থেকে স্বয়ংক্রিয় স্ট্যাটাস পরিবর্তন: ${newStatus}`,
+      actionEn: `Courier webhook status update: ${newStatus}`,
+      timestamp: new Date().toISOString()
+    };
+    writeJson(ORDERS_FILE, orders);
+    recordAuditLog(order.id, 'Steadfast Webhook', `কুরিয়ার অটো-আপডেট: ${prev} ➔ ${newStatus}`, `Courier auto-update: ${prev} ➔ ${newStatus}`);
+
+    return res.json({ success: true, message: `Order #${order.id} status updated to ${newStatus}`, orderId: order.id, status: newStatus });
+  }
+
+  res.json({ success: true, message: `Order #${order.id} status is already ${order.status}` });
+});
+
+// Courier Real-time Status Sync from Steadfast API
+app.all('/api/courier/sync-status', async (req, res) => {
+  const orders = readJson(ORDERS_FILE, []);
+  const activeOrders = orders.filter(o => ['In Courier', 'Shipped', 'Confirmed', 'Pending'].includes(o.status));
+  const updatedList = [];
+
+  for (const ord of activeOrders) {
+    try {
+      const sfRes = await fetch(`https://portal.packzy.com/api/v1/status_by_invoice/${encodeURIComponent(ord.id)}`, {
+        headers: {
+          'Api-Key': 'o8pnudnvo70jpz6jgraykqdi9qnwvyjl',
+          'Secret-Key': '8ipxndp3quigmytzdk3jzzwu'
+        }
+      });
+      const sfData = await sfRes.json();
+      if (sfData && sfData.status === 200 && sfData.delivery_status) {
+        const st = sfData.delivery_status.toLowerCase();
+        let mapped = null;
+        if (st === 'delivered' || st === 'partial_delivered') mapped = 'Delivered';
+        else if (st === 'cancelled') mapped = 'Cancelled';
+        else if (st === 'return' || st === 'returned') mapped = 'Return';
+
+        if (mapped && mapped !== ord.status) {
+          const prev = ord.status;
+          ord.status = mapped;
+          if (ord.courier) {
+            ord.courier.status = mapped;
+            ord.courier.lastCheckedAt = new Date().toISOString();
+          }
+          ord.lastUpdatedBy = {
+            agent: 'Steadfast Sync API',
+            action: `কুরিয়ার লাইভ সিঙ্ক: ${mapped}`,
+            actionEn: `Courier live sync: ${mapped}`,
+            timestamp: new Date().toISOString()
+          };
+          recordAuditLog(ord.id, 'Steadfast Sync', `কুরিয়ার লাইভ সিঙ্ক: স্ট্যাটাস পরিবর্তিত হয়ে ${mapped} হয়েছে`, `Courier live sync: status changed to ${mapped}`);
+          updatedList.push({ id: ord.id, oldStatus: prev, newStatus: mapped });
+        }
+      }
+    } catch (e) {
+      console.warn(`Sync check error for ${ord.id}:`, e.message);
+    }
+  }
+
+  if (updatedList.length > 0) {
+    writeJson(ORDERS_FILE, orders);
+  }
+
+  res.json({
+    success: true,
+    totalChecked: activeOrders.length,
+    updatedCount: updatedList.length,
+    updatedOrders: updatedList
   });
 });
 
