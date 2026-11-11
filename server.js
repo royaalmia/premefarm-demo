@@ -400,7 +400,7 @@ app.put('/api/auth/profile', (req, res) => {
 // 5. ORDERS API
 app.get('/api/orders', (req, res) => {
   const orders = readJson(ORDERS_FILE, []);
-  res.json({ success: true, count: orders.length, data: orders });
+  res.json({ success: true, count: orders.length, data: orders, orders });
 });
 
 app.get('/api/orders/track/:phone', (req, res) => {

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preme Farm (প্রিমি ফার্ম)</title>
   <meta name="description" content="Preme Farm Admin Dashboard">
-  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/admin.css?v=2.8.0">
   <link rel="icon" type="image/png" href="images/logo.png">
 
   <!-- Open Graph / Facebook / WhatsApp Preview -->
@@ -136,7 +136,7 @@
       </div>
       <div>
         <h2 style="font-size: 17.5px; margin: 0; color: #ffd875; font-weight: 900; letter-spacing: 0.5px;">Preme Farm</h2>
-        <span style="font-size: 11px; color: #cbd5e1; display: block; font-weight: 600;">প্রিমি ফার্ম • ১০০% খাঁটি ও নিরাপদ</span>
+        <span id="sidebar-brand-tagline" style="font-size: 11px; color: #cbd5e1; display: block; font-weight: 600;" data-i18n="sidebar_tagline">প্রিমি ফার্ম • ১০০% খাঁটি ও নিরাপদ</span>
       </div>
     </div>
 
@@ -211,6 +211,11 @@
         <span style="background: #eef5f0; color: #0d4d29; padding: 6px 12px; border-radius: 20px; font-weight: 800; font-size: 12.5px; border: 1px solid #cce3d1;" data-i18n="status_live">
           লাইভ সিস্টেম
         </span>
+
+        <!-- Instant Topbar Logout Button (Always accessible without zoom/scroll) -->
+        <button type="button" onclick="AdminApp.handleLogout()" class="btn-topbar-logout" style="padding: 6px 14px; font-size: 13px; font-weight: 800; border-radius: 20px; border: 1.5px solid #ef4444; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;" title="Logout">
+          <span>🚪</span> <span data-i18n="btn_logout">লগআউট</span>
+        </button>
       </div>
     </div>
 
@@ -1184,6 +1189,6 @@
     </div>
   </div>
 
-  <script src="js/admin.js?v=2.7.0"></script>
+  <script src="js/admin.js?v=2.8.0"></script>
 </body>
 </html>

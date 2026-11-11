@@ -172,7 +172,7 @@ export async function onRequest(context) {
         courier: parseJsonField(r.courier, null),
         lastUpdatedBy: parseJsonField(r.lastUpdatedBy, null)
       }));
-      return jsonResponse({ success: true, count: orders.length, orders });
+      return jsonResponse({ success: true, count: orders.length, orders, data: orders });
     }
 
     if (path === '/api/orders' && method === 'POST') {

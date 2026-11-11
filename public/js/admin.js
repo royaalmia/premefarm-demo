@@ -8,6 +8,7 @@ const I18N = {
   bn: {
     sidebar_title: 'Preme Farm',
     sidebar_sub: 'কন্ট্রোল প্যানেল',
+    sidebar_tagline: 'প্রিমি ফার্ম • ১০০% খাঁটি ও নিরাপদ',
     sidebar_user_label: 'লগইন কৃত একাউন্ট:',
     nav_orders: 'অর্ডার ম্যানেজমেন্ট',
     nav_audit: 'এজেন্ট অ্যাক্টিভিটি লগ',
@@ -148,6 +149,7 @@ const I18N = {
   en: {
     sidebar_title: 'Preme Farm',
     sidebar_sub: 'CONTROL PANEL',
+    sidebar_tagline: 'Preme Farm • 100% Pure & Organic',
     sidebar_user_label: 'Logged in as:',
     nav_orders: 'Order Management',
     nav_audit: 'Agent Activity Logs',
@@ -620,6 +622,32 @@ const AdminApp = {
     const optOutside = document.getElementById('opt-city-outside');
     if (optDhaka && t.opt_city_dhaka) optDhaka.textContent = t.opt_city_dhaka;
     if (optOutside && t.opt_city_outside) optOutside.textContent = t.opt_city_outside;
+
+    // Update active agent dropdown labels
+    const agentSelect = document.getElementById('active-agent-select');
+    if (agentSelect) {
+      const options = agentSelect.options;
+      for (let i = 0; i < options.length; i++) {
+        const opt = options[i];
+        if (opt.value === 'সুপার এডমিন') opt.textContent = lang === 'en' ? 'Super Admin' : 'সুপার এডমিন (Super Admin)';
+        if (opt.value === 'তানভীর (Agent-01)') opt.textContent = lang === 'en' ? 'Tanvir (Agent-01)' : 'তানভীর (Agent-01)';
+        if (opt.value === 'সাদিয়া (Agent-02)') opt.textContent = lang === 'en' ? 'Sadia (Agent-02)' : 'সাদিয়া (Agent-02)';
+        if (opt.value === 'রফিক (Supervisor)') opt.textContent = lang === 'en' ? 'Rafiq (Supervisor)' : 'রফিক (Supervisor)';
+        if (opt.value === 'মার্কেটিং স্পেশালিস্ট') opt.textContent = lang === 'en' ? 'Marketing Specialist' : 'মার্কেটিং স্পেশালিস্ট';
+      }
+    }
+
+    // Update active user in sidebar
+    const userName = document.getElementById('sidebar-user-name');
+    if (userName) {
+      if (lang === 'en') {
+        if (this.activeAgent === 'সুপার এডমিন') userName.textContent = 'Super Admin';
+        else if (this.activeAgent === 'মার্কেটিং স্পেশালিস্ট') userName.textContent = 'Marketing Specialist';
+        else userName.textContent = this.activeAgent;
+      } else {
+        userName.textContent = this.activeAgent;
+      }
+    }
   },
 
   // ================= MOBILE SIDEBAR DRAWER =================
@@ -683,7 +711,15 @@ const AdminApp = {
     // Update active user pill in sidebar
     const nameEl = document.getElementById('sidebar-user-name');
     const roleEl = document.getElementById('sidebar-user-role');
-    if (nameEl) nameEl.textContent = this.activeAgent;
+    if (nameEl) {
+      if (this.currentLang === 'en') {
+        if (this.activeAgent === 'সুপার এডমিন') nameEl.textContent = 'Super Admin';
+        else if (this.activeAgent === 'মার্কেটিং স্পেশালিস্ট') nameEl.textContent = 'Marketing Specialist';
+        else nameEl.textContent = this.activeAgent;
+      } else {
+        nameEl.textContent = this.activeAgent;
+      }
+    }
     if (roleEl) roleEl.textContent = role || (isSuperAdmin ? 'Super Admin' : 'Agent');
 
     // If current tab is hidden, auto-switch to first allowed tab
@@ -757,7 +793,7 @@ const AdminApp = {
       const res = await fetch('/api/orders');
       if (res.ok) {
         const json = await res.json();
-        this.orders = json.data || [];
+        this.orders = json.orders || json.data || [];
         this.updateTabCounters();
         this.renderOrdersTable();
         return;
@@ -867,20 +903,21 @@ const AdminApp = {
     const bar = document.getElementById('orders-pagination-bar');
     if (bar) bar.style.display = 'flex';
 
-    // Reset table header
+    // Reset table header with current language
     const theadRow = document.getElementById('orders-table-head-row');
+    const t = I18N[this.currentLang] || I18N.bn;
     if (theadRow) {
       theadRow.innerHTML = `
-        <th data-i18n="th_id_source">অর্ডার ID ও সোর্স</th>
-        <th data-i18n="th_customer">গ্রাহক তথ্য ও ফ্রড চেক</th>
-        <th data-i18n="th_address">ডেলিভারি ঠিকানা</th>
-        <th data-i18n="th_items">অর্ডারকৃত পণ্য</th>
-        <th data-i18n="th_bill">বিল (COD)</th>
-        <th data-i18n="th_status">স্ট্যাটাস</th>
-        <th data-i18n="th_courier">কুরিয়ার একশন</th>
-        <th data-i18n="th_note">কল সেন্টার নোট</th>
-        <th data-i18n="th_agent">হালনাগাদ করেছেন</th>
-        <th data-i18n="th_actions">একশন</th>
+        <th data-i18n="th_id_source">${t.th_id_source}</th>
+        <th data-i18n="th_customer">${t.th_customer}</th>
+        <th data-i18n="th_address">${t.th_address}</th>
+        <th data-i18n="th_items">${t.th_items}</th>
+        <th data-i18n="th_bill">${t.th_bill}</th>
+        <th data-i18n="th_status">${t.th_status}</th>
+        <th data-i18n="th_courier">${t.th_courier}</th>
+        <th data-i18n="th_note">${t.th_note}</th>
+        <th data-i18n="th_agent">${t.th_agent}</th>
+        <th data-i18n="th_actions">${t.th_actions}</th>
       `;
     }
 
@@ -901,8 +938,6 @@ const AdminApp = {
     const totalItems = items.length;
     const start = (this.currentPage - 1) * this.pageSize;
     const pageItems = items.slice(start, start + this.pageSize);
-
-    const t = I18N[this.currentLang] || I18N.bn;
 
     tbody.innerHTML = pageItems.map(o => {
       const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString(this.currentLang === 'bn' ? 'bn-BD' : 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
@@ -1034,8 +1069,12 @@ const AdminApp = {
     const btns = document.getElementById('orders-pagination-btns');
     if (!bar || !info || !btns) return;
 
+    const isEn = this.currentLang === 'en';
+
     if (totalItems <= this.pageSize) {
-      info.textContent = `মোট ${totalItems} টি অর্ডার দেখাচ্ছে`;
+      info.textContent = isEn
+        ? `Showing ${totalItems} order(s)`
+        : `মোট ${totalItems} টি অর্ডার দেখাচ্ছে`;
       btns.innerHTML = '';
       return;
     }
@@ -1044,11 +1083,13 @@ const AdminApp = {
     const startIdx = (this.currentPage - 1) * this.pageSize + 1;
     const endIdx = Math.min(this.currentPage * this.pageSize, totalItems);
 
-    info.textContent = `দেখাচ্ছে ${startIdx}-${endIdx} / মোট ${totalItems} টি অর্ডার (পৃষ্ঠা ${this.currentPage} এর ${totalPages})`;
+    info.textContent = isEn
+      ? `Showing ${startIdx}-${endIdx} of ${totalItems} orders (Page ${this.currentPage} of ${totalPages})`
+      : `দেখাচ্ছে ${startIdx}-${endIdx} / মোট ${totalItems} টি অর্ডার (পৃষ্ঠা ${this.currentPage} এর ${totalPages})`;
 
     let html = `
       <button class="admin-page-btn" ${this.currentPage === 1 ? 'disabled' : ''} onclick="AdminApp.goToOrdersPage(${this.currentPage - 1})">
-        ◀ পূর্ববর্তী
+        ${isEn ? '◀ Prev' : '◀ পূর্ববর্তী'}
       </button>
     `;
 
@@ -1066,7 +1107,7 @@ const AdminApp = {
 
     html += `
       <button class="admin-page-btn" ${this.currentPage === totalPages ? 'disabled' : ''} onclick="AdminApp.goToOrdersPage(${this.currentPage + 1})">
-        পরবর্তী ▶
+        ${isEn ? 'Next ▶' : 'পরবর্তী ▶'}
       </button>
     `;
 
