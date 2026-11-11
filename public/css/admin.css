@@ -375,7 +375,7 @@ body {
 #courier-modal .admin-modal-box { max-width: 480px !important; }
 #note-modal .admin-modal-box { max-width: 480px !important; }
 #coupon-modal .admin-modal-box { max-width: 500px !important; }
-#staff-modal .admin-modal-box { max-width: 520px !important; }
+#staff-modal .admin-modal-box { max-width: 540px !important; }
 #fraud-modal .admin-modal-box { max-width: 540px !important; }
 #new-order-modal .admin-modal-box { max-width: 640px !important; }
 #product-modal .admin-modal-box { max-width: 660px !important; }
@@ -441,12 +441,61 @@ body {
   border-radius: 4px;
 }
 
-.admin-modal-body input,
+.admin-modal-body input:not([type="checkbox"]):not([type="radio"]),
 .admin-modal-body select,
 .admin-modal-body textarea {
   width: 100% !important;
   box-sizing: border-box !important;
   min-width: 0 !important;
+}
+
+.admin-modal-body input[type="checkbox"],
+.admin-modal-body input[type="radio"] {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  max-width: 18px !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+  accent-color: #0d4d29 !important;
+  cursor: pointer !important;
+}
+
+/* Permission Checkbox Rows */
+.perm-checkbox-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: #ffffff;
+  border: 1px solid #dce8dd;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.18s ease;
+  margin: 0 !important;
+}
+.perm-checkbox-row:hover {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+.perm-checkbox-row input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  max-width: 18px !important;
+  accent-color: #0d4d29 !important;
+  cursor: pointer;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+}
+.perm-checkbox-row .perm-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+  flex: 1;
+  line-height: 1.35;
 }
 
 .grid-prod-row {

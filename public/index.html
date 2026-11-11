@@ -159,11 +159,96 @@
     </div>
   </section>
 
-  <!-- Spotlight Hero Product Section (Rendered dynamically if products exist) -->
-  <section class="spotlight-section" id="spotlight-section-wrap" style="display:none;">
-    <div class="spotlight-card" id="spotlight-card-content">
-      <!-- Injected dynamically from active products database -->
+  <!-- Spotlight Hero Hot Seller Section (Multi-Product Banner Slider) -->
+  <section class="spotlight-section" id="spotlight-section-wrap" style="display:none; position:relative;">
+    <style>
+      .spotlight-slider-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        border-radius: var(--radius-lg, 16px);
+      }
+      .spotlight-slide {
+        display: none;
+        width: 100%;
+        animation: fadeSpotlight 0.4s ease-in-out;
+      }
+      .spotlight-slide.active {
+        display: block;
+      }
+      @keyframes fadeSpotlight {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .spotlight-arrow-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.92);
+        color: #0d4d29;
+        border: 1.5px solid #c9decb;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: 900;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.2s ease;
+        line-height: 1;
+      }
+      .spotlight-arrow-btn:hover {
+        background: #0d4d29;
+        color: #ffffff;
+        border-color: #0d4d29;
+        transform: translateY(-50%) scale(1.08);
+      }
+      .spotlight-arrow-btn.prev { left: 14px; }
+      .spotlight-arrow-btn.next { right: 14px; }
+      .spotlight-slider-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .spotlight-slider-dots .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: #cbd5e1;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+      .spotlight-slider-dots .dot.active {
+        background: #d97706;
+        width: 28px;
+        border-radius: 12px;
+      }
+      @media (max-width: 768px) {
+        .spotlight-arrow-btn {
+          width: 36px;
+          height: 36px;
+          font-size: 20px;
+        }
+        .spotlight-arrow-btn.prev { left: 6px; }
+        .spotlight-arrow-btn.next { right: 6px; }
+      }
+    </style>
+
+    <div class="spotlight-slider-container" id="spotlight-slider-box">
+      <!-- Slides will be rendered here dynamically -->
     </div>
+    
+    <!-- Arrows (Shown if > 1 product) -->
+    <button type="button" class="spotlight-arrow-btn prev" id="spotlight-btn-prev" onclick="window.prevSpotlightSlide()" style="display:none;" title="পূর্বের প্রোডাক্ট">‹</button>
+    <button type="button" class="spotlight-arrow-btn next" id="spotlight-btn-next" onclick="window.nextSpotlightSlide()" title="পরের প্রোডাক্ট">›</button>
+
+    <!-- Dots Container -->
+    <div class="spotlight-slider-dots" id="spotlight-dots-container" style="display:none;"></div>
   </section>
 
   <!-- Popular Products Showcase -->
@@ -1166,6 +1251,7 @@
         <h4>প্রয়োজনীয় লিংক</h4>
         <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
           <li><a href="/profile" style="color: #cbd5e1; text-decoration: none; font-size: 14px; transition: color 0.2s;">অর্ডার ট্র্যাকিং</a></li>
+          <li><a href="javascript:void(0)" onclick="openWholesaleModal()" style="color: #cbd5e1; text-decoration: none; font-size: 14px; transition: color 0.2s;">হোলসেল</a></li>
           <li><a href="/privacy" style="color: #cbd5e1; text-decoration: none; font-size: 14px; transition: color 0.2s;">প্রাইভেসি পলিসি</a></li>
           <li><a href="/terms" style="color: #cbd5e1; text-decoration: none; font-size: 14px; transition: color 0.2s;">টার্মস এন্ড কন্ডিশনস</a></li>
           <li><a href="/refund" style="color: #cbd5e1; text-decoration: none; font-size: 14px; transition: color 0.2s;">রিটার্ন এন্ড রিফান্ড</a></li>
@@ -1351,47 +1437,158 @@
       const spotlightCard = document.getElementById('spotlight-card-content');
       const prods = e.detail || [];
 
-      // 1. Handle Spotlight Hero Product
-      if (prods.length > 0 && spotlightWrap && spotlightCard) {
-        const heroProd = prods.find(p => p.category === 'hero' || p.category === 'kalo-shona') || prods[0];
-        const v0 = heroProd.variants?.[0] || { price: heroProd.price || 550, size: 'স্ট্যান্ডার্ড' };
-        const v1 = heroProd.variants?.[1] || v0;
-        
-        spotlightCard.innerHTML = `
-          ${heroProd.tag ? `<div class="spotlight-badge">${heroProd.tag}</div>` : ''}
-          <div class="spotlight-visual">
-            <img src="${heroProd.image || 'images/logo.png'}" alt="${heroProd.name}">
-          </div>
-          <div class="spotlight-details">
-            <div class="rating-stars">★★★★★ <span>${heroProd.rating || 5.0} (${heroProd.reviewCount || 100}+ রিভিউ)</span></div>
-            <h2 class="spotlight-title">${heroProd.name}</h2>
-            <p class="spotlight-desc">${heroProd.description || ''}</p>
-            ${heroProd.benefits && heroProd.benefits.length > 0 ? `
-              <ul class="benefit-ticks">
-                ${heroProd.benefits.slice(0, 4).map(b => `<li><span class="check">✓</span> ${b}</li>`).join('')}
-              </ul>
-            ` : ''}
-            <div class="size-selector">
-              ${heroProd.variants && heroProd.variants.length > 0 ? heroProd.variants.map((v, i) => `
-                <div class="size-btn ${i === 0 ? 'active' : ''}" id="var-btn-${i}" onclick="selectSpotlightVariant(${i})">
-                  <span class="size-name">${v.size}</span>
-                  <span class="size-price">৳${v.price}</span>
-                  ${v.regularPrice ? `<span class="size-regular">৳${v.regularPrice}</span>` : ''}
+      // 1. Handle Hot Seller Multi-Product Banner Slider
+      const spotlightWrap = document.getElementById('spotlight-section-wrap');
+      const sliderBox = document.getElementById('spotlight-slider-box');
+      const btnPrev = document.getElementById('spotlight-btn-prev');
+      const btnNext = document.getElementById('spotlight-btn-next');
+      const dotsBox = document.getElementById('spotlight-dots-container');
+
+      // Filter products marked as Hot Seller (or with tag containing 'হট সেলার')
+      let hotProds = prods.filter(p => p.isHotSeller || (p.tag && p.tag.includes('হট সেলার')));
+      if (hotProds.length === 0 && prods.length > 0) {
+        hotProds = [prods[0]]; // fallback to first product
+      }
+
+      if (hotProds.length > 0 && spotlightWrap && sliderBox) {
+        // State for slide variant and quantities
+        window._slideState = window._slideState || {};
+        hotProds.forEach(p => {
+          if (!window._slideState[p.id]) {
+            window._slideState[p.id] = { varIdx: 0, qty: 1 };
+          }
+        });
+
+        // Helper functions for slide interaction
+        window.selectSlideVar = (prodId, varIdx) => {
+          if (!window._slideState[prodId]) window._slideState[prodId] = { varIdx: 0, qty: 1 };
+          window._slideState[prodId].varIdx = varIdx;
+          const container = document.getElementById('slide-sizes-' + prodId);
+          if (container) {
+            container.querySelectorAll('.size-btn').forEach((btn, idx) => {
+              btn.classList.toggle('active', idx === varIdx);
+            });
+          }
+          if (typeof updateCheckoutPreview === 'function') updateCheckoutPreview();
+        };
+
+        window.changeSlideQty = (prodId, delta) => {
+          if (!window._slideState[prodId]) window._slideState[prodId] = { varIdx: 0, qty: 1 };
+          window._slideState[prodId].qty = Math.max(1, window._slideState[prodId].qty + delta);
+          const input = document.getElementById('slide-' + prodId + '-qty');
+          if (input) input.value = window._slideState[prodId].qty;
+          if (typeof updateCheckoutPreview === 'function') updateCheckoutPreview();
+        };
+
+        window.orderSlideItem = (prodId) => {
+          const st = window._slideState[prodId] || { varIdx: 0, qty: 1 };
+          PremeStore.addToCart(prodId, st.varIdx, st.qty);
+          const checkoutSection = document.getElementById('checkout-section');
+          if (checkoutSection) checkoutSection.scrollIntoView({ behavior: 'smooth' });
+          if (typeof updateCheckoutPreview === 'function') updateCheckoutPreview();
+        };
+
+        // Render slides HTML
+        sliderBox.innerHTML = hotProds.map((prod, idx) => {
+          const variants = (prod.variants && prod.variants.length > 0) 
+            ? prod.variants 
+            : [{ size: 'স্ট্যান্ডার্ড', price: prod.price || 0, regularPrice: prod.regularPrice || 0 }];
+          const tagText = prod.tag || 'হট সেলার • সেরা পছন্দ';
+
+          return `
+            <div class="spotlight-slide ${idx === 0 ? 'active' : ''}" id="spotlight-slide-${idx}" data-index="${idx}">
+              <div class="spotlight-card">
+                <div class="spotlight-badge">${tagText}</div>
+                
+                <div class="spotlight-visual">
+                  <img src="${prod.image || 'images/logo.png'}" alt="${prod.name}">
+                  <div style="position:absolute; bottom:16px; left:50%; transform:translateX(-50%); background:rgba(13,77,41,0.92); color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; box-shadow:0 4px 10px rgba(0,0,0,0.15); white-space:nowrap;">
+                    <span>WhatsApp: 01872-170476</span>
+                  </div>
                 </div>
-              `).join('') : ''}
-            </div>
-            <div class="spotlight-actions">
-              <div class="qty-control">
-                <button class="qty-btn" onclick="changeSpotlightQty(-1)">-</button>
-                <input type="text" class="qty-input" id="spotlight-qty" value="1" readonly>
-                <button class="qty-btn" onclick="changeSpotlightQty(1)">+</button>
+
+                <div class="spotlight-details">
+                  <div class="rating-stars">★★★★★ <span>${prod.rating || 5} (${prod.reviewCount || 10}+ রিভিউ)</span></div>
+                  <h2 class="spotlight-title">${prod.name}</h2>
+                  <p class="spotlight-desc">${prod.description || ''}</p>
+
+                  ${prod.benefits && prod.benefits.length > 0 ? `
+                    <ul class="benefit-ticks">
+                      ${prod.benefits.slice(0, 4).map(b => `<li><span class="check">✓</span> ${b}</li>`).join('')}
+                    </ul>
+                  ` : ''}
+
+                  <!-- Size / Variant Selector -->
+                  <div class="size-selector" id="slide-sizes-${prod.id}">
+                    ${variants.map((v, vIdx) => `
+                      <div class="size-btn ${vIdx === 0 ? 'active' : ''}" id="slide-${prod.id}-var-${vIdx}" onclick="window.selectSlideVar(${prod.id}, ${vIdx})">
+                        <span class="size-name">${v.size || v.name || 'স্ট্যান্ডার্ড'}</span>
+                        <span class="size-price">৳${v.price}</span>
+                        ${v.regularPrice ? `<span class="size-regular">৳${v.regularPrice}</span>` : ''}
+                      </div>
+                    `).join('')}
+                  </div>
+
+                  <!-- Actions: Quantity & Direct Order CTA -->
+                  <div class="spotlight-actions">
+                    <div class="qty-control">
+                      <button type="button" class="qty-btn" onclick="window.changeSlideQty(${prod.id}, -1)">-</button>
+                      <input type="text" class="qty-input" id="slide-${prod.id}-qty" value="1" readonly>
+                      <button type="button" class="qty-btn" onclick="window.changeSlideQty(${prod.id}, 1)">+</button>
+                    </div>
+                    <button type="button" class="btn-fast-order" onclick="window.orderSlideItem(${prod.id})">
+                      <span>⚡</span> সরাসরি অর্ডার করুন (ক্যাশ অন ডেলিভারি)
+                    </button>
+                  </div>
+                </div>
               </div>
-              <button class="btn-fast-order" onclick="PremeStore.addToCart(${heroProd.id}, currentSpotlightVar, currentSpotlightQty); document.getElementById('checkout-section')?.scrollIntoView({behavior:'smooth'}); updateCheckoutPreview();">
-                <span>⚡</span> সরাসরি অর্ডার করুন (ক্যাশ অন ডেলিভারি)
-              </button>
             </div>
-          </div>
-        `;
+          `;
+        }).join('');
+
+        // Handle multi-slide controls & timer
+        let curSpotSlide = 0;
+        const totalSlides = hotProds.length;
+
+        window.setSpotlightSlide = (idx) => {
+          curSpotSlide = (idx + totalSlides) % totalSlides;
+          const slides = sliderBox.querySelectorAll('.spotlight-slide');
+          slides.forEach((s, i) => s.classList.toggle('active', i === curSpotSlide));
+          if (dotsBox) {
+            dotsBox.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === curSpotSlide));
+          }
+        };
+
+        window.nextSpotlightSlide = () => window.setSpotlightSlide(curSpotSlide + 1);
+        window.prevSpotlightSlide = () => window.setSpotlightSlide(curSpotSlide - 1);
+
+        if (totalSlides > 1) {
+          if (btnPrev) btnPrev.style.display = 'flex';
+          if (btnNext) btnNext.style.display = 'flex';
+          if (dotsBox) {
+            dotsBox.style.display = 'flex';
+            dotsBox.innerHTML = hotProds.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}" onclick="window.setSpotlightSlide(${i})"></span>`).join('');
+          }
+
+          // Auto-slide every 5.5 seconds
+          if (window._spotlightInterval) clearInterval(window._spotlightInterval);
+          window._spotlightInterval = setInterval(() => {
+            window.nextSpotlightSlide();
+          }, 5500);
+
+          // Pause on hover
+          spotlightWrap.onmouseenter = () => { if (window._spotlightInterval) clearInterval(window._spotlightInterval); };
+          spotlightWrap.onmouseleave = () => {
+            if (window._spotlightInterval) clearInterval(window._spotlightInterval);
+            window._spotlightInterval = setInterval(() => { window.nextSpotlightSlide(); }, 5500);
+          };
+        } else {
+          if (btnPrev) btnPrev.style.display = 'none';
+          if (btnNext) btnNext.style.display = 'none';
+          if (dotsBox) dotsBox.style.display = 'none';
+          if (window._spotlightInterval) clearInterval(window._spotlightInterval);
+        }
+
         spotlightWrap.style.display = 'block';
       } else if (spotlightWrap) {
         spotlightWrap.style.display = 'none';

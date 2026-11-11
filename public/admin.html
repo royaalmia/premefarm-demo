@@ -728,7 +728,8 @@
                 <th>ক্যাটাগরি</th>
                 <th>মূল্য (অফার / রেগুলার)</th>
                 <th>স্টক ও স্ট্যাটাস</th>
-                <th>ইন স্টক টগল</th>
+                <th>হট সেলার</th>
+                <th>ইন স্টক</th>
                 <th>অ্যাকশন</th>
               </tr>
             </thead>
@@ -1055,6 +1056,17 @@
             </div>
           </div>
 
+          <!-- Hot Seller Toggle Checkbox -->
+          <div style="margin-bottom: 14px; background:#fffbeb; border:1.5px solid #fde68a; border-radius:8px; padding:10px 14px;">
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin:0; user-select:none;">
+              <input type="checkbox" id="prod-hot-seller" style="width:19px!important; height:19px!important; accent-color:#d97706; cursor:pointer;">
+              <div>
+                <b style="font-size:13.5px; color:#b45309; display:block;">🔥 হট সেলার স্পটলাইট প্রোডাক্ট (Hot Seller Spotlight)</b>
+                <span style="font-size:12px; color:#92400e;">সিলেক্ট করলে হোমপেজের ওপরের বড় হট সেলার ব্যানারে স্লাইড আকারে প্রদর্শিত হবে।</span>
+              </div>
+            </label>
+          </div>
+
           <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px;">
             <div>
               <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">বিক্রয় মূল্য (৳) *</label>
@@ -1243,35 +1255,60 @@
       </div>
 
       <form id="staff-form" onsubmit="AdminApp.handleStaffSubmit(event)" style="display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;">
-        <div class="admin-modal-body">
-          <div style="margin-bottom: 12px;">
-            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">স্টাফের পূর্ণ নাম *</label>
-            <input type="text" id="stf-name" required placeholder="যেমন: ফাহিম আহমেদ" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;">
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-            <div>
-              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">ইউজারনেম (লগইন) *</label>
-              <input type="text" id="stf-username" required placeholder="fahim" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
-            </div>
-            <div>
-              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">সিক্রেট পিন / পাসওয়ার্ড *</label>
-              <input type="password" id="stf-pin" required placeholder="1234" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
-            </div>
-          </div>
+        <div class="admin-modal-body" style="padding: 20px 24px;">
+          <!-- Staff Full Name -->
           <div style="margin-bottom: 14px;">
-            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:6px;">অনুমোদিত পারমিশন নির্বাচন করুন:</label>
-            <div style="display: flex; flex-direction: column; gap: 8px; background: #f8faf8; padding: 12px; border-radius: 8px; border: 1px solid #cedcd0;">
-              <label style="cursor:pointer;"><input type="checkbox" id="perm-orders" checked> অর্ডার ম্যানেজমেন্ট ও কুরিয়ার বুকিং</label>
-              <label style="cursor:pointer;"><input type="checkbox" id="perm-landing" checked> ফেসবুক বুস্ট ল্যান্ডিং পেজ তৈরি</label>
-              <label style="cursor:pointer;"><input type="checkbox" id="perm-products" checked> প্রোডাক্ট ও স্টক পরিচালনা</label>
-              <label style="cursor:pointer;"><input type="checkbox" id="perm-cms"> ওয়েবসাইট ব্যানার ও কনটেন্ট CMS</label>
-              <label style="cursor:pointer;"><input type="checkbox" id="perm-reports"> সেলস রিপোর্ট ও ডেটা এক্সপোর্ট</label>
+            <label style="display:block; font-size:13.5px; font-weight:800; color:#1e293b; margin-bottom:5px;">স্টাফের পূর্ণ নাম *</label>
+            <input type="text" id="stf-name" required placeholder="যেমন: ফাহিম আহমেদ" style="width:100%; padding:10px 13px; border:1.5px solid #cedcd0; border-radius:7px; font-size:14px; background:#fff;">
+          </div>
+
+          <!-- Username & Secret PIN Grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+            <div>
+              <label style="display:block; font-size:13px; font-weight:800; color:#1e293b; margin-bottom:5px;">ইউজারনেম (লগইন) *</label>
+              <input type="text" id="stf-username" required placeholder="fahim" style="width:100%; padding:9px 12px; border:1.5px solid #cedcd0; border-radius:7px; font-size:13.5px; background:#fff;">
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:800; color:#1e293b; margin-bottom:5px;">সিক্রেট পিন / পাসওয়ার্ড *</label>
+              <input type="password" id="stf-pin" required placeholder="1234" style="width:100%; padding:9px 12px; border:1.5px solid #cedcd0; border-radius:7px; font-size:13.5px; background:#fff;">
+            </div>
+          </div>
+
+          <!-- Permissions Checkbox List -->
+          <div>
+            <label style="display:block; font-size:13.5px; font-weight:800; color:#0d4d29; margin-bottom:8px;">অনুমোদিত পারমিশন নির্বাচন করুন:</label>
+            <div style="display: flex; flex-direction: column; gap: 8px; background: #f8faf8; padding: 12px; border-radius: 10px; border: 1.5px solid #e2e8e3;">
+              <label class="perm-checkbox-row">
+                <input type="checkbox" id="perm-orders" checked>
+                <span class="perm-title">অর্ডার ম্যানেজমেন্ট ও কুরিয়ার বুকিং</span>
+              </label>
+              <label class="perm-checkbox-row">
+                <input type="checkbox" id="perm-wholesale" checked>
+                <span class="perm-title">হোলসেল ও পাইকারি ইনকোয়ারি</span>
+              </label>
+              <label class="perm-checkbox-row">
+                <input type="checkbox" id="perm-landing" checked>
+                <span class="perm-title">ফেসবুক বুস্ট ল্যান্ডিং পেজ তৈরি</span>
+              </label>
+              <label class="perm-checkbox-row">
+                <input type="checkbox" id="perm-products" checked>
+                <span class="perm-title">প্রোডাক্ট ও স্টক পরিচালনা</span>
+              </label>
+              <label class="perm-checkbox-row">
+                <input type="checkbox" id="perm-cms">
+                <span class="perm-title">ওয়েবসাইট ব্যানার ও কনটেন্ট CMS</span>
+              </label>
+              <label class="perm-checkbox-row">
+                <input type="checkbox" id="perm-reports">
+                <span class="perm-title">সেলস রিপোর্ট ও ডেটা এক্সপোর্ট</span>
+              </label>
             </div>
           </div>
         </div>
+
         <div class="admin-modal-footer">
-          <button type="button" onclick="AdminApp.closeStaffModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer; font-weight: 700;">বাতিল</button>
-          <button type="submit" class="btn-courier-action" style="padding: 10px 22px;">স্টাফ সংরক্ষণ করুন</button>
+          <button type="button" onclick="AdminApp.closeStaffModal()" style="padding: 9px 18px; border-radius: 6px; border: 1.5px solid #cbd5e1; background:#fff; cursor:pointer; font-weight: 700;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 10px 24px;">স্টাফ সংরক্ষণ করুন ➔</button>
         </div>
       </form>
     </div>

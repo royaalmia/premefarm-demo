@@ -119,6 +119,7 @@ app.put('/api/products/:id', (req, res) => {
     price: body.price !== undefined ? parseInt(body.price) : existing.price,
     regularPrice: body.regularPrice !== undefined ? parseInt(body.regularPrice) : existing.regularPrice,
     tag: body.tag !== undefined ? body.tag : existing.tag,
+    isHotSeller: body.isHotSeller !== undefined ? Boolean(body.isHotSeller) : existing.isHotSeller,
     image: body.image !== undefined ? body.image : existing.image,
     rating: body.rating !== undefined ? parseFloat(body.rating) : existing.rating,
     reviewCount: body.reviewCount !== undefined ? parseInt(body.reviewCount) : existing.reviewCount,

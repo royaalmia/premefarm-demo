@@ -2522,6 +2522,13 @@ const AdminApp = {
           <td><b>৳${currentPrice}</b> ${currentRegPrice ? `<span style="text-decoration:line-through; color:#94a3b8; font-size:12px;">৳${currentRegPrice}</span>` : ''}</td>
           <td><span style="color:${inStock ? '#15803d' : '#dc2626'}; font-weight:800;">${stockText}</span></td>
           <td>
+            <button type="button" onclick="AdminApp.toggleHotSeller(${p.id})" 
+              title="${(p.isHotSeller || (p.tag && p.tag.includes('হট সেলার'))) ? 'হট সেলার থেকে বাদ দিন' : 'হট সেলার হিসেবে সেট করুন'}"
+              style="padding:5px 11px; border-radius:18px; font-size:12px; font-weight:800; cursor:pointer; border:1.5px solid ${(p.isHotSeller || (p.tag && p.tag.includes('হট সেলার'))) ? '#d97706' : '#cbd5e1'}; background:${(p.isHotSeller || (p.tag && p.tag.includes('হট সেলার'))) ? '#fffbeb' : '#f8fafc'}; color:${(p.isHotSeller || (p.tag && p.tag.includes('হট সেলার'))) ? '#b45309' : '#64748b'}; display:inline-flex; align-items:center; gap:4px; transition:all 0.2s;">
+              <span>${(p.isHotSeller || (p.tag && p.tag.includes('হট সেলার'))) ? '🔥 হট সেলার' : '☆ সাধারণ'}</span>
+            </button>
+          </td>
+          <td>
             <label class="switch">
               <input type="checkbox" ${inStock ? 'checked' : ''} onchange="AdminApp.toggleProductStock(${p.id}, this.checked)">
               <span class="slider"></span>
@@ -2551,6 +2558,10 @@ const AdminApp = {
     document.getElementById('prod-modal-title').textContent = isEn ? `Edit Product (#${p.id})` : `প্রোডাক্ট এডিট করুন (আইডি: #${p.id})`;
     const submitBtn = document.getElementById('prod-submit-btn');
     if (submitBtn) submitBtn.textContent = isEn ? 'Update Product ➔' : 'প্রোডাক্ট আপডেট করুন ➔';
+
+    const isHot = Boolean(p.isHotSeller || (p.tag && p.tag.includes('হট সেলার')));
+    const hotCheck = document.getElementById('prod-hot-seller');
+    if (hotCheck) hotCheck.checked = isHot;
 
     document.getElementById('prod-name').value = p.name || '';
     document.getElementById('prod-category').value = p.category || 'others';
@@ -2593,6 +2604,35 @@ const AdminApp = {
     const form = document.getElementById('product-form');
     if (form) form.reset();
     document.getElementById('prod-id').value = '';
+  },
+
+  async toggleHotSeller(id) {
+    const p = this.products.find(x => String(x.id) === String(id));
+    if (!p) return;
+    const currentHot = Boolean(p.isHotSeller || (p.tag && p.tag.includes('হট সেলার')));
+    const newHot = !currentHot;
+    let newTag = p.tag || '';
+
+    if (newHot) {
+      if (!newTag.includes('হট সেলার')) {
+        newTag = newTag ? ('হট সেলার • ' + newTag) : 'হট সেলার • সেরা পছন্দ';
+      }
+    } else {
+      newTag = newTag.replace(/হট সেলারs*•?s*/g, '').trim();
+    }
+
+    try {
+      await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tag: newTag, isHotSeller: newHot })
+      });
+      p.tag = newTag;
+      p.isHotSeller = newHot;
+      this.renderProducts();
+    } catch (e) {
+      alert('হট সেলার স্ট্যাটাস পরিবর্তন করা যায়নি।');
+    }
   },
 
   async toggleProductStock(id, inStock) {
@@ -2688,10 +2728,20 @@ const AdminApp = {
       }];
     }
 
+    const isHotSeller = Boolean(document.getElementById('prod-hot-seller')?.checked);
+    let tag = existing?.tag || '';
+    if (isHotSeller) {
+      if (!tag.includes('হট সেলার')) tag = tag ? ('হট সেলার • ' + tag) : 'হট সেলার • সেরা পছন্দ';
+    } else {
+      tag = tag.replace(/হট সেলার\s*•?\s*/g, '').trim();
+    }
+
     const payload = {
       name,
       category,
       categoryName,
+      tag,
+      isHotSeller,
       price,
       regularPrice,
       stock,
@@ -2816,8 +2866,26 @@ const AdminApp = {
     `).join('');
   },
 
-  openStaffModal() { document.getElementById('staff-modal').classList.add('active'); },
-  closeStaffModal() { document.getElementById('staff-modal').classList.remove('active'); },
+  openStaffModal() {
+    const modal = document.getElementById('staff-modal');
+    if (modal) {
+      const form = document.getElementById('staff-form');
+      if (form) form.reset();
+      // default checks
+      document.getElementById('perm-orders').checked = true;
+      const wsPerm = document.getElementById('perm-wholesale');
+      if (wsPerm) wsPerm.checked = true;
+      document.getElementById('perm-landing').checked = true;
+      document.getElementById('perm-products').checked = true;
+      modal.classList.add('active');
+      const body = modal.querySelector('.admin-modal-body');
+      if (body) body.scrollTop = 0;
+    }
+  },
+  closeStaffModal() {
+    const modal = document.getElementById('staff-modal');
+    if (modal) modal.classList.remove('active');
+  },
 
   async handleStaffSubmit(e) {
     e.preventDefault();
@@ -2826,6 +2894,7 @@ const AdminApp = {
     const pin = document.getElementById('stf-pin').value.trim();
     const permissions = [];
     if (document.getElementById('perm-orders').checked) permissions.push('orders');
+    if (document.getElementById('perm-wholesale')?.checked) permissions.push('wholesale');
     if (document.getElementById('perm-landing').checked) permissions.push('landing');
     if (document.getElementById('perm-products').checked) permissions.push('products');
     if (document.getElementById('perm-cms').checked) permissions.push('cms');
