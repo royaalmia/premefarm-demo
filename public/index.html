@@ -187,9 +187,9 @@
 
 
 
-    <!-- Verified Customer Reviews (20 Auto-scrolling Reviews) -->
+      <!-- Verified Customer Reviews (20 Auto-scrolling Reviews in 1 Single Line) -->
   <section class="catalog-section" id="reviews" style="margin-top: 36px; margin-bottom: 24px; padding: 0 0 10px; overflow: hidden;">
-    <div class="section-header" style="text-align: center; margin-bottom: 28px;">
+    <div class="section-header" style="text-align: center; margin-bottom: 26px;">
       <span class="section-badge" style="background:#eef5f0; color:#0d4d29; padding:5px 14px; border-radius:20px; font-weight:800; font-size:12.5px; display:inline-block; margin-bottom:8px;">গ্রাহকদের অভিজ্ঞতা</span>
       <h2 class="section-title" style="font-size:26px; color:#0d4d29; font-weight:800; margin:0 0 6px;">আমাদের সন্তুষ্ট গ্রাহকদের মতামত</h2>
       <p class="section-subtitle" style="font-size:14.5px; color:#64748b; margin:0;">
@@ -204,37 +204,28 @@
         overflow: hidden;
         mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
         -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
-        padding: 6px 0;
+        padding: 8px 0 14px;
       }
       .reviews-marquee-track {
         display: flex;
-        gap: 18px;
+        gap: 20px;
         width: max-content;
         will-change: transform;
-      }
-      .track-left {
-        animation: scrollReviewsLeft 50s linear infinite;
-      }
-      .track-right {
-        animation: scrollReviewsRight 52s linear infinite;
+        animation: scrollReviewsSingle 65s linear infinite;
       }
       .reviews-marquee-wrapper:hover .reviews-marquee-track {
         animation-play-state: paused;
       }
-      @keyframes scrollReviewsLeft {
+      @keyframes scrollReviewsSingle {
         0% { transform: translateX(0); }
         100% { transform: translateX(-50%); }
       }
-      @keyframes scrollReviewsRight {
-        0% { transform: translateX(-50%); }
-        100% { transform: translateX(0); }
-      }
       .review-card-item {
-        width: 320px;
-        min-width: 320px;
-        max-width: 320px;
+        width: 325px;
+        min-width: 325px;
+        max-width: 325px;
         background: #ffffff;
-        padding: 20px 22px;
+        padding: 22px 24px;
         border-radius: 16px;
         border: 1px solid #e2e8e3;
         box-shadow: 0 4px 16px rgba(13, 77, 41, 0.05);
@@ -244,453 +235,238 @@
         transition: transform 0.25s ease, box-shadow 0.25s ease;
       }
       .review-card-item:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(13, 77, 41, 0.12);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 26px rgba(13, 77, 41, 0.12);
         border-color: #bbf7d0;
       }
       @media (max-width: 768px) {
         .review-card-item {
-          width: 285px;
-          min-width: 285px;
-          max-width: 285px;
-          padding: 16px 18px;
+          width: 290px;
+          min-width: 290px;
+          max-width: 290px;
+          padding: 18px 20px;
         }
-        .track-left { animation-duration: 38s; }
-        .track-right { animation-duration: 40s; }
+        .reviews-marquee-track {
+          animation-duration: 48s;
+          gap: 16px;
+        }
       }
     </style>
 
-    <!-- Marquee Row 1 (Scrolling Left) -->
-    <div class="reviews-marquee-wrapper" style="margin-bottom: 16px;">
-      <div class="reviews-marquee-track track-left">
-        
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "টানা ডেস্কে বসে কাজ করার কারণে বিকেলে ভীষণ ক্লান্তি লাগত। প্রিমি ফার্মের মধুময় কালো সোনা নিয়মিত খাওয়ার পর থেকে শরীর ভীষণ হালকা ও এনার্জেটিক লাগে। ১০০% পিওর!"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ই
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ইঞ্জিনিয়ার রাকিবুল ইসলাম</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">উত্তরা, ঢাকা • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "আচারের তেল ও মসলার ব্যালেন্স চমৎকার! রসুনের কোয়াগুলো খুব সুন্দর নরম হয়েছে এবং খিচুড়ির সাথে খেতে অমৃত লাগে। একদম খাঁটি হোমমেড স্বাদ।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#f59e0b; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ম
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মাহমুদা সুলতানা</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">জিইসি, চট্টগ্রাম • <strong style="color:#2f6f44;">প্রিমি ফার্ম রসুন আচার</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "ক্যাশ অন ডেলিভারিতে চেক করে নিয়েছি। খাঁটি মধুর আসল ঘ্রাণ আর স্বাদ মুখে দিলেই বোঝা যায় এতে কোনো কৃত্রিম চিনি বা ভেজাল নেই। নিশ্চিন্তে খাওয়া যায়।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#0284c7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ড
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ডাঃ মোর্শেদ হাসান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">রাজশাহী সদর • <strong style="color:#2f6f44;">সুন্দরবনের প্রাকৃতিক মধু</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "তেলের জার খোলার সাথে সাথেই সেই আসল ঝাঁঝালো ঘ্রাণ নাকে এলো! রান্নায় দিয়ে পরিবার সবাই বলেছে বাজারের যেকোনো ব্র্যান্ডের চেয়ে এর স্বাদ অতুলনীয়।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#8b5cf6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ত
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">তানভীর আহমেদ</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ধানমন্ডি, ঢাকা • <strong style="color:#2f6f44;">ঘানি ভাঙা খাঁটি সরিষার তেল</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "ভাতের সাথে এক চামচ ঘি মিশিয়ে খেলেই মন ভরে যায়। খাঁটি দানাদার টেক্সচার আর খাঁটি দুধের সুবাস। পরিবারের বাচ্চারাও এখন খুব মজা করে খায়।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#ec4899; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ফ
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ফারহানা আফরোজ</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মিরপুর-১০, ঢাকা • <strong style="color:#2f6f44;">প্রিমি ফার্ম গাওয়া ঘি</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "প্যাকেজিং খুব সুরক্ষিত ছিল, বিন্দুমাত্র তেল লিক করেনি। স্বাদে কোনো কৃত্রিম রাসায়নিকের গন্ধ নেই, একদম গ্রামের মা-দাদীমার হাতের তৈরি আচারের মতো।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#14b8a6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ম
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মো: আসাদুজ্জামান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">খুলনা সদর • <strong style="color:#2f6f44;">আমড়া ও জলপাই আচার</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "ওয়েট লস ডায়েটের জন্য নিয়েছিলাম। দানাগুলো একদম পরিষ্কার ও কোনো ধুলাবালি নেই। পানিতে দিলে খুব সুন্দর জেল হয়ে ফুলে ওঠে। দারুণ প্রিমিয়াম কোয়ালিটি!"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#f97316; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          স
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সামিয়া রহমান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">জিন্দাবাজার, সিলেট • <strong style="color:#2f6f44;">প্রিমি ফার্ম অর্গানিক চিয়া সীড</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "দ্বিতীয়বার অর্ডার করলাম। বয়স ৫০ পার হয়েছে, নিয়মিত সকালে এক চামচ খেয়ে দারুণ রিফ্রেশিং অনুভব করি। সারাদিনের কাজের স্ট্যামিনা অনেক বেড়েছে।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#059669; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ব
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ব্যবসায়ী জহিরুল ইসলাম</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">নারায়ণগঞ্জ • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "ঝালপ্রেমীদের জন্য এটা সেরা! ঝাল ও টকের পারফেক্ট কম্বিনেশন। খিচুড়ি কিংবা গরম ভাতের সাথে খেলে মুখের অরুচি নিমেষেই দূর হয়ে যায়।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#e11d48; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ন
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">নুসরাত জাহান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">কান্দিরপাড়, কুমিল্লা • <strong style="color:#2f6f44;">স্পেশাল বোম্বাই মরিচ আচার</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "কাজু, কাঠবাদাম, পেস্তা আর খাঁটি মধুর মিশ্রণটা অসাধারণ পুষ্টিকর। বাচ্চার টিফিনে কিংবা বিকালের নাস্তায় এটি আমাদের পরিবারের স্বাস্থ্যকর সঙ্গী।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#d97706; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ম
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মেহেদী হাসান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সাতমাথা, বগুড়া • <strong style="color:#2f6f44;">প্রিমি ফার্ম হানি নাটস</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "টানা ডেস্কে বসে কাজ করার কারণে বিকেলে ভীষণ ক্লান্তি লাগত। প্রিমি ফার্মের মধুময় কালো সোনা নিয়মিত খাওয়ার পর থেকে শরীর ভীষণ হালকা ও এনার্জেটিক লাগে। ১০০% পিওর!"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ই
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ইঞ্জিনিয়ার রাকিবুল ইসলাম</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">উত্তরা, ঢাকা • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "আচারের তেল ও মসলার ব্যালেন্স চমৎকার! রসুনের কোয়াগুলো খুব সুন্দর নরম হয়েছে এবং খিচুড়ির সাথে খেতে অমৃত লাগে। একদম খাঁটি হোমমেড স্বাদ।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#f59e0b; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ম
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মাহমুদা সুলতানা</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">জিইসি, চট্টগ্রাম • <strong style="color:#2f6f44;">প্রিমি ফার্ম রসুন আচার</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "ক্যাশ অন ডেলিভারিতে চেক করে নিয়েছি। খাঁটি মধুর আসল ঘ্রাণ আর স্বাদ মুখে দিলেই বোঝা যায় এতে কোনো কৃত্রিম চিনি বা ভেজাল নেই। নিশ্চিন্তে খাওয়া যায়।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#0284c7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ড
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ডাঃ মোর্শেদ হাসান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">রাজশাহী সদর • <strong style="color:#2f6f44;">সুন্দরবনের প্রাকৃতিক মধু</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "তেলের জার খোলার সাথে সাথেই সেই আসল ঝাঁঝালো ঘ্রাণ নাকে এলো! রান্নায় দিয়ে পরিবার সবাই বলেছে বাজারের যেকোনো ব্র্যান্ডের চেয়ে এর স্বাদ অতুলনীয়।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#8b5cf6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ত
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">তানভীর আহমেদ</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ধানমন্ডি, ঢাকা • <strong style="color:#2f6f44;">ঘানি ভাঙা খাঁটি সরিষার তেল</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "ভাতের সাথে এক চামচ ঘি মিশিয়ে খেলেই মন ভরে যায়। খাঁটি দানাদার টেক্সচার আর খাঁটি দুধের সুবাস। পরিবারের বাচ্চারাও এখন খুব মজা করে খায়।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#ec4899; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ফ
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ফারহানা আফরোজ</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মিরপুর-১০, ঢাকা • <strong style="color:#2f6f44;">প্রিমি ফার্ম গাওয়া ঘি</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "প্যাকেজিং খুব সুরক্ষিত ছিল, বিন্দুমাত্র তেল লিক করেনি। স্বাদে কোনো কৃত্রিম রাসায়নিকের গন্ধ নেই, একদম গ্রামের মা-দাদীমার হাতের তৈরি আচারের মতো।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#14b8a6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ম
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মো: আসাদুজ্জামান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">খুলনা সদর • <strong style="color:#2f6f44;">আমড়া ও জলপাই আচার</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "ওয়েট লস ডায়েটের জন্য নিয়েছিলাম। দানাগুলো একদম পরিষ্কার ও কোনো ধুলাবালি নেই। পানিতে দিলে খুব সুন্দর জেল হয়ে ফুলে ওঠে। দারুণ প্রিমিয়াম কোয়ালিটি!"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#f97316; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          স
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সামিয়া রহমান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">জিন্দাবাজার, সিলেট • <strong style="color:#2f6f44;">প্রিমি ফার্ম অর্গানিক চিয়া সীড</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "দ্বিতীয়বার অর্ডার করলাম। বয়স ৫০ পার হয়েছে, নিয়মিত সকালে এক চামচ খেয়ে দারুণ রিফ্রেশিং অনুভব করি। সারাদিনের কাজের স্ট্যামিনা অনেক বেড়েছে।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#059669; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ব
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ব্যবসায়ী জহিরুল ইসলাম</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">নারায়ণগঞ্জ • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "ঝালপ্রেমীদের জন্য এটা সেরা! ঝাল ও টকের পারফেক্ট কম্বিনেশন। খিচুড়ি কিংবা গরম ভাতের সাথে খেলে মুখের অরুচি নিমেষেই দূর হয়ে যায়।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#e11d48; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ন
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">নুসরাত জাহান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">কান্দিরপাড়, কুমিল্লা • <strong style="color:#2f6f44;">স্পেশাল বোম্বাই মরিচ আচার</strong></span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="review-card-item">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
-        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          ✓ ভেরিফাইড বায়ার
-        </span>
-      </div>
-      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
-        "কাজু, কাঠবাদাম, পেস্তা আর খাঁটি মধুর মিশ্রণটা অসাধারণ পুষ্টিকর। বাচ্চার টিফিনে কিংবা বিকালের নাস্তায় এটি আমাদের পরিবারের স্বাস্থ্যকর সঙ্গী।"
-      </p>
-      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
-        <div style="width:36px; height:36px; border-radius:50%; background:#d97706; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
-          ম
-        </div>
-        <div style="overflow:hidden;">
-          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মেহেদী হাসান</b>
-          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সাতমাথা, বগুড়া • <strong style="color:#2f6f44;">প্রিমি ফার্ম হানি নাটস</strong></span>
-        </div>
-      </div>
-    </div>
-  
-      </div>
-    </div>
-
-    <!-- Marquee Row 2 (Scrolling Right) -->
+    <!-- Single Line Continuous Auto-Scrolling Marquee Track -->
     <div class="reviews-marquee-wrapper">
-      <div class="reviews-marquee-track track-right">
+      <div class="reviews-marquee-track">
         
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "টানা ডেস্কে বসে কাজ করার কারণে বিকেলে ভীষণ ক্লান্তি লাগত। প্রিমি ফার্মের মধুময় কালো সোনা নিয়মিত খাওয়ার পর থেকে শরীর ভীষণ হালকা ও এনার্জেটিক লাগে। ১০০% পিওর!"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ই
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ইঞ্জিনিয়ার রাকিবুল ইসলাম</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">উত্তরা, ঢাকা • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "আচারের তেল ও মসলার ব্যালেন্স চমৎকার! রসুনের কোয়াগুলো খুব সুন্দর নরম হয়েছে এবং খিচুড়ির সাথে খেতে অমৃত লাগে। একদম খাঁটি হোমমেড স্বাদ।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#f59e0b; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ম
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মাহমুদা সুলতানা</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">জিইসি, চট্টগ্রাম • <strong style="color:#2f6f44;">প্রিমি ফার্ম রসুন আচার</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "ক্যাশ অন ডেলিভারিতে চেক করে নিয়েছি। খাঁটি মধুর আসল ঘ্রাণ আর স্বাদ মুখে দিলেই বোঝা যায় এতে কোনো কৃত্রিম চিনি বা ভেজাল নেই। নিশ্চিন্তে খাওয়া যায়।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#0284c7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ড
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ডাঃ মোর্শেদ হাসান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">রাজশাহী সদর • <strong style="color:#2f6f44;">সুন্দরবনের প্রাকৃতিক মধু</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "তেলের জার খোলার সাথে সাথেই সেই আসল ঝাঁঝালো ঘ্রাণ নাকে এলো! রান্নায় দিয়ে পরিবার সবাই বলেছে বাজারের যেকোনো ব্র্যান্ডের চেয়ে এর স্বাদ অতুলনীয়।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#8b5cf6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ত
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">তানভীর আহমেদ</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ধানমন্ডি, ঢাকা • <strong style="color:#2f6f44;">ঘানি ভাঙা খাঁটি সরিষার তেল</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "ভাতের সাথে এক চামচ ঘি মিশিয়ে খেলেই মন ভরে যায়। খাঁটি দানাদার টেক্সচার আর খাঁটি দুধের সুবাস। পরিবারের বাচ্চারাও এখন খুব মজা করে খায়।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#ec4899; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ফ
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ফারহানা আফরোজ</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মিরপুর-১০, ঢাকা • <strong style="color:#2f6f44;">প্রিমি ফার্ম গাওয়া ঘি</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "প্যাকেজিং খুব সুরক্ষিত ছিল, বিন্দুমাত্র তেল লিক করেনি। স্বাদে কোনো কৃত্রিম রাসায়নিকের গন্ধ নেই, একদম গ্রামের মা-দাদীমার হাতের তৈরি আচারের মতো।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#14b8a6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ম
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মো: আসাদুজ্জামান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">খুলনা সদর • <strong style="color:#2f6f44;">আমড়া ও জলপাই আচার</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "ওয়েট লস ডায়েটের জন্য নিয়েছিলাম। দানাগুলো একদম পরিষ্কার ও কোনো ধুলাবালি নেই। পানিতে দিলে খুব সুন্দর জেল হয়ে ফুলে ওঠে। দারুণ প্রিমিয়াম কোয়ালিটি!"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#f97316; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          স
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সামিয়া রহমান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">জিন্দাবাজার, সিলেট • <strong style="color:#2f6f44;">প্রিমি ফার্ম অর্গানিক চিয়া সীড</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "দ্বিতীয়বার অর্ডার করলাম। বয়স ৫০ পার হয়েছে, নিয়মিত সকালে এক চামচ খেয়ে দারুণ রিফ্রেশিং অনুভব করি। সারাদিনের কাজের স্ট্যামিনা অনেক বেড়েছে।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#059669; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ব
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ব্যবসায়ী জহিরুল ইসলাম</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">নারায়ণগঞ্জ • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "ঝালপ্রেমীদের জন্য এটা সেরা! ঝাল ও টকের পারফেক্ট কম্বিনেশন। খিচুড়ি কিংবা গরম ভাতের সাথে খেলে মুখের অরুচি নিমেষেই দূর হয়ে যায়।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#e11d48; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ন
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">নুসরাত জাহান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">কান্দিরপাড়, কুমিল্লা • <strong style="color:#2f6f44;">স্পেশাল বোম্বাই মরিচ আচার</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "কাজু, কাঠবাদাম, পেস্তা আর খাঁটি মধুর মিশ্রণটা অসাধারণ পুষ্টিকর। বাচ্চার টিফিনে কিংবা বিকালের নাস্তায় এটি আমাদের পরিবারের স্বাস্থ্যকর সঙ্গী।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#d97706; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ম
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মেহেদী হাসান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সাতমাথা, বগুড়া • <strong style="color:#2f6f44;">প্রিমি ফার্ম হানি নাটস</strong></span>
+        </div>
+      </div>
+    </div>
+  
     <div class="review-card-item">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
@@ -897,6 +673,216 @@
         <div style="overflow:hidden;">
           <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ইকবাল মাহমুদ</b>
           <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সাভার, ঢাকা • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "টানা ডেস্কে বসে কাজ করার কারণে বিকেলে ভীষণ ক্লান্তি লাগত। প্রিমি ফার্মের মধুময় কালো সোনা নিয়মিত খাওয়ার পর থেকে শরীর ভীষণ হালকা ও এনার্জেটিক লাগে। ১০০% পিওর!"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ই
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ইঞ্জিনিয়ার রাকিবুল ইসলাম</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">উত্তরা, ঢাকা • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "আচারের তেল ও মসলার ব্যালেন্স চমৎকার! রসুনের কোয়াগুলো খুব সুন্দর নরম হয়েছে এবং খিচুড়ির সাথে খেতে অমৃত লাগে। একদম খাঁটি হোমমেড স্বাদ।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#f59e0b; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ম
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মাহমুদা সুলতানা</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">জিইসি, চট্টগ্রাম • <strong style="color:#2f6f44;">প্রিমি ফার্ম রসুন আচার</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "ক্যাশ অন ডেলিভারিতে চেক করে নিয়েছি। খাঁটি মধুর আসল ঘ্রাণ আর স্বাদ মুখে দিলেই বোঝা যায় এতে কোনো কৃত্রিম চিনি বা ভেজাল নেই। নিশ্চিন্তে খাওয়া যায়।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#0284c7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ড
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ডাঃ মোর্শেদ হাসান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">রাজশাহী সদর • <strong style="color:#2f6f44;">সুন্দরবনের প্রাকৃতিক মধু</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "তেলের জার খোলার সাথে সাথেই সেই আসল ঝাঁঝালো ঘ্রাণ নাকে এলো! রান্নায় দিয়ে পরিবার সবাই বলেছে বাজারের যেকোনো ব্র্যান্ডের চেয়ে এর স্বাদ অতুলনীয়।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#8b5cf6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ত
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">তানভীর আহমেদ</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ধানমন্ডি, ঢাকা • <strong style="color:#2f6f44;">ঘানি ভাঙা খাঁটি সরিষার তেল</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "ভাতের সাথে এক চামচ ঘি মিশিয়ে খেলেই মন ভরে যায়। খাঁটি দানাদার টেক্সচার আর খাঁটি দুধের সুবাস। পরিবারের বাচ্চারাও এখন খুব মজা করে খায়।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#ec4899; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ফ
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ফারহানা আফরোজ</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মিরপুর-১০, ঢাকা • <strong style="color:#2f6f44;">প্রিমি ফার্ম গাওয়া ঘি</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "প্যাকেজিং খুব সুরক্ষিত ছিল, বিন্দুমাত্র তেল লিক করেনি। স্বাদে কোনো কৃত্রিম রাসায়নিকের গন্ধ নেই, একদম গ্রামের মা-দাদীমার হাতের তৈরি আচারের মতো।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#14b8a6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ম
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মো: আসাদুজ্জামান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">খুলনা সদর • <strong style="color:#2f6f44;">আমড়া ও জলপাই আচার</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "ওয়েট লস ডায়েটের জন্য নিয়েছিলাম। দানাগুলো একদম পরিষ্কার ও কোনো ধুলাবালি নেই। পানিতে দিলে খুব সুন্দর জেল হয়ে ফুলে ওঠে। দারুণ প্রিমিয়াম কোয়ালিটি!"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#f97316; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          স
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সামিয়া রহমান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">জিন্দাবাজার, সিলেট • <strong style="color:#2f6f44;">প্রিমি ফার্ম অর্গানিক চিয়া সীড</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "দ্বিতীয়বার অর্ডার করলাম। বয়স ৫০ পার হয়েছে, নিয়মিত সকালে এক চামচ খেয়ে দারুণ রিফ্রেশিং অনুভব করি। সারাদিনের কাজের স্ট্যামিনা অনেক বেড়েছে।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#059669; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ব
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ব্যবসায়ী জহিরুল ইসলাম</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">নারায়ণগঞ্জ • <strong style="color:#2f6f44;">মধুময় কালো সোনা</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "ঝালপ্রেমীদের জন্য এটা সেরা! ঝাল ও টকের পারফেক্ট কম্বিনেশন। খিচুড়ি কিংবা গরম ভাতের সাথে খেলে মুখের অরুচি নিমেষেই দূর হয়ে যায়।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#e11d48; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ন
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">নুসরাত জাহান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">কান্দিরপাড়, কুমিল্লা • <strong style="color:#2f6f44;">স্পেশাল বোম্বাই মরিচ আচার</strong></span>
+        </div>
+      </div>
+    </div>
+  
+    <div class="review-card-item">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="color:#f59e0b; font-size:16px; letter-spacing:2px;">★★★★★</div>
+        <span style="background:#eef5f0; color:#0d4d29; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          ✓ ভেরিফাইড বায়ার
+        </span>
+      </div>
+      <p style="font-size:14px; color:#2c3e30; line-height:1.55; margin:0 0 14px; flex:1;">
+        "কাজু, কাঠবাদাম, পেস্তা আর খাঁটি মধুর মিশ্রণটা অসাধারণ পুষ্টিকর। বাচ্চার টিফিনে কিংবা বিকালের নাস্তায় এটি আমাদের পরিবারের স্বাস্থ্যকর সঙ্গী।"
+      </p>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:10px; border-top:1px solid #f1f5f2;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#d97706; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;">
+          ম
+        </div>
+        <div style="overflow:hidden;">
+          <b style="display:block; color:#0d4d29; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">মেহেদী হাসান</b>
+          <span style="display:block; font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">সাতমাথা, বগুড়া • <strong style="color:#2f6f44;">প্রিমি ফার্ম হানি নাটস</strong></span>
         </div>
       </div>
     </div>
