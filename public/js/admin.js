@@ -2618,7 +2618,7 @@ const AdminApp = {
         newTag = newTag ? ('হট সেলার • ' + newTag) : 'হট সেলার • সেরা পছন্দ';
       }
     } else {
-      newTag = newTag.replace(/হট সেলারs*•?s*/g, '').trim();
+      newTag = newTag.replace(/হট সেলার\s*•?\s*/g, '').replace(/^•\s*/, '').replace(/\s*•$/, '').trim();
     }
 
     try {
