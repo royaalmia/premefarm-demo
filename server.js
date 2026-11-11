@@ -582,8 +582,8 @@ app.put('/api/orders/:id', (req, res) => {
   res.json({ success: true, message: 'অর্ডার সফলভাবে আপডেট হয়েছে!', order: orders[index] });
 });
 
-// Update Call Center Note only
-app.put('/api/orders/:id/note', (req, res) => {
+// Update / Append Call Center Note (Threaded Multi-Agent Log)
+const handleOrderNote = (req, res) => {
   const { id } = req.params;
   const { note, agent } = req.body;
   const orders = readJson(ORDERS_FILE, []);
@@ -593,19 +593,41 @@ app.put('/api/orders/:id/note', (req, res) => {
     return res.status(404).json({ success: false, message: 'অর্ডার পাওয়া যায়নি।' });
   }
 
-  const actingAgent = agent || 'সাদিয়া (Agent-02)';
-  order.callCenterNote = (note || '').trim();
+  const actingAgent = agent || 'Admin';
+  const newNoteText = (note || '').trim();
+
+  let notesHistory = [];
+  try {
+    const parsed = JSON.parse(order.callCenterNote || '[]');
+    if (Array.isArray(parsed)) notesHistory = parsed;
+    else if (order.callCenterNote) notesHistory = [{ id: 'note_init', agent: 'System', text: order.callCenterNote, timestamp: new Date().toISOString() }];
+  } catch (e) {
+    if (order.callCenterNote) notesHistory = [{ id: 'note_init', agent: 'System', text: order.callCenterNote, timestamp: new Date().toISOString() }];
+  }
+
+  if (newNoteText) {
+    notesHistory.push({
+      id: `note_${Date.now()}`,
+      agent: actingAgent,
+      text: newNoteText,
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  order.callCenterNote = JSON.stringify(notesHistory);
   order.lastUpdatedBy = {
     agent: actingAgent,
-    action: `নোট যোগ/হালনাগাদ: "${(note || '').slice(0, 30)}..."`,
-    actionEn: `Note updated: "${(note || '').slice(0, 30)}..."`,
+    action: `নতুন নোট: "${newNoteText.slice(0, 30)}..."`,
+    actionEn: `New note: "${newNoteText.slice(0, 30)}..."`,
     timestamp: new Date().toISOString()
   };
 
   writeJson(ORDERS_FILE, orders);
-  recordAuditLog(id, actingAgent, `কল সেন্টার নোট: "${(note || '').slice(0, 40)}"`, `Call center note: "${(note || '').slice(0, 40)}"`);
-  res.json({ success: true, message: 'কল সেন্টার নোট সংরক্ষিত হয়েছে!', order });
-});
+  recordAuditLog(id, actingAgent, `কল সেন্টার নোট: "${newNoteText.slice(0, 40)}"`, `Call center note: "${newNoteText.slice(0, 40)}"`);
+  res.json({ success: true, message: 'কল সেন্টার নোট সংরক্ষিত হয়েছে!', notes: notesHistory, order });
+};
+app.put('/api/orders/:id/note', handleOrderNote);
+app.post('/api/orders/:id/note', handleOrderNote);
 
 // 1000% Genuine Fraud Check API (Database Orders History, Real BD Operator, Blacklist)
 app.get('/api/fraud-check/:phone', (req, res) => {
@@ -693,6 +715,37 @@ app.get('/api/fraud-check/:phone', (req, res) => {
   // Find customer IP if available from orders
   const foundIp = customerOrders.find(o => o.customerIp)?.customerIp || '103.145.74.88';
 
+  const courierBreakdown = {
+    steadfast: {
+      name: 'Steadfast Courier',
+      total: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('steadfast')).length,
+      delivered: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('steadfast') && (o.status || '').toLowerCase() === 'delivered').length,
+      returned: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('steadfast') && ['return', 'returned'].includes((o.status || '').toLowerCase())).length,
+      status: 'Active API'
+    },
+    pathao: {
+      name: 'Pathao Courier',
+      total: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('pathao')).length,
+      delivered: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('pathao') && (o.status || '').toLowerCase() === 'delivered').length,
+      returned: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('pathao') && ['return', 'returned'].includes((o.status || '').toLowerCase())).length,
+      status: 'Merchant Gateway'
+    },
+    redx: {
+      name: 'RedX Courier',
+      total: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('redx')).length,
+      delivered: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('redx') && (o.status || '').toLowerCase() === 'delivered').length,
+      returned: customerOrders.filter(o => o.courier?.provider?.toLowerCase().includes('redx') && ['return', 'returned'].includes((o.status || '').toLowerCase())).length,
+      status: 'Integrated'
+    },
+    inhouse: {
+      name: 'Preme Farm Store',
+      total: totalParcels,
+      delivered: deliveredParcels,
+      returned: returnedParcels,
+      totalSpent
+    }
+  };
+
   res.json({
     success: true,
     phone: rawPhone,
@@ -710,7 +763,8 @@ app.get('/api/fraud-check/:phone', (req, res) => {
     pendingParcels,
     totalSpent,
     customerType,
-    advice
+    advice,
+    courierBreakdown
   });
 });
 
@@ -1162,25 +1216,55 @@ app.post('/api/settings', (req, res) => {
 app.get('/api/stats', (req, res) => {
   const orders = readJson(ORDERS_FILE, []);
   const products = readJson(PRODUCTS_FILE, []);
-  let totalRevenue = 0, pendingOrders = 0, shippedOrders = 0, deliveredOrders = 0;
+  let totalRevenue = 0; // STRICTLY DELIVERED ONLY!
+  let deliveredOrders = 0;
+  let pendingOrders = 0, pendingAmount = 0;
+  let inCourierOrders = 0, inCourierAmount = 0;
+  let cancelledOrders = 0, cancelledAmount = 0;
 
   orders.forEach(o => {
-    if (o.status !== 'Cancelled') totalRevenue += (o.total || 0);
-    if (o.status === 'Pending') pendingOrders++;
-    if (o.status === 'Shipped') shippedOrders++;
-    if (o.status === 'Delivered') deliveredOrders++;
+    const amt = o.total || 0;
+    const s = (o.status || '').toLowerCase();
+    if (s === 'delivered') {
+      totalRevenue += amt;
+      deliveredOrders++;
+    } else if (s === 'pending') {
+      pendingOrders++;
+      pendingAmount += amt;
+    } else if (s === 'in courier' || s === 'shipped') {
+      inCourierOrders++;
+      inCourierAmount += amt;
+    } else if (s === 'cancelled' || s === 'cancel' || s === 'return' || s === 'returned' || s === 'failed') {
+      cancelledOrders++;
+      cancelledAmount += amt;
+    }
   });
 
   const lowStockProducts = products.filter(p => (p.stock !== undefined && p.stock <= 10) || !p.inStock);
 
   res.json({
     success: true,
+    totalOrders: orders.length,
+    totalRevenue,
+    deliveredRevenue: totalRevenue,
+    deliveredOrders,
+    pendingOrders,
+    pendingAmount,
+    inCourierOrders,
+    inCourierAmount,
+    cancelledOrders,
+    cancelledAmount,
     data: {
       totalOrders: orders.length,
       totalRevenue,
-      pendingOrders,
-      shippedOrders,
+      deliveredRevenue: totalRevenue,
       deliveredOrders,
+      pendingOrders,
+      pendingAmount,
+      inCourierOrders,
+      inCourierAmount,
+      cancelledOrders,
+      cancelledAmount,
       totalProducts: products.length,
       lowStockCount: lowStockProducts.length
     }

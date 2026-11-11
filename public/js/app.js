@@ -6,12 +6,13 @@
 const PremeStore = {
   cart: [],
   products: [],
-  deliveryCharge: 70,
+  deliveryCharge: 100,
 
   init() {
     this.loadCart();
     this.fetchProducts();
     this.updateCartBadge();
+    this.loadDynamicBanners();
   },
 
   loadCart() {
@@ -348,21 +349,92 @@ const PremeStore = {
     if (totalEl) totalEl.textContent = `৳${sub + charge}`;
   },
 
+  async loadDynamicBanners() {
+    const slider = document.getElementById('hero-slider');
+    if (!slider) return;
+    try {
+      const res = await fetch('/api/content');
+      if (res.ok) {
+        const json = await res.json();
+        const banners = json.data?.banners || json.content?.banners;
+        if (Array.isArray(banners) && banners.length > 0) {
+          this.renderHeroSlider(banners);
+        }
+      }
+    } catch (e) {}
+  },
+
+  renderHeroSlider(banners) {
+    const slider = document.getElementById('hero-slider');
+    if (!slider) return;
+    
+    // Build slides HTML
+    const slidesHtml = banners.map((b, idx) => `
+      <div class="slide ${idx === 0 ? 'active' : ''}" style="background-image: url('${b.image}');">
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          ${b.badge ? `<div class="slide-badge">${b.badge}</div>` : ''}
+          <h2 class="slide-title">
+            ${b.title}
+          </h2>
+          <p class="slide-desc">
+            ${b.desc}
+          </p>
+          <div class="slide-actions">
+            ${b.btn1Text || b.buttonText ? `<a href="${b.btn1Link || '#kalo-shona'}" class="btn-primary-large"><span>🛍️</span> ${b.btn1Text || b.buttonText}</a>` : ''}
+            ${b.btn2Text ? `<a href="${b.btn2Link || '/shop'}" class="btn-secondary-outline">${b.btn2Text}</a>` : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    const dotsHtml = `
+      <div class="slider-dots">
+        ${banners.map((_, idx) => `<span class="dot ${idx === 0 ? 'active' : ''}" onclick="window.setCustomHeroSlide(${idx})"></span>`).join('')}
+      </div>
+    `;
+
+    slider.innerHTML = slidesHtml + dotsHtml;
+
+    // Attach slide transition
+    let cur = 0;
+    const slides = slider.querySelectorAll('.slide');
+    const dots = slider.querySelectorAll('.dot');
+    window.setCustomHeroSlide = (idx) => {
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      cur = idx;
+    };
+
+    if (window._heroSliderInterval) clearInterval(window._heroSliderInterval);
+    window._heroSliderInterval = setInterval(() => {
+      if (slides.length > 1) {
+        window.setCustomHeroSlide((cur + 1) % slides.length);
+      }
+    }, 5500);
+  },
+
   async submitOrder(formData) {
     if (this.cart.length === 0) {
       alert('আপনার কার্ট খালি! অনুগ্রহ করে একটি প্রোডাক্ট সিলেক্ট করুন।');
       return;
     }
 
+    const subtotal = this.getSubtotal();
+    const deliveryCharge = subtotal >= 1800 ? 0 : (this.deliveryCharge || 100);
+    const total = subtotal + deliveryCharge;
+
     const orderPayload = {
       customer: {
         name: formData.name,
         phone: formData.phone,
         address: formData.address,
-        city: formData.city || (this.deliveryCharge === 70 ? 'Dhaka' : 'Outside Dhaka')
+        city: formData.city || (this.deliveryCharge === 100 ? 'Dhaka' : 'Outside Dhaka')
       },
       items: [...this.cart],
-      deliveryCharge: this.getSubtotal() >= 1800 ? 0 : this.deliveryCharge,
+      subtotal,
+      deliveryCharge,
+      total,
       notes: formData.notes || ''
     };
 
@@ -388,8 +460,6 @@ const PremeStore = {
       id: `PF-${Math.floor(1000 + Math.random() * 9000)}`,
       createdAt: new Date().toISOString(),
       ...orderPayload,
-      subtotal: this.getSubtotal(),
-      total: this.getTotal(),
       paymentMethod: 'Cash on Delivery (ক্যাশ অন ডেলিভারি)',
       status: 'Pending',
       courier: null
@@ -405,7 +475,9 @@ const PremeStore = {
     this.saveCart();
     
     // Save order phone to remember user on /profile
-    localStorage.setItem('premefarm_user_phone', order.customer.phone);
+    if (order.customer && order.customer.phone) {
+      localStorage.setItem('premefarm_user_phone', order.customer.phone);
+    }
 
     const modal = document.getElementById('order-success-modal');
     if (modal) {
@@ -414,21 +486,44 @@ const PremeStore = {
       const totalEl = document.getElementById('success-order-total');
       const phoneEl = document.getElementById('success-customer-phone');
       const waLink = document.getElementById('success-whatsapp-btn');
+      const trackBtn = document.getElementById('success-track-btn');
+      const itemsList = document.getElementById('success-items-list');
+      const subtotalEl = document.getElementById('success-order-subtotal');
+      const deliveryEl = document.getElementById('success-order-delivery');
 
       if (idEl) idEl.textContent = order.id;
-      if (nameEl) nameEl.textContent = order.customer.name;
-      if (phoneEl) phoneEl.textContent = order.customer.phone;
-      if (totalEl) totalEl.textContent = `৳${order.total}`;
+      if (nameEl) nameEl.textContent = order.customer?.name || '';
+      if (phoneEl) phoneEl.textContent = order.customer?.phone || '';
+      if (totalEl) totalEl.textContent = `৳${(order.total || 0).toLocaleString()}`;
+      if (subtotalEl) subtotalEl.textContent = `৳${(order.subtotal || (order.total - (order.deliveryCharge || 100))).toLocaleString()}`;
+      if (deliveryEl) deliveryEl.textContent = `৳${(order.deliveryCharge !== undefined ? order.deliveryCharge : 100).toLocaleString()}`;
+
+      if (itemsList && order.items && order.items.length > 0) {
+        itemsList.innerHTML = order.items.map(i => `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13.5px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-weight: 700; color: #1e293b;">${i.name}</span>
+              ${i.size ? `<span style="font-size: 11.5px; background: #eef5f0; color: #0d4d29; padding: 1px 6px; border-radius: 4px;">${i.size}</span>` : ''}
+              <span style="color: #64748b; font-size: 12px;">× ${i.quantity || 1}</span>
+            </div>
+            <div style="font-weight: 800; color: #0d4d29;">৳${((i.price || 0) * (i.quantity || 1)).toLocaleString()}</div>
+          </div>
+        `).join('');
+      }
+
+      if (trackBtn) {
+        trackBtn.href = `/profile?phone=${encodeURIComponent(order.customer?.phone || '')}`;
+      }
 
       if (waLink) {
-        const msg = encodeURIComponent(`হ্যালো প্রিমি ফার্ম, আমি এইমাত্র অর্ডার করেছি। অর্ডার আইডি: ${order.id}, মোট: ৳${order.total} (ক্যাশ অন ডেলিভারি)`);
+        const msg = encodeURIComponent(`হ্যালো প্রিমি ফার্ম, আমি এইমাত্র অর্ডার করেছি।\nঅর্ডার আইডি: #${order.id}\nমোট বিল: ৳${order.total} (ক্যাশ অন ডেলিভারি)\nঅনুগ্রহ করে অর্ডারটি দ্রুত পাঠিয়ে দিন।`);
         waLink.href = `https://wa.me/8801872170476?text=${msg}`;
       }
 
       modal.classList.add('active');
     } else {
       alert(`🎉 ধন্যবাদ! আপনার অর্ডার #${order.id} গ্রহণ করা হয়েছে। মোট: ৳${order.total} (ক্যাশ অন ডেলিভারি)।`);
-      window.location.href = '/profile';
+      window.location.href = `/profile?phone=${encodeURIComponent(order.customer?.phone || '')}`;
     }
   },
 

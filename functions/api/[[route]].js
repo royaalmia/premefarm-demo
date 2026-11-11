@@ -194,9 +194,9 @@ export async function onRequest(context) {
 
       const customer = body.customer || {};
       const items = body.items || [];
-      const subtotal = body.subtotal || items.reduce((acc, i) => acc + ((i.price || 0) * (i.quantity || 1)), 0);
-      const deliveryCharge = body.deliveryCharge !== undefined ? body.deliveryCharge : 70;
-      const total = body.total || (subtotal + deliveryCharge);
+      const subtotal = body.subtotal !== undefined ? body.subtotal : items.reduce((acc, i) => acc + ((i.price || 0) * (i.quantity || 1)), 0);
+      const deliveryCharge = body.deliveryCharge !== undefined ? body.deliveryCharge : 100;
+      const total = body.total !== undefined ? body.total : (subtotal + deliveryCharge);
       const createdAt = new Date().toISOString();
 
       await db.prepare(`
@@ -230,7 +230,19 @@ export async function onRequest(context) {
         await db.prepare("UPDATE failed_orders SET status = 'Recovered' WHERE customer LIKE ?").bind(`%"phone":"${customer.phone}"%`).run();
       }
 
-      return jsonResponse({ success: true, order: { id: orderId, total, status: 'Pending' } }, 201);
+      const createdOrder = {
+        id: orderId,
+        customer,
+        items,
+        subtotal,
+        deliveryCharge,
+        total,
+        status: body.status || 'Pending',
+        source: body.source || 'Website Store',
+        createdAt
+      };
+
+      return jsonResponse({ success: true, order: createdOrder }, 201);
     }
 
     // Tracking route: /api/orders/track/:phone
@@ -271,10 +283,37 @@ export async function onRequest(context) {
     if (noteMatch && (method === 'PUT' || method === 'POST')) {
       const id = noteMatch[1];
       const body = await request.json();
-      const note = body.note || '';
-      const lastUpdatedBy = JSON.stringify({ agent: body.agent || 'Admin', timestamp: new Date().toISOString() });
-      await db.prepare('UPDATE orders SET callCenterNote = ?, lastUpdatedBy = ? WHERE id = ?').bind(note, lastUpdatedBy, id).run();
-      return jsonResponse({ success: true, message: 'Note updated' });
+      const newNoteText = (body.note || '').trim();
+      const agent = body.agent || 'Admin';
+
+      const existing = await db.prepare('SELECT callCenterNote FROM orders WHERE id = ?').bind(id).first();
+      let notesHistory = [];
+      try {
+        const parsed = JSON.parse(existing?.callCenterNote || '[]');
+        if (Array.isArray(parsed)) notesHistory = parsed;
+        else if (existing?.callCenterNote) notesHistory = [{ id: 'note_init', agent: 'System', text: existing.callCenterNote, timestamp: new Date().toISOString() }];
+      } catch(e) {
+        if (existing?.callCenterNote) notesHistory = [{ id: 'note_init', agent: 'System', text: existing.callCenterNote, timestamp: new Date().toISOString() }];
+      }
+
+      if (newNoteText) {
+        notesHistory.push({
+          id: `note_${Date.now()}`,
+          agent,
+          text: newNoteText,
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      const noteJson = JSON.stringify(notesHistory);
+      const lastUpdatedBy = JSON.stringify({ agent, timestamp: new Date().toISOString() });
+      await db.prepare('UPDATE orders SET callCenterNote = ?, lastUpdatedBy = ? WHERE id = ?').bind(noteJson, lastUpdatedBy, id).run();
+
+      await db.prepare('INSERT INTO audit_logs (orderId, agent, action, timestamp) VALUES (?, ?, ?, ?)').bind(
+        id, agent, `নতুন কল সেন্টার নোট: "${newNoteText.slice(0, 35)}"`, new Date().toISOString()
+      ).run();
+
+      return jsonResponse({ success: true, message: 'নোট যুক্ত হয়েছে', notes: notesHistory });
     }
 
     const orderIdMatch = path.match(/^\/api\/orders\/([A-Za-z0-9\-]+)$/);
@@ -582,6 +621,56 @@ export async function onRequest(context) {
     }
 
     // ================= 10. SETTINGS & CMS =================
+    const DEFAULT_CMS_CONTENT = {
+      header: {
+        topTicker: "🌿 বিশেষ মেগা অফার: ২ বা ততোধিক প্রোডাক্ট অর্ডারে সারা দেশে ক্যাশ অন ডেলিভারি একদম ফ্রি!",
+        hotline: "01872170476",
+        logoImage: "images/logo.png",
+        brandName: "Preme Farm",
+        brandTagline: "প্রিমি ফার্ম • সুখী জীবনের জন্য স্বাস্থ্যকর খাবার"
+      },
+      banners: [
+        {
+          id: 1,
+          badge: "⚡ কাজের ক্লান্তি দূর করার ন্যাচারাল ফর্মুলা",
+          title: "অফিসের কাজের ক্লান্তি? <br><span class=\"gold\">সারাদিন থাকুন চাঙ্গা ও প্রাণবন্ত!</span>",
+          desc: "টানা কাজের চাপ আর শারীরিক দুর্বলতাকে বিদায় জানান। কাজের টেবিলে রাখুন প্রিমি ফার্মের মধুময় কালো সোনা — ১০০% প্রাকৃতিক স্ট্যামিনা বুস্টার।",
+          image: "images/hero_banner_1.png",
+          btn1Text: "🛍️ এখনই অর্ডার করুন (৳৯৫০)",
+          btn1Link: "#kalo-shona",
+          btn2Text: "সকল প্রোডাক্ট দেখুন ➔",
+          btn2Link: "/shop"
+        },
+        {
+          id: 2,
+          badge: "🌿 সুস্থ ও ফিট থাকার সহজ অভ্যাস",
+          title: "কাজের টেবিলে রাখুন <br><span class=\"gold\">আপনার সিক্রেট এনার্জি পার্টনার!</span>",
+          desc: "প্রতিদিন সকালে মাত্র এক চামচেই ফিরিয়ে আনুন অফুরন্ত উদ্যম, ক্লান্তিহীন কর্মশক্তি ও অটুট রোগ প্রতিরোধ ক্ষমতা।",
+          image: "images/hero_banner_2.png",
+          btn1Text: "🛍️ ট্রায়াল প্যাক অর্ডার করুন (৳৫৫০)",
+          btn1Link: "#kalo-shona",
+          btn2Text: "শপ ভিজিট করুন",
+          btn2Link: "/shop"
+        },
+        {
+          id: 3,
+          badge: "✨ সুস্থ সুন্দর জীবনের সেরা উপহার",
+          title: "ব্যস্ত রুটিনেও থাকুক <br><span class=\"gold\">অফুরন্ত প্রাণচাঞ্চল্য!</span>",
+          desc: "শারীরিক দুর্বলতা ও ক্লান্তি কাটিয়ে সুস্থ, সতেজ ও কর্মক্ষম জীবনের জন্য প্রিমি ফার্ম মধুময় কালো সোনা ও অর্গানিক কম্বো প্যাক।",
+          image: "images/hero_banner_3.png",
+          btn1Text: "🔥 মেগা কম্বো কিনুন (৳১৯৯০)",
+          btn1Link: "/shop",
+          btn2Text: "কম্বো অফার",
+          btn2Link: "/shop"
+        }
+      ],
+      footer: {
+        aboutText: "প্রকৃতির শ্রেষ্ঠ উপহার খাঁটি ভেষজ, সুন্দরবনের মধু, গাওয়া ঘি ও পুষ্টিকর খাবার আপনার পরিবারে পৌঁছে দিতে প্রিমি ফার্ম নিবেদিতপ্রাণ।",
+        hotline: "01872170476",
+        copyright: "© ২০২৬ Preme Farm (প্রিমি ফার্ম)। সর্বস্বত্ব সংরক্ষিত।"
+      }
+    };
+
     if (path === '/api/settings' && method === 'GET') {
       const r = await db.prepare('SELECT value FROM settings WHERE key = ?').bind('general').first();
       const settings = r ? parseJsonField(r.value, {}) : {};
@@ -597,10 +686,37 @@ export async function onRequest(context) {
       return jsonResponse({ success: true, message: 'সেটিংস আপডেট হয়েছে', settings: updated, data: updated });
     }
 
-    if (path === '/api/cms' && method === 'GET') {
+    if ((path === '/api/cms' || path === '/api/content') && method === 'GET') {
       const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
-      const content = r ? parseJsonField(r.value, {}) : {};
-      return jsonResponse({ success: true, content });
+      const content = r ? parseJsonField(r.value, DEFAULT_CMS_CONTENT) : DEFAULT_CMS_CONTENT;
+      return jsonResponse({ success: true, content, data: content });
+    }
+
+    if (path === '/api/content/header' && (method === 'PUT' || method === 'POST')) {
+      const body = await request.json();
+      const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
+      const content = r ? parseJsonField(r.value, DEFAULT_CMS_CONTENT) : { ...DEFAULT_CMS_CONTENT };
+      content.header = { ...content.header, ...body };
+      await db.prepare('INSERT OR REPLACE INTO cms (key, value) VALUES (?, ?)').bind('content', JSON.stringify(content)).run();
+      return jsonResponse({ success: true, message: 'হেডার আপডেট হয়েছে', data: content.header });
+    }
+
+    if (path === '/api/content/footer' && (method === 'PUT' || method === 'POST')) {
+      const body = await request.json();
+      const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
+      const content = r ? parseJsonField(r.value, DEFAULT_CMS_CONTENT) : { ...DEFAULT_CMS_CONTENT };
+      content.footer = { ...content.footer, ...body };
+      await db.prepare('INSERT OR REPLACE INTO cms (key, value) VALUES (?, ?)').bind('content', JSON.stringify(content)).run();
+      return jsonResponse({ success: true, message: 'ফুটার আপডেট হয়েছে', data: content.footer });
+    }
+
+    if (path === '/api/content/banners' && (method === 'PUT' || method === 'POST')) {
+      const body = await request.json();
+      const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
+      const content = r ? parseJsonField(r.value, DEFAULT_CMS_CONTENT) : { ...DEFAULT_CMS_CONTENT };
+      content.banners = Array.isArray(body) ? body : (body.banners || []);
+      await db.prepare('INSERT OR REPLACE INTO cms (key, value) VALUES (?, ?)').bind('content', JSON.stringify(content)).run();
+      return jsonResponse({ success: true, message: 'ব্যানার সফলভাবে আপডেট হয়েছে', data: content.banners });
     }
 
     if (path === '/api/cms' && method === 'POST') {
@@ -612,7 +728,52 @@ export async function onRequest(context) {
     // ================= 11. LANDING PAGES =================
     if ((path === '/api/landing' || path === '/api/landing-pages') && method === 'GET') {
       const rows = (await db.prepare('SELECT * FROM landing_pages').all()).results || [];
-      return jsonResponse({ success: true, data: rows });
+      const data = rows.map(r => {
+        const prod = parseJsonField(r.product, {});
+        return {
+          ...r,
+          ...prod,
+          id: r.id,
+          title: r.title,
+          template: r.template,
+          status: r.status || 'active'
+        };
+      });
+      return jsonResponse({ success: true, count: data.length, data });
+    }
+
+    if ((path === '/api/landing' || path === '/api/landing-pages') && method === 'POST') {
+      const body = await request.json();
+      const id = body.id || `lp-${Date.now()}`;
+      const slug = body.slug || `landing-${Date.now()}`;
+      const title = body.title || 'বিশেষ ধামাকা অফার — প্রিমি ফার্ম';
+      const template = body.template || 'template-1';
+      const productObj = {
+        productId: body.productId || 1,
+        productName: body.productName || 'প্রিমি ফার্ম প্রোডাক্ট',
+        image: body.image || 'images/kalo_shona_jar.png',
+        price: parseInt(body.price) || 950,
+        regularPrice: parseInt(body.regularPrice) || 1150,
+        discountBadge: body.discountBadge || 'সীমিত সময়ের অফার',
+        subtitle: body.subtitle || '',
+        templateName: body.templateName || 'সিঙ্গেল প্রোডাক্ট হিরো',
+        features: body.features || [
+          'অফিস ও কাজের ক্লান্তি দূর করে সারাদিনের কর্মশক্তি বৃদ্ধি করে',
+          'স্মৃতিশক্তি ও কাজের গভীর মনোযোগ বৃদ্ধি করে',
+          '১০০% খাঁটি ও প্রাকৃতিক উপাদানের নিশ্চয়তা'
+        ]
+      };
+
+      await db.prepare(`
+        INSERT OR REPLACE INTO landing_pages (id, slug, title, template, product, views, conversions, status)
+        VALUES (?, ?, ?, ?, ?, 0, 0, 'active')
+      `).bind(id, slug, title, template, JSON.stringify(productObj)).run();
+
+      return jsonResponse({
+        success: true,
+        message: 'ল্যান্ডিং পেজ সফলভাবে তৈরি হয়েছে!',
+        page: { id, slug, title, template, ...productObj }
+      });
     }
 
     if (path.startsWith('/api/landing-pages/') && method === 'DELETE') {
@@ -624,19 +785,42 @@ export async function onRequest(context) {
     // ================= 12. STATS & ANALYTICS =================
     if (path === '/api/stats' && method === 'GET') {
       const orders = (await db.prepare('SELECT total, status FROM orders').all()).results || [];
-      let totalRevenue = 0, pendingOrders = 0, shippedOrders = 0;
+      let totalRevenue = 0; // STRICTLY DELIVERED ONLY!
+      let deliveredOrders = 0;
+      let pendingOrders = 0, pendingAmount = 0;
+      let inCourierOrders = 0, inCourierAmount = 0;
+      let cancelledOrders = 0, cancelledAmount = 0;
+
       orders.forEach(o => {
-        totalRevenue += (o.total || 0);
+        const amt = o.total || 0;
         const s = (o.status || '').toLowerCase();
-        if (s === 'pending') pendingOrders++;
-        if (s === 'in courier' || s === 'shipped' || s === 'delivered') shippedOrders++;
+        if (s === 'delivered') {
+          totalRevenue += amt;
+          deliveredOrders++;
+        } else if (s === 'pending') {
+          pendingOrders++;
+          pendingAmount += amt;
+        } else if (s === 'in courier' || s === 'shipped') {
+          inCourierOrders++;
+          inCourierAmount += amt;
+        } else if (s === 'cancelled' || s === 'cancel' || s === 'return' || s === 'returned' || s === 'failed') {
+          cancelledOrders++;
+          cancelledAmount += amt;
+        }
       });
+
       return jsonResponse({
         success: true,
         totalOrders: orders.length,
         totalRevenue,
+        deliveredRevenue: totalRevenue,
+        deliveredOrders,
         pendingOrders,
-        shippedOrders
+        pendingAmount,
+        inCourierOrders,
+        inCourierAmount,
+        cancelledOrders,
+        cancelledAmount
       });
     }
 

@@ -25,8 +25,8 @@ const I18N = {
     topbar_title: 'প্রিমি ফার্ম এডমিন ড্যাশবোর্ড',
     topbar_sub: 'কল সেন্টার অর্ডার ম্যানেজমেন্ট, কুরিয়ার এপিআই ও সেলস কন্ট্রোল প্যানেল',
     agent_label: 'এজেন্ট:',
-    theme_light: 'Light Mode',
-    theme_dark: 'Dark Mode',
+    theme_light: 'লাইট মোড',
+    theme_dark: 'ডার্ক মোড',
     btn_csv: 'অর্ডার রিপোর্ট (CSV)',
     status_live: 'লাইভ সিস্টেম',
 
@@ -42,8 +42,8 @@ const I18N = {
 
     tab_all: 'সব অর্ডার',
     tab_pending: 'পেন্ডিং',
-    tab_hold: 'হোল্ড',
-    tab_confirmed: 'কনফার্ম',
+    tab_hold: 'স্থগিত',
+    tab_confirmed: 'নিশ্চিত',
     tab_incourier: 'ইন কুরিয়ার',
     tab_delivered: 'ডেলিভার্ড',
     tab_return: 'রিটার্ন',
@@ -65,7 +65,7 @@ const I18N = {
     btn_unblock: 'আনব্লক',
     btn_note: 'নোট',
     btn_edit: 'এডিট',
-    btn_send_courier: 'Send Courier',
+    btn_send_courier: 'কুরিয়ারে পাঠান',
 
     // Audit logs tab
     audit_title: 'কল সেন্টার এজেন্ট অ্যাক্টিভিটি লগ',
@@ -91,7 +91,7 @@ const I18N = {
     th_bl_action: 'একশন',
 
     tab_failed: 'ব্যর্থ অর্ডার',
-    btn_logout: 'লগআউট (Logout)',
+    btn_logout: 'লগআউট',
     login_user_label: 'এডমিন আইডি / ইমেইল *',
     login_pass_label: 'পাসওয়ার্ড *',
     login_btn: 'লগইন করুন ➔',
@@ -111,7 +111,7 @@ const I18N = {
     placeholder_customer_name: 'গ্রাহকের পুরো নাম লিখুন',
     placeholder_phone: '১১ ডিজিটের মোবাইল নম্বর',
     placeholder_address: 'বাসা নং, রোড, থানা, জেলা...',
-    opt_city_dhaka: 'ঢাকা শহর (চার্জ ৳৭০)',
+    opt_city_dhaka: 'ঢাকা শহর (চার্জ ৳১০০)',
     opt_city_outside: 'ঢাকার বাইরে (চার্জ ৳১৩০)',
     btn_cancel: 'বাতিল',
     btn_save_order: 'অর্ডার সেভ করুন ➔',
@@ -602,13 +602,13 @@ const AdminApp = {
     const statusSelect = document.getElementById('detail-ord-status');
     if (statusSelect) {
       const statusMap = {
-        'Pending': lang === 'bn' ? 'Pending (পেন্ডিং)' : 'Pending',
-        'Hold': lang === 'bn' ? 'Hold (হোল্ড)' : 'On Hold',
-        'Confirmed': lang === 'bn' ? 'Confirmed (নিশ্চিত)' : 'Confirmed',
-        'In Courier': lang === 'bn' ? 'In Courier (কুরিয়ারে প্রেরিত)' : 'In Courier (Dispatched)',
-        'Delivered': lang === 'bn' ? 'Delivered (ডেলিভারড)' : 'Delivered',
-        'Return': lang === 'bn' ? 'Return (রিটার্ন)' : 'Returned',
-        'Cancelled': lang === 'bn' ? 'Cancelled (বাতিল)' : 'Cancelled'
+        'Pending': lang === 'bn' ? 'পেন্ডিং' : 'Pending',
+        'Hold': lang === 'bn' ? 'স্থগিত' : 'On Hold',
+        'Confirmed': lang === 'bn' ? 'নিশ্চিতকৃত' : 'Confirmed',
+        'In Courier': lang === 'bn' ? 'কুরিয়ারে পাঠানো হয়েছে' : 'In Courier',
+        'Delivered': lang === 'bn' ? 'ডেলিভারি সম্পন্ন' : 'Delivered',
+        'Return': lang === 'bn' ? 'রিটার্ন' : 'Returned',
+        'Cancelled': lang === 'bn' ? 'বাতিলকৃত' : 'Cancelled'
       };
       const curVal = statusSelect.value;
       Array.from(statusSelect.options).forEach(opt => {
@@ -629,10 +629,10 @@ const AdminApp = {
       const options = agentSelect.options;
       for (let i = 0; i < options.length; i++) {
         const opt = options[i];
-        if (opt.value === 'সুপার এডমিন') opt.textContent = lang === 'en' ? 'Super Admin' : 'সুপার এডমিন (Super Admin)';
-        if (opt.value === 'তানভীর (Agent-01)') opt.textContent = lang === 'en' ? 'Tanvir (Agent-01)' : 'তানভীর (Agent-01)';
-        if (opt.value === 'সাদিয়া (Agent-02)') opt.textContent = lang === 'en' ? 'Sadia (Agent-02)' : 'সাদিয়া (Agent-02)';
-        if (opt.value === 'রফিক (Supervisor)') opt.textContent = lang === 'en' ? 'Rafiq (Supervisor)' : 'রফিক (Supervisor)';
+        if (opt.value === 'সুপার এডমিন') opt.textContent = lang === 'en' ? 'Super Admin' : 'সুপার এডমিন';
+        if (opt.value === 'তানভীর (Agent-01)') opt.textContent = lang === 'en' ? 'Tanvir (Agent-01)' : 'তানভীর (এজেন্ট-০১)';
+        if (opt.value === 'সাদিয়া (Agent-02)') opt.textContent = lang === 'en' ? 'Sadia (Agent-02)' : 'সাদিয়া (এজেন্ট-০২)';
+        if (opt.value === 'রফিক (Supervisor)') opt.textContent = lang === 'en' ? 'Rafiq (Supervisor)' : 'রফিক (সুপারভাইজার)';
         if (opt.value === 'মার্কেটিং স্পেশালিস্ট') opt.textContent = lang === 'en' ? 'Marketing Specialist' : 'মার্কেটিং স্পেশালিস্ট';
       }
     }
@@ -771,20 +771,81 @@ const AdminApp = {
     } catch (e) {}
 
     const local = JSON.parse(localStorage.getItem('premefarm_orders') || '[]');
-    let totalRevenue = 0, pending = 0, shipped = 0;
+    let deliveredRev = 0, deliveredCount = 0;
+    let pendingCount = 0, pendingAmt = 0;
+    let inCourierCount = 0, inCourierAmt = 0;
+    let cancelledCount = 0, cancelledAmt = 0;
+
     local.forEach(o => {
-      totalRevenue += (o.total || 0);
-      if (o.status === 'Pending') pending++;
-      if (o.status === 'In Courier' || o.status === 'Shipped') shipped++;
+      const s = (o.status || '').toLowerCase();
+      const amt = o.total || 0;
+      if (s === 'delivered') {
+        deliveredRev += amt;
+        deliveredCount++;
+      } else if (s === 'pending') {
+        pendingCount++;
+        pendingAmt += amt;
+      } else if (s === 'in courier' || s === 'shipped') {
+        inCourierCount++;
+        inCourierAmt += amt;
+      } else if (s === 'cancelled' || s === 'cancel' || s === 'return' || s === 'returned') {
+        cancelledCount++;
+        cancelledAmt += amt;
+      }
     });
-    this.renderStats({ totalOrders: local.length, totalRevenue, pendingOrders: pending, shippedOrders: shipped });
+
+    this.renderStats({
+      totalOrders: local.length,
+      totalRevenue: deliveredRev,
+      deliveredRevenue: deliveredRev,
+      deliveredOrders: deliveredCount,
+      pendingOrders: pendingCount,
+      pendingAmount: pendingAmt,
+      inCourierOrders: inCourierCount,
+      inCourierAmount: inCourierAmt,
+      cancelledOrders: cancelledCount,
+      cancelledAmount: cancelledAmt
+    });
   },
 
   renderStats(stats) {
-    document.getElementById('stat-revenue').textContent = `৳${(stats.totalRevenue || 0).toLocaleString()}`;
-    document.getElementById('stat-orders').textContent = stats.totalOrders || 0;
-    document.getElementById('stat-pending').textContent = stats.pendingOrders || 0;
-    document.getElementById('stat-shipped').textContent = stats.shippedOrders || 0;
+    const isEn = this.currentLang === 'en';
+    const deliveredRev = stats.deliveredRevenue !== undefined ? stats.deliveredRevenue : (stats.totalRevenue || 0);
+    const delivCount = stats.deliveredOrders || 0;
+    const pendCount = stats.pendingOrders || 0;
+    const pendAmt = stats.pendingAmount || 0;
+    const courierCount = stats.inCourierOrders !== undefined ? stats.inCourierOrders : (stats.shippedOrders || 0);
+    const courierAmt = stats.inCourierAmount || 0;
+    const cancelCount = stats.cancelledOrders || 0;
+    const cancelAmt = stats.cancelledAmount || 0;
+    const totalCount = stats.totalOrders || 0;
+
+    const elRev = document.getElementById('stat-revenue');
+    if (elRev) elRev.textContent = `৳${deliveredRev.toLocaleString()}`;
+
+    const elDelivCount = document.getElementById('stat-delivered-count');
+    if (elDelivCount) elDelivCount.textContent = isEn ? `${delivCount} delivered successfully` : `${delivCount} টি সফল ডেলিভারি`;
+
+    const elPend = document.getElementById('stat-pending');
+    if (elPend) elPend.textContent = isEn ? `${pendCount} Orders` : `${pendCount} টি`;
+
+    const elPendAmt = document.getElementById('stat-pending-amount');
+    if (elPendAmt) elPendAmt.textContent = isEn ? `৳${pendAmt.toLocaleString()} pending` : `৳${pendAmt.toLocaleString()} টাকার পার্সেল`;
+
+    const elShipped = document.getElementById('stat-shipped');
+    if (elShipped) elShipped.textContent = isEn ? `${courierCount} Orders` : `${courierCount} টি`;
+
+    const elCourierAmt = document.getElementById('stat-incourier-amount');
+    if (elCourierAmt) elCourierAmt.textContent = isEn ? `৳${courierAmt.toLocaleString()} in transit` : `৳${courierAmt.toLocaleString()} ট্রানজিটে`;
+
+    const elCancel = document.getElementById('stat-cancelled');
+    if (elCancel) elCancel.textContent = isEn ? `${cancelCount} Orders` : `${cancelCount} টি`;
+
+    const elCancelAmt = document.getElementById('stat-cancelled-amount');
+    if (elCancelAmt) elCancelAmt.textContent = isEn ? `৳${cancelAmt.toLocaleString()} cancelled` : `৳${cancelAmt.toLocaleString()} টাকার বাতিল`;
+
+    const elOrders = document.getElementById('stat-orders');
+    if (elOrders) elOrders.textContent = totalCount;
   },
 
   // ================= 1. ORDERS WORKFLOW =================
@@ -976,12 +1037,19 @@ const AdminApp = {
         courierHtml = `<span style="color:#94a3b8; font-size:12px;">-</span>`;
       }
 
-      // Note display
-      const noteHtml = o.callCenterNote ? `
-        <div style="font-size:12px; background:#fffbeb; border:1px solid #fef3c7; padding:4px 8px; border-radius:6px; max-width:140px; margin-bottom:4px; color:#92400e;">
-          "${o.callCenterNote}"
-        </div>
-      ` : '';
+      // Threaded Call Center Note display
+      const notes = this.parseNotes(o.callCenterNote);
+      let noteHtml = '';
+      if (notes.length > 0) {
+        const lastNote = notes[notes.length - 1];
+        const preview = (lastNote.text || '').length > 25 ? (lastNote.text || '').slice(0, 25) + '...' : (lastNote.text || '');
+        noteHtml = `
+          <div onclick="AdminApp.openNoteModal('${o.id}')" style="font-size:11.5px; background:#fffbeb; border:1px solid #fef3c7; padding:4px 6px; border-radius:6px; max-width:145px; margin-bottom:4px; color:#92400e; cursor:pointer;" title="নোটের ইতিহাস দেখতে ক্লিক করুন">
+            <b style="color:#b45309;">${lastNote.agent || 'Admin'}:</b> "${this.escapeHtml(preview)}"
+            ${notes.length > 1 ? `<span style="font-size:10px; background:#fde68a; color:#78350f; padding:1px 4px; border-radius:10px; margin-left:2px; font-weight:800;">+${notes.length - 1}</span>` : ''}
+          </div>
+        `;
+      }
 
       // Last updated by display
       let updatedByHtml = '<span style="color:#94a3b8; font-size:12px;">System</span>';
@@ -1039,7 +1107,7 @@ const AdminApp = {
           </td>
           <td>
             ${noteHtml}
-            <button onclick="AdminApp.openNoteModal('${o.id}', '${(o.callCenterNote || '').replace(/'/g, "\\'")}')" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:3px 8px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer;">
+            <button onclick="AdminApp.openNoteModal('${o.id}')" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:3px 8px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer;">
               ${t.btn_note}
             </button>
           </td>
@@ -1254,6 +1322,34 @@ const AdminApp = {
     this.fetchStats();
   },
 
+  escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, m => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[m]));
+  },
+
+  parseNotes(raw) {
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw;
+    if (typeof raw === 'object') return [raw];
+    if (typeof raw === 'string') {
+      const trimmed = raw.trim();
+      if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          return Array.isArray(parsed) ? parsed : [parsed];
+        } catch (e) {}
+      }
+      return [{ id: 'init', agent: 'System', text: trimmed, timestamp: '' }];
+    }
+    return [];
+  },
+
   // ================= 2. FRAUD CHECK (1000% GENUINE BD OPERATOR & REAL DB HISTORY) =================
   async openFraudCheck(phone) {
     if (!phone) return;
@@ -1287,6 +1383,26 @@ const AdminApp = {
       document.getElementById('fraud-returns').textContent = data.returnedParcels || '0';
       document.getElementById('fraud-advice').textContent = data.advice || '-';
 
+      // Real Courier Breakdown (Steadfast, Pathao, Preme Farm)
+      const cb = data.courierBreakdown || {};
+      const sfEl = document.getElementById('fraud-courier-sf');
+      if (sfEl) {
+        const sf = cb.steadfast || { total: 0, delivered: 0, returned: 0 };
+        const rate = sf.total > 0 ? Math.round((sf.delivered / sf.total) * 100) : 100;
+        sfEl.textContent = `মোট: ${sf.total} | সফল: ${sf.delivered} | রিটার্ন: ${sf.returned} (${rate}%)`;
+      }
+      const ptEl = document.getElementById('fraud-courier-pt');
+      if (ptEl) {
+        const pt = cb.pathao || { total: 0, delivered: 0, returned: 0 };
+        const rate = pt.total > 0 ? Math.round((pt.delivered / pt.total) * 100) : 100;
+        ptEl.textContent = `মোট: ${pt.total} | সফল: ${pt.delivered} | রিটার্ন: ${pt.returned} (${rate}%)`;
+      }
+      const pfEl = document.getElementById('fraud-courier-pf');
+      if (pfEl) {
+        const pf = cb.inhouse || { total: data.totalParcels || 0, delivered: data.deliveredParcels || 0, returned: data.returnedParcels || 0 };
+        pfEl.textContent = `সফল: ${pf.delivered} টি | রিটার্ন: ${pf.returned} টি`;
+      }
+
       // Set Block Button in Fraud Modal
       const blockBtn = document.getElementById('btn-fraud-block-action');
       if (blockBtn) {
@@ -1309,11 +1425,47 @@ const AdminApp = {
     document.getElementById('fraud-modal').classList.remove('active');
   },
 
-  // ================= 3. CALL CENTER NOTES =================
-  openNoteModal(orderId, currentNote) {
+  // ================= 3. CALL CENTER NOTES (MULTI-AGENT THREADED LOG) =================
+  openNoteModal(orderId) {
     this.activeNoteOrderId = orderId;
     document.getElementById('modal-note-order-id').textContent = `#${orderId}`;
-    document.getElementById('modal-note-text').value = currentNote || '';
+    const order = this.orders.find(o => o.id === orderId);
+    const notes = this.parseNotes(order ? order.callCenterNote : []);
+    
+    const countBadge = document.getElementById('modal-notes-count-badge');
+    if (countBadge) countBadge.textContent = `${notes.length} টি নোট`;
+
+    const agentBadge = document.getElementById('modal-note-agent-badge');
+    if (agentBadge) agentBadge.textContent = `এজেন্ট: ${this.activeAgent}`;
+
+    const threadEl = document.getElementById('modal-notes-thread');
+    if (threadEl) {
+      if (notes.length === 0) {
+        threadEl.innerHTML = `<div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 16px;">কোনো পূর্ববর্তী নোট নেই। নিচে নতুন নোট লিখুন।</div>`;
+      } else {
+        threadEl.innerHTML = notes.map(n => {
+          const time = n.timestamp ? new Date(n.timestamp).toLocaleString(this.currentLang === 'bn' ? 'bn-BD' : 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+          return `
+            <div style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:8px 10px; box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="font-weight:800; font-size:12px; color:#0d4d29; display:flex; align-items:center; gap:5px;">
+                  <span style="background:#dcfce7; color:#15803d; padding:1px 6px; border-radius:4px; font-size:11px;">👤 ${n.agent || 'Admin'}</span>
+                </span>
+                <span style="font-size:11px; color:#64748b;">${time}</span>
+              </div>
+              <div style="font-size:13px; color:#1e293b; line-height:1.45; word-break:break-word;">${this.escapeHtml(n.text || '')}</div>
+            </div>
+          `;
+        }).join('');
+        threadEl.scrollTop = threadEl.scrollHeight;
+      }
+    }
+
+    const noteInput = document.getElementById('modal-note-text');
+    if (noteInput) {
+      noteInput.value = '';
+      setTimeout(() => noteInput.focus(), 150);
+    }
     document.getElementById('note-modal').classList.add('active');
   },
 
@@ -1324,21 +1476,41 @@ const AdminApp = {
   async saveOrderNote() {
     const note = document.getElementById('modal-note-text').value.trim();
     if (!this.activeNoteOrderId) return;
+    if (!note) {
+      this.closeNoteModal();
+      return;
+    }
+
+    const order = this.orders.find(o => o.id === this.activeNoteOrderId);
+    const existingNotes = this.parseNotes(order ? order.callCenterNote : []);
+    const newEntry = {
+      id: `note_${Date.now()}`,
+      agent: this.activeAgent,
+      text: note,
+      timestamp: new Date().toISOString()
+    };
+    const updatedNotes = [...existingNotes, newEntry];
 
     try {
-      await fetch(`/api/orders/${this.activeNoteOrderId}/note`, {
-        method: 'PUT',
+      const res = await fetch(`/api/orders/${this.activeNoteOrderId}/note`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ note, agent: this.activeAgent })
       });
-    } catch (e) {}
+      const data = await res.json();
+      if (data.success && data.notes) {
+        if (order) order.callCenterNote = JSON.stringify(data.notes);
+      } else {
+        if (order) order.callCenterNote = JSON.stringify(updatedNotes);
+      }
+    } catch (e) {
+      if (order) order.callCenterNote = JSON.stringify(updatedNotes);
+    }
 
-    const order = this.orders.find(o => o.id === this.activeNoteOrderId);
     if (order) {
-      order.callCenterNote = note;
       order.lastUpdatedBy = {
         agent: this.activeAgent,
-        action: `Note updated`,
+        action: `New note: ${note.slice(0, 25)}`,
         timestamp: new Date().toISOString()
       };
     }
@@ -1492,13 +1664,35 @@ const AdminApp = {
     }
 
     // Subtotal & Financials
-    const subtotal = order.subtotal || (order.total - (order.deliveryCharge || 70));
+    const subtotal = order.subtotal || (order.total - (order.deliveryCharge || 100));
     document.getElementById('detail-ord-subtotal').value = subtotal;
-    document.getElementById('detail-ord-delivery').value = order.deliveryCharge || 70;
-    document.getElementById('detail-ord-total').value = order.total || (subtotal + (order.deliveryCharge || 70));
+    document.getElementById('detail-ord-delivery').value = order.deliveryCharge !== undefined ? order.deliveryCharge : 100;
+    document.getElementById('detail-ord-total').value = order.total || (subtotal + (order.deliveryCharge !== undefined ? order.deliveryCharge : 100));
 
-    // Internal Note
-    document.getElementById('detail-ord-note').value = order.callCenterNote || '';
+    // Internal Notes Thread
+    const notes = this.parseNotes(order.callCenterNote);
+    const countEl = document.getElementById('detail-notes-count');
+    if (countEl) countEl.textContent = `${notes.length} টি পূর্ববর্তী নোট`;
+    const threadEl = document.getElementById('detail-notes-thread');
+    if (threadEl) {
+      if (notes.length === 0) {
+        threadEl.innerHTML = `<div style="text-align:center; color:#94a3b8; font-size:12px; padding:6px;">কোনো পূর্ববর্তী নোট নেই</div>`;
+      } else {
+        threadEl.innerHTML = notes.map(n => {
+          const time = n.timestamp ? new Date(n.timestamp).toLocaleString(this.currentLang === 'bn' ? 'bn-BD' : 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+          return `
+            <div style="background:#fff; border:1px solid #e2e8f0; border-radius:4px; padding:6px 8px; font-size:12px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                <b style="color:#0d4d29;">👤 ${n.agent || 'Admin'}</b>
+                <span style="color:#64748b; font-size:10.5px;">${time}</span>
+              </div>
+              <div style="color:#1e293b;">${this.escapeHtml(n.text || '')}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+    document.getElementById('detail-ord-note').value = '';
 
     // Courier Info
     const courierInfo = document.getElementById('detail-courier-info');
@@ -1547,9 +1741,21 @@ const AdminApp = {
     const phone = document.getElementById('detail-ord-phone').value.trim();
     const address = document.getElementById('detail-ord-address').value.trim();
     const city = document.getElementById('detail-ord-city').value.trim();
-    const deliveryCharge = parseInt(document.getElementById('detail-ord-delivery').value) || 70;
+    const deliveryCharge = parseInt(document.getElementById('detail-ord-delivery').value) || 100;
     const total = parseInt(document.getElementById('detail-ord-total').value) || 0;
-    const callCenterNote = document.getElementById('detail-ord-note').value.trim();
+    const newNote = document.getElementById('detail-ord-note').value.trim();
+
+    const existingOrder = this.orders.find(o => o.id === id);
+    const notes = this.parseNotes(existingOrder ? existingOrder.callCenterNote : []);
+    if (newNote) {
+      notes.push({
+        id: `note_${Date.now()}`,
+        agent: this.activeAgent,
+        text: newNote,
+        timestamp: new Date().toISOString()
+      });
+    }
+    const finalNoteJson = notes.length > 0 ? JSON.stringify(notes) : '';
 
     try {
       const res = await fetch(`/api/orders/${id}`, {
@@ -1560,7 +1766,7 @@ const AdminApp = {
           customer: { name, phone, address, city },
           deliveryCharge,
           total,
-          callCenterNote,
+          callCenterNote: finalNoteJson,
           agent: this.activeAgent
         })
       });
@@ -1984,9 +2190,11 @@ const AdminApp = {
         alert('নতুন ল্যান্ডিং পেজ সফলভাবে তৈরি হয়েছে!');
         this.closeLandingModal();
         await this.fetchLandingPages();
+      } else {
+        alert(data.message || 'ল্যান্ডিং পেজ তৈরি করতে সমস্যা হয়েছে।');
       }
     } catch (e) {
-      alert('ল্যান্ডিং পেজ তৈরি করতে সমস্যা হয়েছে।');
+      alert('ল্যান্ডিং পেজ তৈরি করতে সমস্যা হয়েছে। সার্ভার সংযোগ পরীক্ষা করুন।');
     }
   },
 
@@ -2239,13 +2447,15 @@ const AdminApp = {
     } catch (e) {}
   },
 
-  // CMS Content
+  // CMS Content & Hero Banners Manager
+  banners: [],
+
   async fetchCmsContent() {
     try {
       const res = await fetch('/api/content');
       if (res.ok) {
         const json = await res.json();
-        const c = json.data || {};
+        const c = json.data || json.content || {};
         if (c.header) {
           if (document.getElementById('cms-hotline')) document.getElementById('cms-hotline').value = c.header.hotline || '01872170476';
           if (document.getElementById('cms-tagline')) document.getElementById('cms-tagline').value = c.header.tagline || 'সুখী জীবনের জন্য স্বাস্থ্যকর খাবার';
@@ -2254,8 +2464,162 @@ const AdminApp = {
           if (document.getElementById('cms-footer-about')) document.getElementById('cms-footer-about').value = c.footer.aboutText || '';
           if (document.getElementById('cms-footer-copy')) document.getElementById('cms-footer-copy').value = c.footer.copyright || '';
         }
+        this.banners = c.banners || [];
+        this.renderBanners();
       }
     } catch (e) {}
+  },
+
+  renderBanners() {
+    const tbody = document.getElementById('cms-banners-table-body');
+    if (!tbody) return;
+    if (!this.banners || this.banners.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#64748b;">কোনো ব্যানার যুক্ত করা নেই। "+ নতুন ব্যানার যোগ করুন" বাটনে ক্লিক করে ব্যানার যুক্ত করুন।</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = this.banners.map((b, idx) => `
+      <tr>
+        <td style="padding:10px;">
+          <img src="${b.image}" alt="Banner" style="width:80px; height:45px; object-fit:cover; border-radius:6px; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+        </td>
+        <td>
+          <span style="font-size:11px; background:#eef5f0; color:#0d4d29; padding:2px 8px; border-radius:4px; font-weight:800; display:inline-block; margin-bottom:4px;">${this.escapeHtml(b.badge || '')}</span>
+          <div style="font-size:13px; font-weight:800; color:#1e293b; line-height:1.3;">${b.title || ''}</div>
+        </td>
+        <td style="font-size:12px; color:#475569; max-width:260px; line-height:1.4;">
+          ${this.escapeHtml(b.desc || '')}
+        </td>
+        <td style="font-size:12px;">
+          ${b.btn1Text || b.buttonText ? `<div style="font-weight:700; color:#0d4d29;">১: ${b.btn1Text || b.buttonText}</div>` : ''}
+          ${b.btn2Text ? `<div style="color:#64748b;">২: ${b.btn2Text}</div>` : ''}
+        </td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <button onclick="AdminApp.openBannerModal(${b.id !== undefined ? b.id : idx})" style="background:#eef5f0; color:#0d4d29; border:1px solid #c9decb; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">এডিট</button>
+            <button onclick="AdminApp.deleteBanner(${b.id !== undefined ? b.id : idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">✕</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  },
+
+  openBannerModal(id) {
+    const editIdEl = document.getElementById('banner-edit-id');
+    const titleEl = document.getElementById('banner-modal-title');
+    const badgeEl = document.getElementById('banner-badge');
+    const bannerTitleEl = document.getElementById('banner-title');
+    const descEl = document.getElementById('banner-desc');
+    const imgEl = document.getElementById('banner-image');
+    const b1Text = document.getElementById('banner-btn1-text');
+    const b1Link = document.getElementById('banner-btn1-link');
+    const b2Text = document.getElementById('banner-btn2-text');
+    const b2Link = document.getElementById('banner-btn2-link');
+
+    if (id !== undefined && id !== null) {
+      const banner = this.banners.find((b, idx) => b.id === id || idx === id);
+      if (banner) {
+        editIdEl.value = banner.id !== undefined ? banner.id : id;
+        titleEl.textContent = 'হিরো ব্যানার এডিট করুন';
+        badgeEl.value = banner.badge || '';
+        bannerTitleEl.value = banner.title || '';
+        descEl.value = banner.desc || '';
+        imgEl.value = banner.image || '';
+        b1Text.value = banner.btn1Text || banner.buttonText || '';
+        b1Link.value = banner.btn1Link || '#';
+        b2Text.value = banner.btn2Text || '';
+        b2Link.value = banner.btn2Link || '/shop';
+        document.getElementById('banner-modal').classList.add('active');
+        return;
+      }
+    }
+
+    // New Banner defaults
+    editIdEl.value = '';
+    titleEl.textContent = '+ নতুন হোমপেজ হিরো ব্যানার যোগ করুন';
+    badgeEl.value = '🌿 বিশেষ অফার • ১০০% খাঁটি অর্গানিক পথ্য';
+    bannerTitleEl.value = 'কাজের টেবিলে রাখুন <br><span class="gold">আপনার সিক্রেট এনার্জি পার্টনার!</span>';
+    descEl.value = 'প্রতিদিন সকালে মাত্র এক চামচেই ফিরিয়ে আনুন অফুরন্ত উদ্যম, ক্লান্তিহীন কর্মশক্তি ও অটুট রোগ প্রতিরোধ ক্ষমতা।';
+    imgEl.value = 'images/hero_banner_1.png';
+    b1Text.value = '🛍️ এখনই অর্ডার করুন (৳৯৫০)';
+    b1Link.value = '#kalo-shona';
+    b2Text.value = 'শপ ভিজিট করুন';
+    b2Link.value = '/shop';
+    document.getElementById('banner-modal').classList.add('active');
+  },
+
+  closeBannerModal() {
+    document.getElementById('banner-modal').classList.remove('active');
+  },
+
+  async handleBannerSubmit(e) {
+    e.preventDefault();
+    const editId = document.getElementById('banner-edit-id').value;
+    const badge = document.getElementById('banner-badge').value.trim();
+    const title = document.getElementById('banner-title').value.trim();
+    const desc = document.getElementById('banner-desc').value.trim();
+    const image = document.getElementById('banner-image').value.trim();
+    const btn1Text = document.getElementById('banner-btn1-text').value.trim();
+    const btn1Link = document.getElementById('banner-btn1-link').value.trim();
+    const btn2Text = document.getElementById('banner-btn2-text').value.trim();
+    const btn2Link = document.getElementById('banner-btn2-link').value.trim();
+
+    const bannerObj = {
+      id: editId ? (parseInt(editId) || editId) : Date.now(),
+      badge,
+      title,
+      desc,
+      image,
+      btn1Text,
+      btn1Link,
+      btn2Text,
+      btn2Link,
+      buttonText: btn1Text
+    };
+
+    if (editId) {
+      const idx = this.banners.findIndex((b, i) => b.id == editId || i == editId);
+      if (idx !== -1) {
+        this.banners[idx] = { ...this.banners[idx], ...bannerObj };
+      } else {
+        this.banners.push(bannerObj);
+      }
+    } else {
+      this.banners.push(bannerObj);
+    }
+
+    try {
+      const res = await fetch('/api/content/banners', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.banners)
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('হোমপেজ ব্যানার সফলভাবে সংরক্ষিত হয়েছে! মূল ওয়েবসাইটে সাথে সাথে আপডেট হয়ে গেছে।');
+        this.closeBannerModal();
+        this.renderBanners();
+      } else {
+        alert('ব্যানার সংরক্ষণ করতে সমস্যা হয়েছে।');
+      }
+    } catch (err) {
+      this.closeBannerModal();
+      this.renderBanners();
+      alert('ব্যানার সংরক্ষিত হয়েছে।');
+    }
+  },
+
+  async deleteBanner(id) {
+    if (!confirm('আপনি কি নিশ্চিত যে এই ব্যানারটি মুছে ফেলতে চান?')) return;
+    this.banners = this.banners.filter((b, idx) => b.id !== id && idx !== id);
+    try {
+      await fetch('/api/content/banners', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.banners)
+      });
+      alert('ব্যানার মুছে ফেলা হয়েছে।');
+    } catch (e) {}
+    this.renderBanners();
   },
 
   async saveCmsContent() {
@@ -2287,7 +2651,7 @@ const AdminApp = {
         const json = await res.json();
         const s = json.data || json.settings || {};
         if (s.shipping) {
-          if (document.getElementById('store-dhaka-charge')) document.getElementById('store-dhaka-charge').value = s.shipping.insideDhaka || 70;
+          if (document.getElementById('store-dhaka-charge')) document.getElementById('store-dhaka-charge').value = s.shipping.insideDhaka || 100;
           if (document.getElementById('store-outside-charge')) document.getElementById('store-outside-charge').value = s.shipping.outsideDhaka || 130;
         }
         if (s.defaultCourier || localStorage.getItem('premefarm_default_courier')) {
@@ -2300,7 +2664,7 @@ const AdminApp = {
   },
 
   async saveSettings() {
-    const inside = parseInt(document.getElementById('store-dhaka-charge').value) || 70;
+    const inside = parseInt(document.getElementById('store-dhaka-charge').value) || 100;
     const outside = parseInt(document.getElementById('store-outside-charge').value) || 130;
 
     try {

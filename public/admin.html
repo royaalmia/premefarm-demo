@@ -219,34 +219,46 @@
       </div>
     </div>
 
-    <!-- KPI Stats Cards (Clean Cut) -->
+    <!-- KPI Stats Cards (5-Metric Financial & Fulfillment Hub) -->
     <div class="stats-grid">
-      <div class="stat-card">
+      <div class="stat-card" style="border-left: 4px solid #16a34a;">
         <div class="stat-icon green">৳</div>
         <div class="stat-info">
-          <span data-i18n="stat_sales">মোট বিক্রি (COD)</span>
-          <h3 id="stat-revenue">৳০</h3>
+          <span style="font-size: 12.5px; font-weight: 700; color: #15803d;">মোট ডেলিভার্ড সেলস (COD)</span>
+          <h3 id="stat-revenue" style="color: #0d4d29; margin: 2px 0;">৳০</h3>
+          <small id="stat-delivered-count" style="font-size: 11.5px; color: #64748b; font-weight: 700;">০ টি সফল ডেলিভারি</small>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon blue">#</div>
-        <div class="stat-info">
-          <span data-i18n="stat_orders">মোট অর্ডার</span>
-          <h3 id="stat-orders">0</h3>
-        </div>
-      </div>
-      <div class="stat-card">
+      <div class="stat-card" style="border-left: 4px solid #f59e0b;">
         <div class="stat-icon amber">P</div>
         <div class="stat-info">
-          <span data-i18n="stat_pending">পেন্ডিং অর্ডার</span>
-          <h3 id="stat-pending">0</h3>
+          <span style="font-size: 12.5px; font-weight: 700; color: #b45309;">পেন্ডিং পার্সেল (Pending)</span>
+          <h3 id="stat-pending" style="color: #d97706; margin: 2px 0;">0 টি</h3>
+          <small id="stat-pending-amount" style="font-size: 11.5px; color: #b45309; font-weight: 800;">৳০ টাকার পার্সেল</small>
         </div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card" style="border-left: 4px solid #8b5cf6;">
         <div class="stat-icon purple">C</div>
         <div class="stat-info">
-          <span data-i18n="stat_courier">ইন কুরিয়ার</span>
-          <h3 id="stat-shipped">0</h3>
+          <span style="font-size: 12.5px; font-weight: 700; color: #6d28d9;">ইন কুরিয়ার (In Courier)</span>
+          <h3 id="stat-shipped" style="color: #7c3aed; margin: 2px 0;">0 টি</h3>
+          <small id="stat-incourier-amount" style="font-size: 11.5px; color: #6d28d9; font-weight: 800;">৳০ ট্রানজিটে</small>
+        </div>
+      </div>
+      <div class="stat-card" style="border-left: 4px solid #ef4444;">
+        <div class="stat-icon" style="background: #fee2e2; color: #dc2626;">✕</div>
+        <div class="stat-info">
+          <span style="font-size: 12.5px; font-weight: 700; color: #b91c1c;">বাতিল / রিটার্ন (Cancelled)</span>
+          <h3 id="stat-cancelled" style="color: #dc2626; margin: 2px 0;">0 টি</h3>
+          <small id="stat-cancelled-amount" style="font-size: 11.5px; color: #b91c1c; font-weight: 800;">৳০ টাকার বাতিল</small>
+        </div>
+      </div>
+      <div class="stat-card" style="border-left: 4px solid #0284c7;">
+        <div class="stat-icon blue">#</div>
+        <div class="stat-info">
+          <span style="font-size: 12.5px; font-weight: 700; color: #0369a1;">মোট অর্ডার (Total)</span>
+          <h3 id="stat-orders" style="color: #0284c7; margin: 2px 0;">0</h3>
+          <small id="stat-total-sub" style="font-size: 11.5px; color: #64748b; font-weight: 700;">সর্বমোট বুকিং</small>
         </div>
       </div>
     </div>
@@ -557,6 +569,36 @@
           ওয়েবসাইট কনটেন্ট সংরক্ষণ করুন
         </button>
       </div>
+
+      <!-- Hero Banners Manager -->
+      <div class="admin-card" style="margin-top: 24px;">
+        <div class="card-title-row" style="flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="color: #0d4d29;">হোমপেজ হিরো ব্যানার ম্যানেজার (Hero Banner CMS)</h3>
+            <p style="font-size: 13px; color: #64748b; margin: 4px 0 0;">মূল ওয়েবসাইটের হিরো স্লাইডারের ব্যানার ছবি, অফার টাইটেল, ব্যাজ ও অ্যাকশন বাটন যুক্ত বা পরিবর্তন করুন</p>
+          </div>
+          <button type="button" onclick="AdminApp.openBannerModal()" class="btn-courier-action" style="padding: 8px 18px; font-size: 13.5px;">
+            + নতুন ব্যানার যোগ করুন
+          </button>
+        </div>
+
+        <div class="table-responsive" style="margin-top: 14px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 100px;">ছবি প্রিভিউ</th>
+                <th>ব্যানার ব্যাজ ও টাইটেল</th>
+                <th>বিবরণ (Description)</th>
+                <th>বাটন ও লিংক</th>
+                <th style="width: 120px;">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="cms-banners-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- TAB 6: STAFF ROLES & PERMISSIONS -->
@@ -610,9 +652,9 @@
             </div>
             <div style="min-width: 260px;">
               <select id="courier-default-select" onchange="AdminApp.setDefaultCourier(this.value)" style="width: 100%; padding: 11px 14px; border: 1.5px solid #0d4d29; border-radius: 8px; font-weight: 800; font-size: 14px; background: #ffffff; color: #0d4d29; cursor: pointer; outline: none; box-shadow: 0 2px 8px rgba(13,77,41,0.08);">
-                <option value="Steadfast">Steadfast Courier (স্ট্যাডফাস্ট) [সুপারিশকৃত / সক্রিয়]</option>
-                <option value="Pathao">Pathao Courier (পাঠাও)</option>
-                <option value="RedX">RedX Courier (রেডএক্স)</option>
+                <option value="Steadfast">Steadfast Courier</option>
+                <option value="Pathao">Pathao Courier</option>
+                <option value="RedX">RedX Courier</option>
               </select>
             </div>
           </div>
@@ -723,9 +765,9 @@
         <div style="margin-bottom: 14px;">
           <label style="display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 6px; color: #1e293b;">কুরিয়ার সার্ভিস</label>
           <select id="select-courier-provider" style="width: 100%; padding: 10px 14px; border: 1.5px solid #cedcd0; border-radius: 8px; font-weight: 700; font-size: 14px; background: #fff;">
-            <option value="Steadfast">Steadfast Courier (স্ট্যাডফাস্ট এপিআই)</option>
-            <option value="Pathao">Pathao Courier (পাঠাও এপিআই)</option>
-            <option value="RedX">RedX Courier (রেডএক্স এপিআই)</option>
+            <option value="Steadfast">Steadfast Courier</option>
+            <option value="Pathao">Pathao Courier</option>
+            <option value="RedX">RedX Courier</option>
           </select>
         </div>
         <div>
@@ -1159,10 +1201,14 @@
             </div>
           </div>
 
-          <!-- Internal Call Center Note -->
+          <!-- Internal Call Center Note (Thread + Add New) -->
           <div style="margin-bottom: 14px; min-width: 0;">
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;" data-i18n="ord_note_label">কল সেন্টার অভ্যন্তরীণ নোট</label>
-            <textarea id="detail-ord-note" rows="2" placeholder="নোট লিখুন: যেমন- কাস্টমার কাল দুপুরে ডেলিভারি নিশ্চিত করতে বলেছেন, ঠিকানা ভেরিফাইড..." data-i18n-placeholder="placeholder_detail_note" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;"></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label style="font-size:13px; font-weight:700; color:#1e293b;" data-i18n="ord_note_label">কল সেন্টার অভ্যন্তরীণ নোট</label>
+              <span id="detail-notes-count" style="font-size:11px; background:#e2e8f0; color:#475569; padding:1px 6px; border-radius:8px; font-weight:700;">০ টি পূর্ববর্তী নোট</span>
+            </div>
+            <div id="detail-notes-thread" style="max-height: 140px; overflow-y: auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 6px;"></div>
+            <textarea id="detail-ord-note" rows="2" placeholder="নতুন নোট লিখুন: যেমন- কাস্টমার কাল দুপুরে ডেলিভারি নিশ্চিত করতে বলেছেন, ঠিকানা ভেরিফাইড..." data-i18n-placeholder="placeholder_detail_note" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13.5px;"></textarea>
           </div>
 
           <!-- Courier Booking Information / Dispatch Button -->
@@ -1248,6 +1294,28 @@
           </div>
         </div>
 
+        <!-- Real Multi-Courier Breakdown (Steadfast, Pathao, Preme Farm) -->
+        <div style="background: #ffffff; border: 1.5px solid #d1fae5; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;">
+          <div style="font-size: 12.5px; font-weight: 800; color: #065f46; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <span>🚚 কুরিয়ারভিত্তিক ডেলিভারি হিস্ট্রি (Real Courier Record)</span>
+            <span style="font-size: 11px; color: #059669; font-weight: 700;">● মার্চেন্ট এপিআই লাইভ ডাটা</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 6px;">
+              <span style="font-weight: 700; color: #166534;">Steadfast Courier</span>
+              <span id="fraud-courier-sf" style="font-weight: 800; color: #0d4d29;">সফল: ০ | রিটার্ন: ০ | সাকসেস: ১০০%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+              <span style="font-weight: 700; color: #334155;">Pathao Courier</span>
+              <span id="fraud-courier-pt" style="font-weight: 800; color: #0d4d29;">সফল: ০ | রিটার্ন: ০ | সাকসেস: ১০০%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+              <span style="font-weight: 700; color: #334155;">Preme Farm Store</span>
+              <span id="fraud-courier-pf" style="font-weight: 800; color: #0d4d29;">সফল: ০ | রিটার্ন: ০</span>
+            </div>
+          </div>
+        </div>
+
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.5; color: #1e40af;">
           <b>কল সেন্টার পরামর্শ:</b><br>
           <span id="fraud-advice">-</span>
@@ -1263,25 +1331,101 @@
     </div>
   </div>
 
-  <!-- MODAL 4: CALL CENTER NOTE -->
+  <!-- MODAL 4: CALL CENTER NOTE (THREADED MULTI-AGENT LOG) -->
   <div class="admin-modal-overlay" id="note-modal">
-    <div class="admin-modal-box">
+    <div class="admin-modal-box" style="max-width: 580px;">
       <div class="admin-modal-header">
         <h3 data-i18n="modal_note_title">কল সেন্টার অভ্যন্তরীণ নোট (<span id="modal-note-order-id"></span>)</h3>
         <button type="button" class="admin-modal-close-btn" onclick="AdminApp.closeNoteModal()" title="বন্ধ করুন">✕</button>
       </div>
 
       <div class="admin-modal-body">
+        <!-- Notes Thread History -->
+        <div style="margin-bottom: 16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="font-size:12.5px; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.5px;">পূর্ববর্তী সকল নোটের ইতিহাস (Notes Thread):</label>
+            <span id="modal-notes-count-badge" style="font-size:11px; background:#e2e8f0; color:#334155; padding:2px 8px; border-radius:10px; font-weight:800;">০ টি নোট</span>
+          </div>
+          <div id="modal-notes-thread" style="max-height: 200px; overflow-y: auto; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+            <!-- Past notes with Agent ID badge, time, text -->
+          </div>
+        </div>
+
         <div>
-          <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:6px; color:#1e293b;">নোট লিখুন:</label>
-          <textarea id="modal-note-text" rows="4" style="width:100%; padding:10px 12px; border:1.5px solid #cedcd0; border-radius:8px; font-size:14px; outline:none;" placeholder="যেমন: কাস্টমার কাল দুপুরে কল দিতে বলেছেন, ঠিকানা নিশ্চিত করা হয়েছে..."></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size:13.5px; font-weight:700; color:#1e293b;">নতুন নোট যোগ করুন:</label>
+            <span id="modal-note-agent-badge" style="font-size: 11.5px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 12px; font-weight: 700;">এজেন্ট: Admin</span>
+          </div>
+          <textarea id="modal-note-text" rows="3" style="width:100%; padding:10px 12px; border:1.5px solid #cedcd0; border-radius:8px; font-size:14px; outline:none;" placeholder="নতুন নোট লিখুন... যেমন: কাস্টমার কাল দুপুরে ডেলিভারি নিশ্চিত করতে বলেছেন"></textarea>
         </div>
       </div>
 
       <div class="admin-modal-footer">
         <button type="button" onclick="AdminApp.closeNoteModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer; font-weight: 700;">বাতিল</button>
-        <button type="button" onclick="AdminApp.saveOrderNote()" class="btn-courier-action" style="padding: 9px 22px;">নোট সেভ করুন ➔</button>
+        <button type="button" onclick="AdminApp.saveOrderNote()" class="btn-courier-action" style="padding: 9px 22px;">+ নতুন নোট যুক্ত করুন ➔</button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: HERO BANNER CMS MODAL -->
+  <div class="admin-modal-overlay" id="banner-modal">
+    <div class="admin-modal-box" style="max-width: 650px;">
+      <div class="admin-modal-header">
+        <h3 id="banner-modal-title">হোমপেজ হিরো ব্যানার যুক্ত / এডিট করুন</h3>
+        <button type="button" class="admin-modal-close-btn" onclick="AdminApp.closeBannerModal()" title="বন্ধ করুন">✕</button>
+      </div>
+
+      <form onsubmit="AdminApp.handleBannerSubmit(event)">
+        <input type="hidden" id="banner-edit-id">
+        <div class="admin-modal-body" style="display: flex; flex-direction: column; gap: 14px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">অফার ব্যাজ (Offer Badge) *</label>
+            <input type="text" id="banner-badge" required style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: ⚡ কাজের ক্লান্তি দূর করার ন্যাচারাল ফর্মুলা">
+          </div>
+
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">ব্যানার টাইটেল (Title - HTML সমর্থিত) *</label>
+            <input type="text" id="banner-title" required style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder='যেমন: কাজের টেবিলে রাখুন <br><span class="gold">আপনার সিক্রেট এনার্জি পার্টনার!</span>'>
+          </div>
+
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">ব্যানার বিবরণ (Short Description) *</label>
+            <textarea id="banner-desc" rows="2" required style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: প্রতিদিন সকালে মাত্র এক চামচেই ফিরিয়ে আনুন অফুরন্ত উদ্যম..."></textarea>
+          </div>
+
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">ব্যানার ছবির URL (Image URL) *</label>
+            <input type="text" id="banner-image" required style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: images/hero_banner_1.png অথবা অনলাইন ছবির লিংক">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">বাটন ১ টেক্সট</label>
+              <input type="text" id="banner-btn1-text" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: 🛍️ এখনই অর্ডার করুন (৳৯৫০)">
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">বাটন ১ লিংক / অ্যাকশন</label>
+              <input type="text" id="banner-btn1-link" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: #kalo-shona অথবা /shop">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">বাটন ২ টেক্সট</label>
+              <input type="text" id="banner-btn2-text" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: শপ ভিজিট করুন">
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">বাটন ২ লিংক</label>
+              <input type="text" id="banner-btn2-link" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;" placeholder="যেমন: /shop">
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" onclick="AdminApp.closeBannerModal()" style="padding: 9px 18px; border-radius: 6px; border: 1px solid #ccc; background:#fff; cursor:pointer; font-weight: 700;">বাতিল</button>
+          <button type="submit" class="btn-courier-action" style="padding: 9px 24px;">ব্যানার সংরক্ষণ করুন ➔</button>
+        </div>
+      </form>
     </div>
   </div>
 
