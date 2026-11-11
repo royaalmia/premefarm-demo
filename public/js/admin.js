@@ -12,6 +12,22 @@ const I18N = {
     sidebar_user_label: 'লগইন কৃত একাউন্ট:',
     nav_dashboard: 'ড্যাশবোর্ড',
     nav_orders: 'অর্ডার ম্যানেজমেন্ট',
+    nav_wholesale: 'হোলসেল',
+    wholesale_title: 'হোলসেল ইনকোয়ারি',
+    wholesale_sub: 'দোকানদার, ডিলার ও রিসেলারদের কাছ থেকে আসা সকল পাইকারি রিকোয়েস্ট',
+    wholesale_refresh: '🔄 রিফ্রেশ লিস্ট',
+    wholesale_all: 'সকল আবেদন',
+    wholesale_new: 'নতুন',
+    wholesale_contacted: 'যোগাযোগ হয়েছে',
+    wholesale_confirmed: 'কনফার্মড',
+    wholesale_th_id: 'আইডি ও তারিখ',
+    wholesale_th_applicant: 'আবেদনকারীর নাম ও প্রতিষ্ঠান',
+    wholesale_th_contact: 'যোগাযোগ / ফোন',
+    wholesale_th_address: 'ঠিকানা',
+    wholesale_th_items: 'আগ্রহী পণ্য ও পরিমাণ',
+    wholesale_th_status: 'স্ট্যাটাস',
+    wholesale_th_action: 'অ্যাকশন',
+    wholesale_empty: 'কোনো হোলসেল আবেদন পাওয়া যায়নি।',
     nav_audit: 'এজেন্ট অ্যাক্টিভিটি লগ',
     nav_blacklist: 'ব্ল্যাকলিস্ট ও সিকিউরিটি',
     nav_landing: 'ল্যান্ডিং পেজ বিল্ডার',
@@ -183,6 +199,22 @@ const I18N = {
     sidebar_user_label: 'Logged in as:',
     nav_dashboard: 'Dashboard',
     nav_orders: 'Order Management',
+    nav_wholesale: 'Wholesale',
+    wholesale_title: 'Wholesale Inquiries',
+    wholesale_sub: 'All wholesale requests from retailers, dealers and resellers',
+    wholesale_refresh: '🔄 Refresh List',
+    wholesale_all: 'All Inquiries',
+    wholesale_new: 'New',
+    wholesale_contacted: 'Contacted',
+    wholesale_confirmed: 'Confirmed',
+    wholesale_th_id: 'ID & Date',
+    wholesale_th_applicant: 'Applicant & Business',
+    wholesale_th_contact: 'Contact / Phone',
+    wholesale_th_address: 'Address',
+    wholesale_th_items: 'Products & Quantity',
+    wholesale_th_status: 'Status',
+    wholesale_th_action: 'Action',
+    wholesale_empty: 'No wholesale inquiries found.',
     nav_audit: 'Agent Activity Logs',
     nav_blacklist: 'Blacklist & Security',
     nav_landing: 'Landing Pages',
@@ -3020,6 +3052,7 @@ const AdminApp = {
   },
 
   renderWholesale() {
+    const isEn = this.currentLang === 'en';
     const tbody = document.getElementById('wholesale-table-body');
     const badge = document.getElementById('ws-badge');
     const countAll = document.getElementById('ws-count-all');
@@ -3049,19 +3082,47 @@ const AdminApp = {
     }
 
     if (items.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b;">কোনো হোলসেল আবেদন পাওয়া যায়নি।</td></tr>';
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b;">${isEn ? 'No wholesale inquiries found.' : 'কোনো হোলসেল আবেদন পাওয়া যায়নি।'}</td></tr>`;
       return;
     }
 
     tbody.innerHTML = items.map(w => {
       const st = w.status || 'new';
-      let stBadge = '<span style="background:#fef3c7; color:#92400e; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">নতুন (New)</span>';
-      if (st === 'contacted') stBadge = '<span style="background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">যোগাযোগ হয়েছে</span>';
-      if (st === 'confirmed') stBadge = '<span style="background:#dcfce7; color:#15803d; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">কনফার্মড ডিল</span>';
-      if (st === 'cancelled') stBadge = '<span style="background:#fee2e2; color:#dc2626; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">বাতিল</span>';
+      let stBadge = isEn 
+        ? '<span style="background:#fef3c7; color:#92400e; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">New</span>'
+        : '<span style="background:#fef3c7; color:#92400e; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">নতুন</span>';
+      
+      if (st === 'contacted') {
+        stBadge = isEn
+          ? '<span style="background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">Contacted</span>'
+          : '<span style="background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">যোগাযোগ হয়েছে</span>';
+      } else if (st === 'confirmed') {
+        stBadge = isEn
+          ? '<span style="background:#dcfce7; color:#15803d; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">Confirmed</span>'
+          : '<span style="background:#dcfce7; color:#15803d; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">কনফার্মড</span>';
+      } else if (st === 'cancelled') {
+        stBadge = isEn
+          ? '<span style="background:#fee2e2; color:#dc2626; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">Cancelled</span>'
+          : '<span style="background:#fee2e2; color:#dc2626; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">বাতিল</span>';
+      }
 
       const cleanPhone = (w.phone || '').replace(/[^0-9]/g, '');
       const waPhone = cleanPhone.startsWith('88') ? cleanPhone : ('88' + cleanPhone);
+      const waMsg = isEn 
+        ? encodeURIComponent('Hello ' + (w.name || '') + ', contacting you from Preme Farm Wholesale Department regarding your inquiry.')
+        : encodeURIComponent('আসসালামু আলাইকুম ' + (w.name || '') + ' ভাই, প্রিমি ফার্ম হোলসেল ডিপার্টমেন্ট থেকে আপনার পাইকারি ইনকোয়ারির প্রেক্ষিতে যোগাযোগ করছি।');
+
+      const selectOpts = isEn ? `
+        <option value="new" ${st === 'new' ? 'selected' : ''}>New</option>
+        <option value="contacted" ${st === 'contacted' ? 'selected' : ''}>Contacted</option>
+        <option value="confirmed" ${st === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+        <option value="cancelled" ${st === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+      ` : `
+        <option value="new" ${st === 'new' ? 'selected' : ''}>নতুন</option>
+        <option value="contacted" ${st === 'contacted' ? 'selected' : ''}>যোগাযোগ হয়েছে</option>
+        <option value="confirmed" ${st === 'confirmed' ? 'selected' : ''}>কনফার্মড</option>
+        <option value="cancelled" ${st === 'cancelled' ? 'selected' : ''}>বাতিল</option>
+      `;
 
       return `
         <tr style="border-bottom:1px solid #f1f5f9;">
@@ -3076,11 +3137,11 @@ const AdminApp = {
           <td style="padding:12px 16px;">
             <div style="font-weight:700; color:#0f172a; font-family:monospace;">${w.phone || ''}</div>
             <div style="display:flex; gap:6px; margin-top:4px;">
-              <a href="https://wa.me/${waPhone}?text=${encodeURIComponent('আসসালামু আলাইকুম ' + (w.name || '') + ' ভাই, প্রিমি ফার্ম হোলসেল ডিপার্টমেন্ট থেকে আপনার পাইকারি ইনকোয়ারির প্রেক্ষিতে যোগাযোগ করছি।')}" target="_blank" rel="noopener" style="font-size:11px; background:#25D366; color:#fff; padding:2px 8px; border-radius:4px; text-decoration:none; font-weight:800; display:inline-flex; align-items:center; gap:3px;">
+              <a href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" rel="noopener" style="font-size:11px; background:#25D366; color:#fff; padding:2px 8px; border-radius:4px; text-decoration:none; font-weight:800; display:inline-flex; align-items:center; gap:3px;">
                 💬 WhatsApp
               </a>
               <a href="tel:${w.phone}" style="font-size:11px; background:#e2e8f0; color:#334155; padding:2px 8px; border-radius:4px; text-decoration:none; font-weight:700;">
-                📞 কল
+                📞 ${isEn ? 'Call' : 'কল'}
               </a>
             </div>
           </td>
@@ -3088,9 +3149,9 @@ const AdminApp = {
             ${this.escapeHtml(w.address || '')}
           </td>
           <td style="padding:12px 16px; font-size:12.5px;">
-            <div style="font-weight:700; color:#0d4d29;">${this.escapeHtml(w.products || 'সকল পণ্য')}</div>
-            ${w.quantity ? `<div style="font-size:11.5px; color:#64748b;">পরিমাণ: ${this.escapeHtml(w.quantity)}</div>` : ''}
-            ${w.note ? `<div style="font-size:11px; color:#94a3b8; font-style:italic; margin-top:2px;">নোট: ${this.escapeHtml(w.note)}</div>` : ''}
+            <div style="font-weight:700; color:#0d4d29;">${this.escapeHtml(w.products || (isEn ? 'All Products' : 'সকল পণ্য'))}</div>
+            ${w.quantity ? `<div style="font-size:11.5px; color:#64748b;">${isEn ? 'Qty' : 'পরিমাণ'}: ${this.escapeHtml(w.quantity)}</div>` : ''}
+            ${w.note ? `<div style="font-size:11px; color:#94a3b8; font-style:italic; margin-top:2px;">${isEn ? 'Note' : 'নোট'}: ${this.escapeHtml(w.note)}</div>` : ''}
           </td>
           <td style="padding:12px 16px;">
             ${stBadge}
@@ -3098,12 +3159,9 @@ const AdminApp = {
           <td style="padding:12px 16px; text-align:right;">
             <div style="display:inline-flex; gap:6px; align-items:center;">
               <select onchange="AdminApp.updateWholesaleStatus(${w.id}, this.value)" style="padding:4px 8px; border-radius:6px; border:1px solid #cbd5e1; font-size:12px; font-weight:700; background:#fff; cursor:pointer;">
-                <option value="new" ${st === 'new' ? 'selected' : ''}>নতুন</option>
-                <option value="contacted" ${st === 'contacted' ? 'selected' : ''}>যোগাযোগ হয়েছে</option>
-                <option value="confirmed" ${st === 'confirmed' ? 'selected' : ''}>কনফার্মড</option>
-                <option value="cancelled" ${st === 'cancelled' ? 'selected' : ''}>বাতিল</option>
+                ${selectOpts}
               </select>
-              <button type="button" onclick="AdminApp.deleteWholesale(${w.id})" title="মুছে ফেলুন" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">✕</button>
+              <button type="button" onclick="AdminApp.deleteWholesale(${w.id})" title="${isEn ? 'Delete' : 'মুছে ফেলুন'}" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">✕</button>
             </div>
           </td>
         </tr>
