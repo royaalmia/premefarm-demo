@@ -1,11 +1,683 @@
 /**
  * Preme Farm (প্রিমি ফার্ম) - Core E-Commerce Logic
- * Supports dual-mode: Node.js Express Backend & Cloudflare/GitHub Pages static fallback
+ * Universal Edge & Client Architecture - Zero LocalStorage Dependency for Products
  */
+
+const DEFAULT_PRODUCTS = [
+  {
+    "id": 1,
+    "name": "প্রিমি ফার্ম স্পেশাল বিফ আচার (Premium Beef Achar)",
+    "slug": "beef-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "হট সেলার • কোমল মাংসের আচার",
+    "price": 550,
+    "regularPrice": 650,
+    "rating": 5,
+    "reviewCount": 428,
+    "image": "images/products/beef-achar.jpg",
+    "gallery": [
+      "images/products/beef-achar.jpg"
+    ],
+    "description": "মজাদার স্বাদে ভরপুর খাঁটি বিফ আচার। নির্বাচিত মসলা আর কোমল গরুর মাংসের অনন্য সমন্বয়ে তৈরি অসাধারণ তৃপ্তিকর স্বাদ। খিচুড়ি, পোলাও বা সাদা ভাতের সাথে দারুণ লোভনীয়।",
+    "benefits": [
+      "১০০% হালাল ও তাজা গরুর মাংসের টুকরো",
+      "ঘরোয়া স্পেশাল মসলায় স্লো-কুকড",
+      "মুখের অরুচি দূর করে খাবারের তৃপ্তি দ্বিগুণ করে"
+    ],
+    "ingredients": "কোমল গরুর মাংস, খাঁটি সরিষার তেল, আদা-রসুন বাটা, বিশেষ পাঁচফোড়ন ও ঘরোয়া আচার মসলা।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 650,
+        "price": 550,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 950,
+        "price": 790,
+        "popular": false
+      }
+    ],
+    "stock": 80,
+    "inStock": true
+  },
+  {
+    "id": 2,
+    "name": "প্রিমি ফার্ম ঘরে তৈরি স্পেশাল শুটকি আচার (Traditional Shutki Pickle)",
+    "slug": "shutki-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "শুটকিপ্রেমীদের প্রথম পছন্দ",
+    "price": 450,
+    "regularPrice": 550,
+    "rating": 5,
+    "reviewCount": 312,
+    "image": "images/products/shutki-achar.jpg",
+    "gallery": [
+      "images/products/shutki-achar.jpg"
+    ],
+    "description": "শুটকিপ্রেমীদের প্রথম পছন্দ — ঘরে তৈরি স্পেশাল শুটকি আচার। প্রতিটি কামড়ে ঐতিহ্যবাহী স্বাদ আর খাঁটি সরিষার তেলের চমৎকার অনুভূতি।",
+    "benefits": [
+      "মুখে রুচি ফেরাতে সেরা ঐতিহ্যবাহী পথ্য",
+      "খাঁটি দেশি মসলা ও সরিষার তেলে প্রস্তুত",
+      "কোনো কৃত্রিম ফ্লেভার বা রাসায়নিক নেই"
+    ],
+    "ingredients": "বাছাইকৃত শুটকি মাছ, রসুন, কাঁচামরিচ, সরিষার তেল, দেশি আচারের স্পেশাল মসলা।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 550,
+        "price": 450,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 750,
+        "price": 650,
+        "popular": false
+      }
+    ],
+    "stock": 95,
+    "inStock": true
+  },
+  {
+    "id": 3,
+    "name": "প্রিমি ফার্ম স্পেশাল খেজুর আচার (Premium Date Pickle)",
+    "slug": "khejurer-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "টক-মিষ্টি অমৃত স্বাদ",
+    "price": 380,
+    "regularPrice": 450,
+    "rating": 4.9,
+    "reviewCount": 265,
+    "image": "images/products/khejurer-achar.jpg",
+    "gallery": [
+      "images/products/khejurer-achar.jpg"
+    ],
+    "description": "প্রতিটি চামচে খাঁটি স্বাদ, খেজুরের আচারে পরিবারের ভালোবাসা। বাছাইকৃত উন্নত মানের খেজুরে তৈরি লোভনীয় টক-মিষ্টি সুস্বাদু আচার।",
+    "benefits": [
+      "রক্তাল্পতা ও দুর্বলতা দূর করতে সাহায্য করে",
+      "হজমশক্তি বাড়ায় ও খাবারে দারুণ রুচি আনে",
+      "১০০% প্রাকৃতিক ও প্রিজারভেটিভমুক্ত"
+    ],
+    "ingredients": "উন্নত মানের খেজুর, খাঁটি সরিষার তেল, তেঁতুলের ক্বাথ, ভাজা পাঁচফোড়ন ও বিশেষ মসলা।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 450,
+        "price": 380,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 650,
+        "price": 550,
+        "popular": false
+      }
+    ],
+    "stock": 110,
+    "inStock": true
+  },
+  {
+    "id": 4,
+    "name": "প্রিমি ফার্ম রসুন ও কালোজিরা আচার (Garlic & Kalojira Pickle)",
+    "slug": "roshun-kalojira-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "পথ্য ও ঔষধি গুণাগুণ",
+    "price": 350,
+    "regularPrice": 420,
+    "rating": 5,
+    "reviewCount": 340,
+    "image": "images/products/roshun-kalojira-achar.jpg",
+    "gallery": [
+      "images/products/roshun-kalojira-achar.jpg"
+    ],
+    "description": "রসুন ও কালোজিরার অসাধারণ স্বাদে বিশেষ আচার। ঘরে তৈরি ঐতিহ্যবাহী রেসিপিতে স্বাদের ভিন্ন এক অভিজ্ঞতা ও রোগ প্রতিরোধ ক্ষমতা।",
+    "benefits": [
+      "কালোজিরা ও রসুনের মহাঔষধি পুষ্টিগুণ",
+      "রোগ প্রতিরোধ ক্ষমতা ও শারীরিক বল বৃদ্ধি করে",
+      "গ্যাস, এসিডিটি ও হজমের সমস্যা রোধে সহায়ক"
+    ],
+    "ingredients": "দেশি রসুন, প্রিমিয়াম কালোজিরা, খাঁটি সরিষার তেল, ভিনেগার ও আচার মশলা।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 420,
+        "price": 350,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 620,
+        "price": 520,
+        "popular": false
+      }
+    ],
+    "stock": 120,
+    "inStock": true
+  },
+  {
+    "id": 5,
+    "name": "প্রিমি ফার্ম ঘরে তৈরি খাঁটি রসুনের আচার (Garlic Pickle)",
+    "slug": "roshun-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "হৃদযন্ত্রের বন্ধু ও সুস্বাদু",
+    "price": 320,
+    "regularPrice": 380,
+    "rating": 4.9,
+    "reviewCount": 198,
+    "image": "images/products/roshun-achar.jpg",
+    "gallery": [
+      "images/products/roshun-achar.jpg"
+    ],
+    "description": "ঘরে তৈরি খাঁটি রসুনের আচার। প্রতিটি কামড়ে রসুনের আসল স্বাদ, ঝাঁজ আর ঘরোয়া মজার অনন্য অনুভূতি।",
+    "benefits": [
+      "রক্ত সঞ্চালন স্বাভাবিক রাখে ও প্রেসার নিয়ন্ত্রণে সাহায্য করে",
+      "বাতব্যথা ও জয়েন্ট পেইন উপশমে সহায়ক",
+      "খাবারে রুচি ও তৃপ্তি দ্বিগুণ করে"
+    ],
+    "ingredients": "বাছাইকৃত দেশি রসুনের কোয়া, খাঁটি সরিষার তেল, মৌরি, মেথি, পাঁচফোড়ন ও বিশেষ মশলা।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 380,
+        "price": 320,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 550,
+        "price": 450,
+        "popular": false
+      }
+    ],
+    "stock": 85,
+    "inStock": true
+  },
+  {
+    "id": 6,
+    "name": "প্রিমি ফার্ম টক-মিষ্টি-ঝাল জলপাই আচার (Traditional Olive Pickle)",
+    "slug": "jalpai-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "আসল দেশি জলপাই আচার",
+    "price": 280,
+    "regularPrice": 350,
+    "rating": 4.9,
+    "reviewCount": 245,
+    "image": "images/products/jalpai-achar.jpg",
+    "gallery": [
+      "images/products/jalpai-achar.jpg"
+    ],
+    "description": "টক-মিষ্টি ঝাল স্বাদে সেরা জলপাই আচার। প্রতিটি কামড়ে ঐতিহ্যবাহী আচারের আসল মজা ও অতুলনীয় তৃপ্তি।",
+    "benefits": [
+      "খাবারের রুচি ও হজমশক্তি বহুগুণ বাড়ায়",
+      "ভিটামিন-সি ও অ্যান্টিঅক্সিডেন্টে ভরপুর",
+      "ঘরোয়া মসলা ও খাঁটি সরিষার তেলে তৈরি"
+    ],
+    "ingredients": "টাটকা দেশি জলপাই, খাঁটি সরিষার তেল, আখের গুড়, পাঁচফোড়ন ও ভাজা মসলা।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 350,
+        "price": 280,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 500,
+        "price": 420,
+        "popular": false
+      }
+    ],
+    "stock": 140,
+    "inStock": true
+  },
+  {
+    "id": 7,
+    "name": "প্রিমি ফার্ম টক-মিষ্টি-ঝাল আসল বড়ই আচার (Traditional Plum Pickle)",
+    "slug": "boroi-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "শৈশবের নস্টালজিক স্বাদ",
+    "price": 260,
+    "regularPrice": 320,
+    "rating": 4.8,
+    "reviewCount": 180,
+    "image": "images/products/boroi-achar.jpg",
+    "gallery": [
+      "images/products/boroi-achar.jpg"
+    ],
+    "description": "টক-মিষ্টি-ঝাল স্বাদের আসল বড়ই আচার। প্রতিটি কামড়ে ঘরে তৈরি আচারের ঐতিহ্যবাহী শৈশবের নস্টালজিক স্বাদ।",
+    "benefits": [
+      "জিভে জল আনা টক-ঝাল-মিষ্টি স্বাদ",
+      "হজমে সহায়তা করে ও মুখের অরুচি দূর করে",
+      "খাঁটি গুড় ও দেশি মশলায় প্রস্তুত"
+    ],
+    "ingredients": "শুকনা দেশি টক বরই, খাঁটি আখের গুড়, সরিষার তেল, বিট লবণ, টালা মরিচ ও পাঁচফোড়ন।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 320,
+        "price": 260,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 460,
+        "price": 380,
+        "popular": false
+      }
+    ],
+    "stock": 130,
+    "inStock": true
+  },
+  {
+    "id": 8,
+    "name": "প্রিমি ফার্ম টক-মিষ্টি খাঁটি চালতার আচার (Elephant Apple Pickle)",
+    "slug": "chalta-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "গ্রামবাংলার আদি রেসিপি",
+    "price": 260,
+    "regularPrice": 320,
+    "rating": 4.9,
+    "reviewCount": 165,
+    "image": "images/products/chalta-achar.jpg",
+    "gallery": [
+      "images/products/chalta-achar.jpg"
+    ],
+    "description": "টক-মিষ্টি স্বাদের খাঁটি চালতার আচার। প্রতিটি কামড়ে চালতার অনন্য স্বাদ ও ঘরোয়া মজার আসল অনুভূতি।",
+    "benefits": [
+      "গ্রামের চালতার খাঁটি পিওর রেসিপি",
+      "ভিটামিন ও খনিজ উপাদানে সমৃদ্ধ",
+      "ভারী খাবারের পর হজমে দারুণ উপকারী"
+    ],
+    "ingredients": "টাটকা চালতা, খাঁটি আখের গুড়, সরিষার তেল, পাঁচফোড়ন, বিশেষ মরিচ গুঁড়া।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 320,
+        "price": 260,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 460,
+        "price": 380,
+        "popular": false
+      }
+    ],
+    "stock": 90,
+    "inStock": true
+  },
+  {
+    "id": 9,
+    "name": "প্রিমি ফার্ম ঝাঁঝালো মরিচ আচার (Spicy Green Chilli Pickle)",
+    "slug": "morich-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "ঝাঁজে ভরপুর স্পাইসি স্বাদ",
+    "price": 280,
+    "regularPrice": 350,
+    "rating": 4.8,
+    "reviewCount": 152,
+    "image": "images/products/morich-achar.jpg",
+    "gallery": [
+      "images/products/morich-achar.jpg"
+    ],
+    "description": "ঝাঁজে ভরপুর খাঁটি মরিচের আচার। টক, ঝাল আর মজার নিখুঁত সমন্বয়ে প্রতিটি সাধারণ খাবারও হবে দারুণ সুস্বাদু।",
+    "benefits": [
+      "খাবারের রুচি ফেরাতে অব্যর্থ",
+      "তাজা কাঁচামরিচ ও সরিষার তেলে গাঁজন করা",
+      "পেটের গ্যাস ও বদহজম রোধে সহায়ক"
+    ],
+    "ingredients": "তাজা বোম্বাই ও দেশি মরিচ, সরিষা বাটা, খাঁটি সরিষার তেল, পাঁচফোড়ন ও ভিনেগার।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 350,
+        "price": 280,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 500,
+        "price": 420,
+        "popular": false
+      }
+    ],
+    "stock": 75,
+    "inStock": true
+  },
+  {
+    "id": 10,
+    "name": "প্রিমি ফার্ম টক-মিষ্টি ঘরে তৈরি টমেটো আচার (Tomato Pickle)",
+    "slug": "tomato-achar",
+    "category": "pickle",
+    "categoryName": "আচার",
+    "tag": "ঘরোয়া রেসিপির জাদু",
+    "price": 280,
+    "regularPrice": 350,
+    "rating": 4.8,
+    "reviewCount": 140,
+    "image": "images/products/tomato-achar.jpg",
+    "gallery": [
+      "images/products/tomato-achar.jpg"
+    ],
+    "description": "টক-মিষ্টি স্বাদের ঘরে তৈরি টমেটো আচার। প্রতিটি চামচে টমেটোর আসল স্বাদ আর ঘরোয়া রান্নার মজার অনুভূতি।",
+    "benefits": [
+      "খিচুড়ি বা ডাল-ভাতের সাথে অসাধারণ জুড়ি",
+      "লাইকোপেন ও পুষ্টিগুণে ভরপুর",
+      "শিশুদের খাবারের রুচি বাড়ায়"
+    ],
+    "ingredients": "পাকা তাজা টমেটো, খাঁটি সরিষার তেল, গুড়, পাঁচফোড়ন ও ঘরোয়া আচারের মসলা।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 350,
+        "price": 280,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 500,
+        "price": 420,
+        "popular": false
+      }
+    ],
+    "stock": 80,
+    "inStock": true
+  },
+  {
+    "id": 11,
+    "name": "প্রিমি ফার্ম রান্নার খাঁটি মসলা কম্বো প্যাক (Pure Spice Combo - 5 in 1)",
+    "slug": "pure-spice-combo-pack",
+    "category": "spices",
+    "categoryName": "মশলা",
+    "tag": "রান্নার ৫টি খাঁটি মসলা কম্বো",
+    "price": 520,
+    "regularPrice": 650,
+    "rating": 5,
+    "reviewCount": 380,
+    "image": "images/products/pure-spice-combo.jpg",
+    "gallery": [
+      "images/products/pure-spice-combo.jpg"
+    ],
+    "description": "এক প্যাকেই রান্নার সব খাঁটি মসলা — ধনিয়া, জিরা, হলুদ, মরিচ ও শাহী গরম মশলার বিশুদ্ধ স্বাদে রান্না হোক আরও সুস্বাদু ও ঘ্রাণময়।",
+    "benefits": [
+      "১০০% খাঁটি ও নির্ভেজাল মসলা",
+      "কোনো কৃত্রিম রঙ বা ধূলিকণামুক্ত",
+      "একসাথে ৫টি প্রয়োজনীয় রান্নার মসলা"
+    ],
+    "ingredients": "খাঁটি হলুদের গুঁড়া, শুকনা মরিচ গুঁড়া, ধনিয়ার গুঁড়া, জিরার গুঁড়া ও শাহী গরম মসলা।",
+    "variants": [
+      {
+        "size": "৫টি মসলা কম্বো (প্রতিটি ১০০ গ্রাম)",
+        "regularPrice": 650,
+        "price": 520,
+        "popular": true
+      },
+      {
+        "size": "৫টি মসলা কম্বো (প্রতিটি ২০০ গ্রাম)",
+        "regularPrice": 1150,
+        "price": 950,
+        "popular": false
+      }
+    ],
+    "stock": 100,
+    "inStock": true
+  },
+  {
+    "id": 12,
+    "name": "প্রিমি ফার্ম স্পেশাল ঝালমুড়ি মসলা (Secret Jhalmuri Masala)",
+    "slug": "jhalmuri-masala",
+    "category": "spices",
+    "categoryName": "মশলা",
+    "tag": "আড্ডার পারফেক্ট সঙ্গী",
+    "price": 250,
+    "regularPrice": 320,
+    "rating": 4.9,
+    "reviewCount": 220,
+    "image": "images/products/jhalmuri-masala.jpg",
+    "gallery": [
+      "images/products/jhalmuri-masala.jpg"
+    ],
+    "description": "স্পেশাল ঝালমুড়ি মশলায় জমে উঠুক প্রতিটি আড্ডা। ঝাঁজ, সুগন্ধ আর মজার নিখুঁত মিশ্রণে তৈরি সবার প্রিয় ঝালমুড়ির আসল ঘরোয়া স্বাদ।",
+    "benefits": [
+      "ঘরোয়া ঝালমুড়িতে এনে দেবে স্ট্রিট স্টাইল পারফেক্ট ঝাঁজ",
+      "চানাচুর, ছোলা ও মুড়ির সাথে দারুণ সুস্বাদু",
+      "সম্পূর্ণ ক্যামিকেলমুক্ত খাঁটি উপাদানে প্রস্তুত"
+    ],
+    "ingredients": "খাঁটি সরিষার তেল, বিট লবণ, টালা জিরা, জয়ফল, জয়ত্রী ও প্রিমি ফার্মের সিক্রেট ঝালমুড়ি মসলা।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 320,
+        "price": 250,
+        "popular": true
+      },
+      {
+        "size": "৪০০ গ্রাম জার",
+        "regularPrice": 490,
+        "price": 390,
+        "popular": false
+      }
+    ],
+    "stock": 115,
+    "inStock": true
+  },
+  {
+    "id": 13,
+    "name": "প্রিমি ফার্ম প্রিমিয়াম শুকনা মরিচ গুঁড়া (Red Chilli Powder)",
+    "slug": "shukna-morich-gura",
+    "category": "spices",
+    "categoryName": "মশলা",
+    "tag": "প্রাকৃতিক রঙ ও ঝাঁজ",
+    "price": 180,
+    "regularPrice": 230,
+    "rating": 4.9,
+    "reviewCount": 190,
+    "image": "images/products/shukna-morich-gura.jpg",
+    "gallery": [
+      "images/products/shukna-morich-gura.jpg"
+    ],
+    "description": "খাঁটি শুকনা মরিচ গুঁড়ায় রান্নায় আনুন ঝাঁজালো স্বাদ। রঙ, ঝাঁজ ও সুগন্ধে ভরপুর বিশুদ্ধ মরিচ গুঁড়া প্রতিটি রান্নার জন্য সেরা।",
+    "benefits": [
+      "কোনো ভেজাল ইটগুঁড়া বা বিষাক্ত কৃত্রিম রঙ ছাড়া প্রস্তুত",
+      "রান্নায় আনে প্রাকৃতিক আকর্ষণীয় লাল রঙ",
+      "কম পরিমানেই দেয় দুর্দান্ত ঝাঁজ"
+    ],
+    "ingredients": "বাছাইকৃত বোঁটাবিহীন শুকনা লাল মরিচ।",
+    "variants": [
+      {
+        "size": "২০০ গ্রাম জার",
+        "regularPrice": 230,
+        "price": 180,
+        "popular": true
+      },
+      {
+        "size": "৫০০ গ্রাম জার",
+        "regularPrice": 520,
+        "price": 420,
+        "popular": false
+      }
+    ],
+    "stock": 150,
+    "inStock": true
+  },
+  {
+    "id": 14,
+    "name": "প্রিমি ফার্ম খাঁটি ধনিয়ার গুঁড়া (Pure Coriander Powder)",
+    "slug": "dhoniar-gura",
+    "category": "spices",
+    "categoryName": "মশলা",
+    "tag": "সুবাসিত ও সতেজ",
+    "price": 170,
+    "regularPrice": 220,
+    "rating": 4.8,
+    "reviewCount": 160,
+    "image": "images/products/dhoniar-gura.jpg",
+    "gallery": [
+      "images/products/dhoniar-gura.jpg"
+    ],
+    "description": "খাঁটি ধনিয়ার গুঁড়ায় রান্নায় আনুন আসল স্বাদ। বিশুদ্ধ ধনিয়ার সুগন্ধে প্রতিটি রান্না হোক আরও সুস্বাদু ও আকর্ষণীয়।",
+    "benefits": [
+      "বাছাইকৃত ধনিয়া ধুয়ে রোদে শুকিয়ে চূর্ণ করা",
+      "হজম প্রক্রিয়া দ্রুত করতে সাহায্য করে",
+      "বিশুদ্ধ ঘ্রাণ বজায় থাকে অনেকদিন"
+    ],
+    "ingredients": "১০০% খাঁটি ও পরিষ্কার দেশি ধনিয়া।",
+    "variants": [
+      {
+        "size": "২০০ গ্রাম জার",
+        "regularPrice": 220,
+        "price": 170,
+        "popular": true
+      },
+      {
+        "size": "৫০০ গ্রাম জার",
+        "regularPrice": 490,
+        "price": 390,
+        "popular": false
+      }
+    ],
+    "stock": 140,
+    "inStock": true
+  },
+  {
+    "id": 15,
+    "name": "প্রিমি ফার্ম খাঁটি সরিষার তেল (Cold Pressed Pure Mustard Oil)",
+    "slug": "pure-mustard-oil",
+    "category": "oil",
+    "categoryName": "তেল",
+    "tag": "ঘানিভাঙা খাঁটি ও ঝাঁজালো",
+    "price": 190,
+    "regularPrice": 240,
+    "rating": 5,
+    "reviewCount": 520,
+    "image": "images/products/pure-mustard-oil.jpg",
+    "gallery": [
+      "images/products/pure-mustard-oil.jpg"
+    ],
+    "description": "খাঁটি সরিষার তেলে পরিবারের বিশুদ্ধতার নিশ্চয়তা। প্রাকৃতিক সরিষার দানায় তৈরি বিশুদ্ধ ঘানিভাঙা তেল, স্বাদ ও গুণে অনন্য।",
+    "benefits": [
+      "প্রাকৃতিক তীব্র ঝাঁজ ও খাঁটি সুবাস",
+      "হৃদযন্ত্র ভালো রাখতে সাহায্য করে",
+      "রান্না, আচার তৈরি ও রূপচর্চা সবকিছুর জন্য সেরা"
+    ],
+    "ingredients": "১০০% কাঠের ঘানিভাঙা মাঘি সরিষার তেল।",
+    "variants": [
+      {
+        "size": "৫০০ মি.লি. বোতল",
+        "regularPrice": 240,
+        "price": 190,
+        "popular": false
+      },
+      {
+        "size": "১ লিটার বোতল",
+        "regularPrice": 420,
+        "price": 350,
+        "popular": true
+      },
+      {
+        "size": "৫ লিটার ক্যান",
+        "regularPrice": 1950,
+        "price": 1690,
+        "popular": false
+      }
+    ],
+    "stock": 200,
+    "inStock": true
+  },
+  {
+    "id": 16,
+    "name": "প্রিমি ফার্ম প্রিমিয়াম চিয়া সিড (Organic Chia Seed)",
+    "slug": "premium-chia-seed",
+    "category": "seeds",
+    "categoryName": "বীজ",
+    "tag": "পুষ্টিগুণে ভরপুর সুপারফুড",
+    "price": 350,
+    "regularPrice": 420,
+    "rating": 5,
+    "reviewCount": 310,
+    "image": "images/products/chia-seed.jpg",
+    "gallery": [
+      "images/products/chia-seed.jpg"
+    ],
+    "description": "খাঁটি চিয়া সিডে স্বাস্থ্যকর জীবনের শুরু। পুষ্টিগুণে ভরপুর চিয়া সিড, প্রতিদিনের সুস্থতা ও মেদ নিয়ন্ত্রণের প্রাকৃতিক সঙ্গী।",
+    "benefits": [
+      "ওজন নিয়ন্ত্রণ ও চর্বি কমাতে দারুণ কার্যকর",
+      "ওমেগা-৩ ও উচ্চ ডায়েটারি ফাইবার সমৃদ্ধ",
+      "সারাদিনের ক্লান্তি দূর করে উদ্যম যোগায়"
+    ],
+    "ingredients": "১০০% প্রিমিয়াম কোয়ালিটি অর্গানিক চিয়া সিড।",
+    "variants": [
+      {
+        "size": "২৫০ গ্রাম জার",
+        "regularPrice": 420,
+        "price": 350,
+        "popular": true
+      },
+      {
+        "size": "৫০০ গ্রাম জার",
+        "regularPrice": 750,
+        "price": 620,
+        "popular": false
+      }
+    ],
+    "stock": 160,
+    "inStock": true
+  },
+  {
+    "id": 17,
+    "name": "প্রিমি ফার্ম প্রাকৃতিক রোজেলা চা (Organic Rosella Tea)",
+    "slug": "rosella-tea",
+    "category": "tea",
+    "categoryName": "চা",
+    "tag": "প্রাকৃতিক অ্যান্টিঅক্সিডেন্ট ভেষজ চা",
+    "price": 320,
+    "regularPrice": 380,
+    "rating": 4.9,
+    "reviewCount": 230,
+    "image": "images/products/rosella-tea.jpg",
+    "gallery": [
+      "images/products/rosella-tea.jpg"
+    ],
+    "description": "প্রাকৃতিক স্বাদে ভরপুর রোজেলা চা। প্রতিটি চুমুকে সতেজতা, স্বাস্থ্য আর প্রকৃতির অপূর্ব ছোঁয়া। রুবি লাল রঙের ভেষজ চা।",
+    "benefits": [
+      "উচ্চ রক্তচাপ ও কোলেস্টেরল নিয়ন্ত্রণে সহায়ক",
+      "প্রচুর ভিটামিন-সি ও ত্বকের উজ্জ্বলতা বাড়ায়",
+      "শারীরিক ক্লান্তি দূর করে শরীর শীতল রাখে"
+    ],
+    "ingredients": "১০০% অর্গানিক শুকনা রোজেলা ফুলের পাপড়ি।",
+    "variants": [
+      {
+        "size": "১০০ গ্রাম জার",
+        "regularPrice": 380,
+        "price": 320,
+        "popular": true
+      },
+      {
+        "size": "২০০ গ্রাম জার",
+        "regularPrice": 690,
+        "price": 590,
+        "popular": false
+      }
+    ],
+    "stock": 120,
+    "inStock": true
+  }
+];
 
 const PremeStore = {
   cart: [],
-  products: [],
+  products: (typeof DEFAULT_PRODUCTS !== 'undefined' && Array.isArray(DEFAULT_PRODUCTS)) ? [...DEFAULT_PRODUCTS] : [],
   deliveryCharge: 100,
 
   init() {
@@ -13,6 +685,9 @@ const PremeStore = {
     this.fetchProducts();
     this.updateCartBadge();
     this.loadDynamicBanners();
+    if (this.products.length > 0) {
+      window.dispatchEvent(new CustomEvent('products_loaded', { detail: this.products }));
+    }
   },
 
   loadCart() {
@@ -25,7 +700,9 @@ const PremeStore = {
   },
 
   saveCart() {
-    localStorage.setItem('premefarm_cart', JSON.stringify(this.cart));
+    try {
+      localStorage.setItem('premefarm_cart', JSON.stringify(this.cart));
+    } catch (e) {}
     this.updateCartBadge();
   },
 
@@ -40,7 +717,7 @@ const PremeStore = {
 
     const pillTotal = document.getElementById('header-cart-total');
     if (pillTotal) {
-      pillTotal.textContent = `৳ ${totalAmount.toLocaleString('bn-BD')}`;
+      pillTotal.textContent = '৳ ' + totalAmount.toLocaleString('bn-BD');
     }
   },
 
@@ -49,14 +726,33 @@ const PremeStore = {
       const res = await fetch('/api/products');
       if (res.ok) {
         const data = await res.json();
-        this.products = data.data || [];
-        window.dispatchEvent(new CustomEvent('products_loaded', { detail: this.products }));
-        return;
+        if (data && Array.isArray(data.data) && data.data.length > 0) {
+          this.products = data.data;
+          window.dispatchEvent(new CustomEvent('products_loaded', { detail: this.products }));
+          return;
+        }
       }
     } catch (e) {
-      console.warn('Backend API unavailable.');
+      console.warn('Backend API /api/products unavailable:', e);
     }
-    this.products = [];
+
+    try {
+      const staticRes = await fetch('/data/products.json');
+      if (staticRes.ok) {
+        const staticData = await staticRes.json();
+        if (Array.isArray(staticData) && staticData.length > 0) {
+          this.products = staticData;
+          window.dispatchEvent(new CustomEvent('products_loaded', { detail: this.products }));
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Static fallback unavailable:', e);
+    }
+
+    if (typeof DEFAULT_PRODUCTS !== 'undefined' && Array.isArray(DEFAULT_PRODUCTS) && DEFAULT_PRODUCTS.length > 0) {
+      this.products = [...DEFAULT_PRODUCTS];
+    }
     window.dispatchEvent(new CustomEvent('products_loaded', { detail: this.products }));
   },
 

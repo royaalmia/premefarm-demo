@@ -1393,17 +1393,22 @@
 
     function handleHomeCheckout(e) {
       e.preventDefault();
-      // If cart empty, add spotlight item
+      // If cart empty, add current spotlight item dynamically
       if (PremeStore.cart.length === 0) {
-        PremeStore.cart.push({
-          productId: 1,
-          name: "প্রিমি ফার্ম মধুময় কালো সোনা",
-          variant: currentSpotlightVar === 1 ? "৫০০ গ্রাম" : "২৫০ গ্রাম",
-          price: currentSpotlightVar === 1 ? 950 : 550,
-          image: "images/kalo_shona_jar.png",
-          quantity: currentSpotlightQty
-        });
-        PremeStore.saveCart();
+        const activeProd = window._currentSpotlightProduct || (PremeStore.products && PremeStore.products[0]);
+        if (activeProd) {
+          const st = (window._slideState && window._slideState[activeProd.id]) || { varIdx: 0, qty: 1 };
+          const variant = (activeProd.variants && activeProd.variants[st.varIdx]) || { size: 'স্ট্যান্ডার্ড', price: activeProd.price || 0 };
+          PremeStore.cart.push({
+            productId: activeProd.id,
+            name: activeProd.name,
+            variant: variant.size || variant.name || 'স্ট্যান্ডার্ড',
+            price: variant.price,
+            image: activeProd.image || 'images/logo.png',
+            quantity: st.qty || 1
+          });
+          PremeStore.saveCart();
+        }
       }
 
       const formData = {
@@ -1430,10 +1435,12 @@
       setSlide((currentSlide + 1) % slides.length);
     }, 5500);
 
-    // Render Products on Loaded
-    window.addEventListener('products_loaded', (e) => {
+    // Render Products on Loaded (Universal Device Resilience)
+    function renderHomePageProducts(incomingProds) {
       const grid = document.getElementById('home-product-grid');
-      const prods = e.detail || [];
+      let prods = (incomingProds && Array.isArray(incomingProds) && incomingProds.length > 0)
+        ? incomingProds
+        : (window.PremeStore && window.PremeStore.products && window.PremeStore.products.length > 0 ? window.PremeStore.products : []);
 
       // 1. Handle Hot Seller Multi-Product Banner Slider
       const spotlightWrap = document.getElementById('spotlight-section-wrap');
@@ -1449,6 +1456,7 @@
       }
 
       if (hotProds.length > 0 && spotlightWrap && sliderBox) {
+        window._currentSpotlightProduct = hotProds[0];
         // State for slide variant and quantities
         window._slideState = window._slideState || {};
         hotProds.forEach(p => {
@@ -1550,6 +1558,7 @@
 
         window.setSpotlightSlide = (idx) => {
           curSpotSlide = (idx + totalSlides) % totalSlides;
+          window._currentSpotlightProduct = hotProds[curSpotSlide];
           const slides = sliderBox.querySelectorAll('.spotlight-slide');
           slides.forEach((s, i) => s.classList.toggle('active', i === curSpotSlide));
           if (dotsBox) {
@@ -1568,13 +1577,11 @@
             dotsBox.innerHTML = hotProds.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}" onclick="window.setSpotlightSlide(${i})"></span>`).join('');
           }
 
-          // Auto-slide every 5.5 seconds
           if (window._spotlightInterval) clearInterval(window._spotlightInterval);
           window._spotlightInterval = setInterval(() => {
             window.nextSpotlightSlide();
           }, 5500);
 
-          // Pause on hover
           spotlightWrap.onmouseenter = () => { if (window._spotlightInterval) clearInterval(window._spotlightInterval); };
           spotlightWrap.onmouseleave = () => {
             if (window._spotlightInterval) clearInterval(window._spotlightInterval);
@@ -1634,6 +1641,21 @@
       });
       grid.innerHTML = html;
       updateCheckoutPreview();
+    }
+
+    // Attach listener
+    window.addEventListener('products_loaded', (e) => {
+      renderHomePageProducts(e.detail || []);
+    });
+
+    // Execute immediately if products are already available or on DOMContentLoaded (zero race condition)
+    if (window.PremeStore && window.PremeStore.products && window.PremeStore.products.length > 0) {
+      renderHomePageProducts(window.PremeStore.products);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.PremeStore && window.PremeStore.products && window.PremeStore.products.length > 0) {
+        renderHomePageProducts(window.PremeStore.products);
+      }
     });
 
     // ================= ABANDONED / FAILED ORDER AUTO-CAPTURE (HOME CHECKOUT) =================

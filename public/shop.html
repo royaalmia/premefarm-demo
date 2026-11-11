@@ -492,49 +492,37 @@
         <li>
           <button class="category-btn active" onclick="selectCategory('all', this)">
             <span>সব প্রোডাক্ট</span>
-            <span class="cat-badge" id="badge-all">11</span>
-          </button>
-        </li>
-        <li>
-          <button class="category-btn" onclick="selectCategory('kalo-shona', this)">
-            <span>কালো সোনা</span>
-            <span class="cat-badge">1</span>
-          </button>
-        </li>
-        <li>
-          <button class="category-btn" onclick="selectCategory('ghee', this)">
-            <span>গাওয়া ঘি</span>
-            <span class="cat-badge">1</span>
-          </button>
-        </li>
-        <li>
-          <button class="category-btn" onclick="selectCategory('honey', this)">
-            <span>খাঁটি মধু</span>
-            <span class="cat-badge">2</span>
+            <span class="cat-badge" id="badge-all">17</span>
           </button>
         </li>
         <li>
           <button class="category-btn" onclick="selectCategory('pickle', this)">
-            <span>ইলিশ ও আচার</span>
-            <span class="cat-badge">3</span>
+            <span>প্রিমি স্পেশাল আচার</span>
+            <span class="cat-badge" id="badge-pickle">10</span>
           </button>
         </li>
         <li>
-          <button class="category-btn" onclick="selectCategory('tea', this)">
-            <span>রোজেলা চা</span>
-            <span class="cat-badge">1</span>
+          <button class="category-btn" onclick="selectCategory('spices', this)">
+            <span>খাঁটি ও পুষ্টিকর মশলা</span>
+            <span class="cat-badge" id="badge-spices">4</span>
+          </button>
+        </li>
+        <li>
+          <button class="category-btn" onclick="selectCategory('oil', this)">
+            <span>খাঁটি সরিষার তেল</span>
+            <span class="cat-badge" id="badge-oil">1</span>
           </button>
         </li>
         <li>
           <button class="category-btn" onclick="selectCategory('seeds', this)">
-            <span>সীড মিক্স</span>
-            <span class="cat-badge">1</span>
+            <span>পুষ্টিকর সিড মিক্স</span>
+            <span class="cat-badge" id="badge-seeds">1</span>
           </button>
         </li>
         <li>
-          <button class="category-btn" onclick="selectCategory('combo', this)">
-            <span>স্পেশাল কম্বো</span>
-            <span class="cat-badge">2</span>
+          <button class="category-btn" onclick="selectCategory('tea', this)">
+            <span>হারবাল ও ওয়েলনেস চা</span>
+            <span class="cat-badge" id="badge-tea">1</span>
           </button>
         </li>
       </ul>
@@ -620,15 +608,31 @@
         const res = await fetch('/api/products');
         if (res.ok) {
           const json = await res.json();
-          allProducts = json.data || [];
+          if (json && Array.isArray(json.data) && json.data.length > 0) {
+            allProducts = json.data;
+          }
         }
       } catch (e) {
-        console.warn('API error, using local fallback.');
+        console.warn('API error, using local fallback:', e);
       }
 
-      if (allProducts.length === 0 && window.PremeStore && window.PremeStore.products) {
+      if (allProducts.length === 0) {
+        try {
+          const staticRes = await fetch('/data/products.json');
+          if (staticRes.ok) {
+            const staticData = await staticRes.json();
+            if (Array.isArray(staticData) && staticData.length > 0) {
+              allProducts = staticData;
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (allProducts.length === 0 && window.PremeStore && window.PremeStore.products && window.PremeStore.products.length > 0) {
         allProducts = window.PremeStore.products;
       }
+
+      updateCategoryBadges();
 
       // Check URL search parameter
       const urlParams = new URLSearchParams(window.location.search);
@@ -642,6 +646,20 @@
       applyFilters();
     }
 
+    function updateCategoryBadges() {
+      if (!allProducts || allProducts.length === 0) return;
+      const counts = { all: allProducts.length, pickle: 0, spices: 0, oil: 0, seeds: 0, tea: 0 };
+      allProducts.forEach(p => {
+        if (counts[p.category] !== undefined) counts[p.category]++;
+      });
+      const bAll = document.getElementById('badge-all'); if (bAll) bAll.textContent = counts.all;
+      const bP = document.getElementById('badge-pickle'); if (bP) bP.textContent = counts.pickle;
+      const bS = document.getElementById('badge-spices'); if (bS) bS.textContent = counts.spices;
+      const bO = document.getElementById('badge-oil'); if (bO) bO.textContent = counts.oil;
+      const bSd = document.getElementById('badge-seeds'); if (bSd) bSd.textContent = counts.seeds;
+      const bT = document.getElementById('badge-tea'); if (bT) bT.textContent = counts.tea;
+    }
+
     function selectCategory(cat, btn) {
       activeCategory = cat;
       document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
@@ -649,13 +667,11 @@
 
       const catNameMap = {
         'all': 'সব প্রোডাক্ট',
-        'kalo-shona': 'কালো সোনা',
-        'ghee': 'গাওয়া ঘি',
-        'honey': 'খাঁটি মধু',
-        'pickle': 'ইলিশ ও আচার',
-        'tea': 'রোজেলা চা',
-        'seeds': 'সীড মিক্স',
-        'combo': 'স্পেশাল কম্বো'
+        'pickle': 'প্রিমি স্পেশাল আচার',
+        'spices': 'খাঁটি ও পুষ্টিকর মশলা',
+        'oil': 'খাঁটি সরিষার তেল',
+        'seeds': 'পুষ্টিকর সিড মিক্স',
+        'tea': 'হারবাল ও ওয়েলনেস চা'
       };
       document.getElementById('showing-category-name').textContent = catNameMap[cat] || 'পণ্যসমূহ';
 
