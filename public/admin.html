@@ -1043,13 +1043,16 @@
             <div>
               <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:4px;">ক্যাটাগরি</label>
               <select id="prod-category" style="width:100%; padding:9px 12px; border:1px solid #cedcd0; border-radius:6px;">
-                <option value="kalo-shona">কালো সোনা</option>
-                <option value="ghee">গাওয়া ঘি</option>
-                <option value="honey">খাঁটি মধু</option>
-                <option value="pickle">আচার</option>
-                <option value="tea">চা ও হারবাল</option>
-                <option value="seeds">সীড মিক্স</option>
-                <option value="combo">কম্বো অফার</option>
+                <option value="pickle">আচার (Pickle)</option>
+                <option value="spices">মশলা (Spices)</option>
+                <option value="oil">তেল (Oil)</option>
+                <option value="seeds">বীজ ও সিড (Seeds)</option>
+                <option value="tea">চা ও হারবাল (Tea)</option>
+                <option value="honey">মধু (Honey)</option>
+                <option value="ghee">গাওয়া ঘি (Ghee)</option>
+                <option value="kalo-shona">কালো সোনা (Black Gold)</option>
+                <option value="combo">কম্বো অফার (Combo)</option>
+                <option value="others">অন্যান্য (Others)</option>
               </select>
             </div>
           </div>
@@ -1066,6 +1069,18 @@
             <div>
               <label style="display:block; font-size:13px; font-weight:700; margin-bottom:4px;">স্টক পরিমাণ</label>
               <input type="number" id="prod-stock" value="50" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px;">
+            </div>
+          </div>
+
+          <!-- Product Image (Path / URL + Preview) -->
+          <div style="margin-bottom: 14px; background:#f8faf8; border:1px solid #dce8dd; border-radius:8px; padding:12px 14px;">
+            <label style="display:block; font-size:13.5px; font-weight:700; margin-bottom:6px; color:#0d4d29;">প্রোডাক্টের ছবি (Image Path / URL)</label>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <img id="prod-image-preview" src="images/logo.png" style="width:52px; height:52px; object-fit:contain; border-radius:6px; border:1px solid #cbd5e1; background:#fff; padding:2px;" onerror="this.src='images/logo.png'">
+              <div style="flex:1;">
+                <input type="text" id="prod-image" placeholder="images/products/... বা ছবির URL" style="width:100%; padding:8px 12px; border:1px solid #cedcd0; border-radius:6px; font-size:13px;" oninput="document.getElementById('prod-image-preview').src = this.value || 'images/logo.png'">
+                <div style="font-size:11.5px; color:#64748b; margin-top:4px;">যেমন: <code>images/products/garlic-pickle.png</code></div>
+              </div>
             </div>
           </div>
 
@@ -1093,7 +1108,7 @@
 
         <div class="admin-modal-footer">
           <button type="button" onclick="AdminApp.closeProductModal()" style="padding: 9px 18px; border-radius: 6px; border: 1.5px solid #cbd5e1; background:#fff; cursor:pointer; font-weight:700;">বাতিল</button>
-          <button type="submit" class="btn-courier-action" style="padding: 9px 24px;">প্রোডাক্ট সেভ করুন ➔</button>
+          <button type="submit" id="prod-submit-btn" class="btn-courier-action" style="padding: 9px 24px;">প্রোডাক্ট সেভ করুন ➔</button>
         </div>
       </form>
     </div>

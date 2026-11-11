@@ -654,6 +654,7 @@ const AdminApp = {
     this.applyLanguage(lang);
     this.updateTabCounters();
     this.renderOrdersTable();
+    this.renderProducts();
     this.renderAuditLogs();
     this.renderBlacklist();
   },
@@ -2489,31 +2490,99 @@ const AdminApp = {
   renderProducts() {
     const tbody = document.getElementById('admin-products-body');
     if (!tbody) return;
+    const isEn = this.currentLang === 'en';
     tbody.innerHTML = this.products.map(p => {
-      const v = p.variants?.[0] || { price: 950, regularPrice: 1150 };
+      const v = p.variants?.[0] || { price: p.price || 0, regularPrice: p.regularPrice || 0 };
+      const currentPrice = v.price || p.price || 0;
+      const currentRegPrice = v.regularPrice || p.regularPrice || '';
+      const inStock = p.inStock !== false && (v.inStock !== false);
+      const stockQty = p.stock !== undefined ? p.stock : (inStock ? 50 : 0);
+      const stockText = isEn 
+        ? (inStock ? `In Stock (${stockQty})` : 'Out of Stock')
+        : (inStock ? `ইন স্টক (${stockQty})` : 'স্টক শেষ');
+      const editLabel = isEn ? 'Edit' : 'এডিট';
+      const deleteLabel = isEn ? 'Delete' : 'ডিলিট';
+
       return `
         <tr>
-          <td><img src="${p.image}" style="width:44px; height:44px; object-fit:contain; border-radius:6px; border:1px solid #e2e8f0;"></td>
+          <td><img src="${p.image || 'images/logo.png'}" style="width:44px; height:44px; object-fit:contain; border-radius:6px; border:1px solid #e2e8f0; background:#f8faf8;" onerror="this.src='images/logo.png'"></td>
           <td><b>${p.name}</b></td>
-          <td><span style="background:#eef5f0; color:#0d4d29; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:700;">${p.category}</span></td>
-          <td><b>৳${v.price}</b> <span style="text-decoration:line-through; color:#94a3b8; font-size:12px;">৳${v.regularPrice || ''}</span></td>
-          <td><span style="color:${p.inStock ? '#15803d' : '#dc2626'}; font-weight:800;">${p.inStock ? 'ইন স্টক (' + p.stock + ')' : 'স্টক শেষ'}</span></td>
+          <td><span style="background:#eef5f0; color:#0d4d29; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:700;">${p.categoryName || p.category}</span></td>
+          <td><b>৳${currentPrice}</b> ${currentRegPrice ? `<span style="text-decoration:line-through; color:#94a3b8; font-size:12px;">৳${currentRegPrice}</span>` : ''}</td>
+          <td><span style="color:${inStock ? '#15803d' : '#dc2626'}; font-weight:800;">${stockText}</span></td>
           <td>
             <label class="switch">
-              <input type="checkbox" ${p.inStock ? 'checked' : ''} onchange="AdminApp.toggleProductStock(${p.id}, this.checked)">
+              <input type="checkbox" ${inStock ? 'checked' : ''} onchange="AdminApp.toggleProductStock(${p.id}, this.checked)">
               <span class="slider"></span>
             </label>
           </td>
-          <td>
-            <button onclick="AdminApp.deleteProduct(${p.id})" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; padding:4px 8px; border-radius:6px; cursor:pointer;">✕</button>
+          <td style="white-space:nowrap;">
+            <div style="display:inline-flex; align-items:center; gap:6px;">
+              <button type="button" onclick="AdminApp.editProduct(${p.id})" title="${editLabel}" style="background:#e0f2fe; color:#0284c7; border:1px solid #bae6fd; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:4px; transition:all 0.15s ease;">
+                ✏️ <span>${editLabel}</span>
+              </button>
+              <button type="button" onclick="AdminApp.deleteProduct(${p.id})" title="${deleteLabel}" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; padding:5px 9px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:700; transition:all 0.15s ease;">
+                🗑️
+              </button>
+            </div>
           </td>
         </tr>
       `;
     }).join('');
   },
 
-  openProductModal() { document.getElementById('product-modal').classList.add('active'); },
-  closeProductModal() { document.getElementById('product-modal').classList.remove('active'); },
+  editProduct(id) {
+    const p = this.products.find(x => String(x.id) === String(id));
+    if (!p) return;
+    const isEn = this.currentLang === 'en';
+
+    document.getElementById('prod-id').value = p.id;
+    document.getElementById('prod-modal-title').textContent = isEn ? `Edit Product (#${p.id})` : `প্রোডাক্ট এডিট করুন (আইডি: #${p.id})`;
+    const submitBtn = document.getElementById('prod-submit-btn');
+    if (submitBtn) submitBtn.textContent = isEn ? 'Update Product ➔' : 'প্রোডাক্ট আপডেট করুন ➔';
+
+    document.getElementById('prod-name').value = p.name || '';
+    document.getElementById('prod-category').value = p.category || 'others';
+
+    const v = p.variants?.[0] || {};
+    document.getElementById('prod-price').value = v.price ?? p.price ?? '';
+    document.getElementById('prod-reg-price').value = v.regularPrice ?? p.regularPrice ?? '';
+    document.getElementById('prod-stock').value = p.stock !== undefined ? p.stock : 50;
+
+    const imgInput = document.getElementById('prod-image');
+    if (imgInput) {
+      imgInput.value = p.image || '';
+      const preview = document.getElementById('prod-image-preview');
+      if (preview) preview.src = p.image || 'images/logo.png';
+    }
+
+    document.getElementById('prod-desc').value = p.description || '';
+    document.getElementById('prod-benefits').value = Array.isArray(p.benefits) 
+      ? p.benefits.join('\n') 
+      : (typeof p.benefits === 'string' ? p.benefits : '');
+
+    document.getElementById('product-modal').classList.add('active');
+  },
+
+  openProductModal() {
+    const isEn = this.currentLang === 'en';
+    const form = document.getElementById('product-form');
+    if (form) form.reset();
+    document.getElementById('prod-id').value = '';
+    document.getElementById('prod-modal-title').textContent = isEn ? 'Add New Product' : 'নতুন প্রোডাক্ট যোগ করুন';
+    const submitBtn = document.getElementById('prod-submit-btn');
+    if (submitBtn) submitBtn.textContent = isEn ? 'Save Product ➔' : 'প্রোডাক্ট সেভ করুন ➔';
+    const preview = document.getElementById('prod-image-preview');
+    if (preview) preview.src = 'images/logo.png';
+    document.getElementById('product-modal').classList.add('active');
+  },
+
+  closeProductModal() {
+    document.getElementById('product-modal').classList.remove('active');
+    const form = document.getElementById('product-form');
+    if (form) form.reset();
+    document.getElementById('prod-id').value = '';
+  },
 
   async toggleProductStock(id, inStock) {
     try {
@@ -2527,7 +2596,8 @@ const AdminApp = {
   },
 
   async deleteProduct(id) {
-    if (!confirm('প্রোডাক্ট ডিলিট করতে চান?')) return;
+    const isEn = this.currentLang === 'en';
+    if (!confirm(isEn ? 'Are you sure you want to delete this product?' : 'প্রোডাক্ট ডিলিট করতে চান?')) return;
     try {
       await fetch(`/api/products/${id}`, { method: 'DELETE' });
       await this.fetchProducts();
@@ -2562,30 +2632,88 @@ const AdminApp = {
 
   async handleProductSubmit(e) {
     e.preventDefault();
+    const isEn = this.currentLang === 'en';
+    const id = document.getElementById('prod-id').value.trim();
     const name = document.getElementById('prod-name').value.trim();
     const category = document.getElementById('prod-category').value;
-    const price = parseInt(document.getElementById('prod-price').value) || 950;
-    const regularPrice = parseInt(document.getElementById('prod-reg-price').value) || 1150;
+    const categoryNameMap = {
+      'pickle': 'আচার',
+      'spices': 'মশলা',
+      'oil': 'তেল',
+      'seeds': 'বীজ',
+      'tea': 'চা',
+      'honey': 'মধু',
+      'ghee': 'গাওয়া ঘি',
+      'kalo-shona': 'কালো সোনা',
+      'combo': 'কম্বো অফার',
+      'others': 'অন্যান্য'
+    };
+    const categoryName = categoryNameMap[category] || category;
+    const price = parseInt(document.getElementById('prod-price').value) || 0;
+    const regularPrice = parseInt(document.getElementById('prod-reg-price').value) || 0;
     const stock = parseInt(document.getElementById('prod-stock').value) || 50;
+    const imgInput = document.getElementById('prod-image');
+    const image = (imgInput && imgInput.value.trim()) ? imgInput.value.trim() : 'images/logo.png';
     const description = document.getElementById('prod-desc').value.trim();
-    const benefits = document.getElementById('prod-benefits').value.trim().split('\n').filter(b => b.trim());
+    const benefits = document.getElementById('prod-benefits').value.trim().split('\n').map(b => b.trim()).filter(Boolean);
+
+    const existing = id ? this.products.find(p => String(p.id) === String(id)) : null;
+
+    let variants = existing?.variants && Array.isArray(existing.variants) ? [...existing.variants] : [];
+    if (variants.length > 0) {
+      variants = variants.map((v, idx) => {
+        if (idx === 0) {
+          return { ...v, price: price || v.price, regularPrice: regularPrice || v.regularPrice, inStock: stock > 0 };
+        }
+        return v;
+      });
+    } else {
+      variants = [{
+        id: 'v1',
+        name: name,
+        price,
+        regularPrice,
+        inStock: stock > 0
+      }];
+    }
+
+    const payload = {
+      name,
+      category,
+      categoryName,
+      price,
+      regularPrice,
+      stock,
+      image,
+      description,
+      benefits,
+      variants,
+      inStock: stock > 0
+    };
+
+    const isEdit = Boolean(id);
+    const url = isEdit ? `/api/products/${id}` : '/api/products';
+    const method = isEdit ? 'PUT' : 'POST';
 
     try {
-      const res = await fetch('/api/products', {
-        method: 'POST',
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name, category, price, regularPrice, stock, description, benefits,
-          image: 'images/kalo_shona_jar.png'
-        })
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (data.success) {
-        alert('নতুন প্রোডাক্ট সফলভাবে যুক্ত হয়েছে!');
+        alert(isEdit 
+          ? (isEn ? 'Product updated successfully!' : 'প্রোডাক্ট সফলভাবে আপডেট হয়েছে!') 
+          : (isEn ? 'New product added successfully!' : 'নতুন প্রোডাক্ট সফলভাবে যুক্ত হয়েছে!'));
         this.closeProductModal();
         await this.fetchProducts();
+      } else {
+        alert(data.message || (isEn ? 'Could not save product.' : 'প্রোডাক্ট সংরক্ষণ করা যায়নি।'));
       }
-    } catch (e) {}
+    } catch (err) {
+      alert(isEn ? 'Server error: Could not save product.' : 'সার্ভার এরর: প্রোডাক্ট সংরক্ষণ করা যায়নি।');
+    }
   },
 
   // Coupons

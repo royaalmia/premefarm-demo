@@ -150,21 +150,46 @@ export async function onRequest(context) {
         UPDATE products SET 
           name = COALESCE(?, name),
           category = COALESCE(?, category),
+          categoryName = COALESCE(?, categoryName),
+          tag = COALESCE(?, tag),
           price = COALESCE(?, price),
           regularPrice = COALESCE(?, regularPrice),
+          image = COALESCE(?, image),
           description = COALESCE(?, description),
+          benefits = COALESCE(?, benefits),
           variants = COALESCE(?, variants)
         WHERE id = ?
       `).bind(
-        body.name,
-        body.category,
-        body.price,
-        body.regularPrice,
-        body.description,
-        body.variants ? JSON.stringify(body.variants) : null,
+        body.name ?? null,
+        body.category ?? null,
+        body.categoryName ?? null,
+        body.tag ?? null,
+        body.price !== undefined ? body.price : null,
+        body.regularPrice !== undefined ? body.regularPrice : null,
+        body.image ?? null,
+        body.description ?? null,
+        body.benefits ? (typeof body.benefits === 'string' ? body.benefits : JSON.stringify(body.benefits)) : null,
+        body.variants ? (typeof body.variants === 'string' ? body.variants : JSON.stringify(body.variants)) : null,
         id
       ).run();
       return jsonResponse({ success: true, message: 'প্রোডাক্ট আপডেট হয়েছে' });
+    }
+
+    const prodStockMatch = path.match(/^\/api\/products\/(\d+)\/stock$/);
+    if (prodStockMatch && method === 'PUT') {
+      const id = parseInt(prodStockMatch[1]);
+      const body = await request.json();
+      const prod = await db.prepare('SELECT variants FROM products WHERE id = ?').bind(id).first();
+      if (prod) {
+        let variants = parseJsonField(prod.variants, []);
+        if (variants.length > 0) {
+          variants = variants.map(v => ({ ...v, inStock: Boolean(body.inStock) }));
+        } else {
+          variants = [{ inStock: Boolean(body.inStock) }];
+        }
+        await db.prepare('UPDATE products SET variants = ? WHERE id = ?').bind(JSON.stringify(variants), id).run();
+      }
+      return jsonResponse({ success: true, message: 'স্টক আপডেট সম্পন্ন হয়েছে' });
     }
 
     if (prodIdMatch && method === 'DELETE') {
