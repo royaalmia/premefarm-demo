@@ -348,41 +348,7 @@ const I18N = {
   }
 };
 
-const DEFAULT_BANNERS = [
-  {
-    id: 1,
-    badge: '⚡ কাজের ক্লান্তি দূর করার ন্যাচারাল ফর্মুলা',
-    title: 'অফিসের কাজের ক্লান্তি? <br><span class="gold">সারাদিন থাকুন চাঙ্গা ও প্রাণবন্ত!</span>',
-    desc: 'টানা কাজের চাপ আর শারীরিক দুর্বলতাকে বিদায় জানান। কাজের টেবিলে রাখুন প্রিমি ফার্মের মধুময় কালো সোনা — ১০০% প্রাকৃতিক স্ট্যামিনা বুস্টার।',
-    image: 'images/hero_banner_1.png',
-    btn1Text: '🛍️ এখনই অর্ডার করুন',
-    btn1Link: '#kalo-shona',
-    btn2Text: 'শপ ভিজিট করুন',
-    btn2Link: '/shop'
-  },
-  {
-    id: 2,
-    badge: '🌿 সুস্থ ও ফিট থাকার সহজ অভ্যাস',
-    title: 'খাঁটি পণ্যের বিশ্বস্ত ঠিকানা <br><span class="gold">আপনার সুস্থতার সিক্রেট পার্টনার!</span>',
-    desc: 'প্রতিদিন সকালে মাত্র এক চামচেই ফিরিয়ে আনুন অফুরন্ত উদ্যম, ক্লান্তিহীন কর্মশক্তি ও অটুট রোগ প্রতিরোধ ক্ষমতা।',
-    image: 'images/hero_banner_2.png',
-    btn1Text: '🛍️ ট্রায়াল প্যাক অর্ডার করুন',
-    btn1Link: '#kalo-shona',
-    btn2Text: 'শপ ভিজিট করুন',
-    btn2Link: '/shop'
-  },
-  {
-    id: 3,
-    badge: '🍵 ১০০% খাঁটি ভেষজ ওয়েলনেস',
-    title: 'সুখী জীবনের জন্য <br><span class="gold">স্বাস্থ্যকর ও খাঁটি খাবার</span>',
-    desc: 'সুন্দরবনের কাঁচা মধু, দানাদার গাওয়া ঘি, রোজেলা টি ও ঘরোয়া আচারের খাঁটি স্বাদ ঘরে বসেই উপভোগ করুন।',
-    image: 'images/hero_banner_3.png',
-    btn1Text: '🛍️ শপ দেখুন',
-    btn1Link: '/shop',
-    btn2Text: 'আমাদের সম্পর্কে',
-    btn2Link: '#about'
-  }
-];
+const DEFAULT_BANNERS = [];
 
 const AdminApp = {
   orders: [],
@@ -837,7 +803,18 @@ const AdminApp = {
 
   // ================= NAVIGATION TABS =================
   setupTabs() {
-    this.currentTab = 'dashboard';
+    const validTabs = ['dashboard', 'orders', 'audit', 'blacklist', 'landing', 'products', 'coupons', 'cms', 'roles', 'courier', 'store'];
+    const getInitialTab = () => {
+      const hash = window.location.hash ? window.location.hash.replace('#', '').trim() : '';
+      if (hash && validTabs.includes(hash)) return hash;
+      const stored = localStorage.getItem('premefarm_active_tab');
+      if (stored && validTabs.includes(stored)) return stored;
+      return 'dashboard';
+    };
+
+    const initialTab = getInitialTab();
+    this.currentTab = initialTab;
+
     const links = document.querySelectorAll('.sidebar-nav a');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -846,11 +823,27 @@ const AdminApp = {
         this.switchTab(tab);
       });
     });
+
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash ? window.location.hash.replace('#', '').trim() : '';
+      if (hash && validTabs.includes(hash) && hash !== this.currentTab) {
+        this.switchTab(hash);
+      }
+    });
+
+    this.switchTab(initialTab);
   },
 
   switchTab(tab) {
     if (!tab) return;
     this.currentTab = tab;
+    try {
+      localStorage.setItem('premefarm_active_tab', tab);
+      if (window.location.hash !== '#' + tab) {
+        history.replaceState(null, '', '#' + tab);
+      }
+    } catch (e) {}
+
     const links = document.querySelectorAll('.sidebar-nav a');
     links.forEach(l => l.classList.toggle('active', l.getAttribute('data-tab') === tab));
 
@@ -859,10 +852,14 @@ const AdminApp = {
     if (target) target.classList.add('active');
 
     if (tab === 'dashboard') this.renderDashboard();
+    if (tab === 'orders') this.fetchOrders();
     if (tab === 'audit') this.fetchAuditLogs();
     if (tab === 'blacklist') this.fetchBlacklist();
     if (tab === 'landing') this.populateLandingProducts();
     if (tab === 'cms') this.fetchCmsContent();
+    if (tab === 'products') this.fetchProducts();
+    if (tab === 'coupons') this.fetchCoupons();
+    if (tab === 'roles') this.fetchStaff();
     this.closeSidebar();
   },
 
@@ -2701,14 +2698,14 @@ const AdminApp = {
           if (document.getElementById('cms-footer-about')) document.getElementById('cms-footer-about').value = c.footer.aboutText || '';
           if (document.getElementById('cms-footer-copy')) document.getElementById('cms-footer-copy').value = c.footer.copyright || '';
         }
-        this.banners = (c.banners && Array.isArray(c.banners) && c.banners.length > 0) ? c.banners : DEFAULT_BANNERS;
+        this.banners = (c.banners && Array.isArray(c.banners)) ? c.banners : [];
         this.renderBanners();
       } else {
-        this.banners = DEFAULT_BANNERS;
+        this.banners = [];
         this.renderBanners();
       }
     } catch (e) {
-      this.banners = DEFAULT_BANNERS;
+      this.banners = [];
       this.renderBanners();
     }
   },
@@ -2738,8 +2735,8 @@ const AdminApp = {
         </td>
         <td>
           <div style="display:flex; gap:6px;">
-            <button onclick="AdminApp.openBannerModal(${b.id !== undefined ? b.id : idx})" style="background:#eef5f0; color:#0d4d29; border:1px solid #c9decb; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">এডিট</button>
-            <button onclick="AdminApp.deleteBanner(${b.id !== undefined ? b.id : idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">✕</button>
+            <button onclick="AdminApp.openBannerModal(${idx})" style="background:#eef5f0; color:#0d4d29; border:1px solid #c9decb; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">এডিট</button>
+            <button onclick="AdminApp.deleteBanner(${idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">✕</button>
           </div>
         </td>
       </tr>
@@ -2911,17 +2908,21 @@ const AdminApp = {
     }
   },
 
-  async deleteBanner(id) {
+  async deleteBanner(index) {
     if (!confirm('আপনি কি নিশ্চিত যে এই ব্যানারটি মুছে ফেলতে চান?')) return;
-    this.banners = this.banners.filter((b, idx) => b.id !== id && idx !== id);
+    if (index >= 0 && index < this.banners.length) {
+      this.banners.splice(index, 1);
+    }
     try {
       await fetch('/api/content/banners', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.banners)
       });
-      alert('ব্যানার মুছে ফেলা হয়েছে।');
-    } catch (e) {}
+      alert('ব্যানার সফলভাবে মুছে ফেলা হয়েছে।');
+    } catch (e) {
+      alert('ব্যানার মুছতে সমস্যা হয়েছে');
+    }
     this.renderBanners();
   },
 

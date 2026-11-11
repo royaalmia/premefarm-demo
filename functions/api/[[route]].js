@@ -619,41 +619,7 @@ export async function onRequest(context) {
         brandName: "Preme Farm",
         brandTagline: "প্রিমি ফার্ম • সুখী জীবনের জন্য স্বাস্থ্যকর খাবার"
       },
-      banners: [
-        {
-          id: 1,
-          badge: "⚡ কাজের ক্লান্তি দূর করার ন্যাচারাল ফর্মুলা",
-          title: "অফিসের কাজের ক্লান্তি? <br><span class=\"gold\">সারাদিন থাকুন চাঙ্গা ও প্রাণবন্ত!</span>",
-          desc: "টানা কাজের চাপ আর শারীরিক দুর্বলতাকে বিদায় জানান। কাজের টেবিলে রাখুন প্রিমি ফার্মের মধুময় কালো সোনা — ১০০% প্রাকৃতিক স্ট্যামিনা বুস্টার।",
-          image: "images/hero_banner_1.png",
-          btn1Text: "🛍️ এখনই অর্ডার করুন (৳৯৫০)",
-          btn1Link: "#kalo-shona",
-          btn2Text: "সকল প্রোডাক্ট দেখুন ➔",
-          btn2Link: "/shop"
-        },
-        {
-          id: 2,
-          badge: "🌿 সুস্থ ও ফিট থাকার সহজ অভ্যাস",
-          title: "কাজের টেবিলে রাখুন <br><span class=\"gold\">আপনার সিক্রেট এনার্জি পার্টনার!</span>",
-          desc: "প্রতিদিন সকালে মাত্র এক চামচেই ফিরিয়ে আনুন অফুরন্ত উদ্যম, ক্লান্তিহীন কর্মশক্তি ও অটুট রোগ প্রতিরোধ ক্ষমতা।",
-          image: "images/hero_banner_2.png",
-          btn1Text: "🛍️ ট্রায়াল প্যাক অর্ডার করুন (৳৫৫০)",
-          btn1Link: "#kalo-shona",
-          btn2Text: "শপ ভিজিট করুন",
-          btn2Link: "/shop"
-        },
-        {
-          id: 3,
-          badge: "✨ সুস্থ সুন্দর জীবনের সেরা উপহার",
-          title: "ব্যস্ত রুটিনেও থাকুক <br><span class=\"gold\">অফুরন্ত প্রাণচাঞ্চল্য!</span>",
-          desc: "শারীরিক দুর্বলতা ও ক্লান্তি কাটিয়ে সুস্থ, সতেজ ও কর্মক্ষম জীবনের জন্য প্রিমি ফার্ম মধুময় কালো সোনা ও অর্গানিক কম্বো প্যাক।",
-          image: "images/hero_banner_3.png",
-          btn1Text: "🔥 মেগা কম্বো কিনুন (৳১৯৯০)",
-          btn1Link: "/shop",
-          btn2Text: "কম্বো অফার",
-          btn2Link: "/shop"
-        }
-      ],
+      banners: [],
       footer: {
         aboutText: "প্রকৃতির শ্রেষ্ঠ উপহার খাঁটি ভেষজ, সুন্দরবনের মধু, গাওয়া ঘি ও পুষ্টিকর খাবার আপনার পরিবারে পৌঁছে দিতে প্রিমি ফার্ম নিবেদিতপ্রাণ।",
         hotline: "01872170476",
@@ -678,14 +644,9 @@ export async function onRequest(context) {
 
     if ((path === '/api/cms' || path === '/api/content') && method === 'GET') {
       const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
-      let content = r ? parseJsonField(r.value, DEFAULT_CMS_CONTENT) : DEFAULT_CMS_CONTENT;
-      if (!content || !content.banners || !Array.isArray(content.banners) || content.banners.length === 0) {
-        content = {
-          ...DEFAULT_CMS_CONTENT,
-          ...(content || {}),
-          banners: DEFAULT_CMS_CONTENT.banners
-        };
-        await db.prepare('INSERT OR REPLACE INTO cms (key, value) VALUES (?, ?)').bind('content', JSON.stringify(content)).run();
+      const content = r ? parseJsonField(r.value, DEFAULT_CMS_CONTENT) : { ...DEFAULT_CMS_CONTENT };
+      if (!Array.isArray(content.banners)) {
+        content.banners = [];
       }
       return jsonResponse({ success: true, content, data: content });
     }
@@ -694,8 +655,15 @@ export async function onRequest(context) {
       await db.prepare('DELETE FROM orders').run();
       await db.prepare('DELETE FROM failed_orders').run();
       await db.prepare('DELETE FROM audit_logs').run();
+      await db.prepare('DELETE FROM products').run();
       await db.prepare("DELETE FROM users WHERE role != 'super_admin' AND id != 'ADMIN-01'").run();
-      return jsonResponse({ success: true, message: 'সকল ডেমো অর্ডার ও ডেমো ইউজার ডিলিট করা হয়েছে। শুধু মেইন এডমিন সক্রিয় আছে।' });
+
+      const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
+      const content = r ? parseJsonField(r.value, {}) : {};
+      content.banners = [];
+      await db.prepare('INSERT OR REPLACE INTO cms (key, value) VALUES (?, ?)').bind('content', JSON.stringify(content)).run();
+
+      return jsonResponse({ success: true, message: 'সকল ডেমো অর্ডার, ডেমো প্রোডাক্ট ও ব্যানার সফলভাবে মুছে ফেলা হয়েছে।' });
     }
 
     if (path === '/api/content/header' && (method === 'PUT' || method === 'POST')) {

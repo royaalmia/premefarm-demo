@@ -49,112 +49,14 @@ const PremeStore = {
       const res = await fetch('/api/products');
       if (res.ok) {
         const data = await res.json();
-        this.products = data.data;
+        this.products = data.data || [];
         window.dispatchEvent(new CustomEvent('products_loaded', { detail: this.products }));
         return;
       }
     } catch (e) {
-      console.warn('Backend API unavailable. Using fallback product database for Cloudflare/GitHub Pages.');
+      console.warn('Backend API unavailable.');
     }
-
-    // Static fallback for Cloudflare Pages / GitHub Pages
-    this.products = [
-      {
-        id: 1,
-        name: "প্রিমি ফার্ম মধুময় কালো সোনা (Madhumoy Kalo Shona)",
-        slug: "madhumoy-kalo-shona",
-        category: "hero",
-        tag: "বেস্ট সেলার",
-        image: "images/kalo_shona_jar.png",
-        rating: 5.0,
-        reviewCount: 428,
-        description: "১০০% খাঁটি সুন্দরবনের মধু, বাছাইকৃত কালোজিরা, রসুন, জাফরান ও ভেষজ উপাদানের সমন্বয়ে প্রস্তুত বিশেষ পথ্য। কাজের ক্লান্তি দূর করে ও স্ট্যামিনা বাড়ায়।",
-        variants: [
-          { size: "২৫০ গ্রাম", regularPrice: 650, price: 550, popular: false },
-          { size: "৫০০ গ্রাম", regularPrice: 1150, price: 950, popular: true }
-        ],
-        inStock: true
-      },
-      {
-        id: 2,
-        name: "প্রিমি ফার্ম সুন্দরবনের খাঁটি মধু (Pure Sundarban Honey)",
-        slug: "sundarban-pure-honey",
-        category: "honey",
-        tag: "খাঁটি প্রাকৃতিক",
-        image: "images/kalo_shona_jar.png",
-        rating: 4.9,
-        reviewCount: 215,
-        description: "সুন্দরবনের গভীর জঙ্গল থেকে মোয়ালদের দ্বারা সরাসরি সংগৃহীত ১০০% বিশুদ্ধ ও কাঁচা মধু।",
-        variants: [
-          { size: "৫০০ গ্রাম", regularPrice: 750, price: 650, popular: true },
-          { size: "১ কেজি", regularPrice: 1400, price: 1200, popular: false }
-        ],
-        inStock: true
-      },
-      {
-        id: 3,
-        name: "কোল্ড প্রেসড প্রিমিয়াম কালোজিরা তেল (Virgin Black Seed Oil)",
-        slug: "black-seed-oil",
-        category: "oil",
-        tag: "কোল্ড প্রেসড",
-        image: "images/kalo_shona_jar.png",
-        rating: 4.9,
-        reviewCount: 182,
-        description: "উন্নত মানের কালোজিরা কোল্ড প্রেস পদ্ধতিতে ভাঙিয়ে প্রস্তুতকৃত শতভাগ খাঁটি তেল।",
-        variants: [
-          { size: "১০০ মিলি", regularPrice: 450, price: 380, popular: false },
-          { size: "২০০ মিলি", regularPrice: 800, price: 690, popular: true }
-        ],
-        inStock: true
-      },
-      {
-        id: 4,
-        name: "এরাবিয়ান রয়্যাল এনার্জি বুস্টার মিক্স (Arabian Royal Nut Mix)",
-        slug: "arabian-nut-mix",
-        category: "combo",
-        tag: "রয়্যাল ব্লেন্ড",
-        image: "images/kalo_shona_jar.png",
-        rating: 5.0,
-        reviewCount: 312,
-        description: "কাঠবাদাম, কাজুবাদাম, পেস্তা, আখরোট, চিয়া সীড এবং প্রিমিয়াম মধুর রয়্যাল মিশ্রণ।",
-        variants: [
-          { size: "৪০০ গ্রাম", regularPrice: 990, price: 850, popular: true },
-          { size: "৮০০ গ্রাম", regularPrice: 1850, price: 1550, popular: false }
-        ],
-        inStock: true
-      },
-      {
-        id: 5,
-        name: "হিমালয়ান অরজিনাল পিংক সল্ট (Himalayan Pink Rock Salt)",
-        slug: "pink-salt",
-        category: "organic",
-        tag: "মিনারেল রিচ",
-        image: "images/kalo_shona_jar.png",
-        rating: 4.8,
-        reviewCount: 94,
-        description: "৮৪টি প্রাকৃতিক খনিজ ও মিনারেল সমৃদ্ধ প্রাকৃতিক হিমালয়ান পিংক সল্ট।",
-        variants: [
-          { size: "৫০০ গ্রাম", regularPrice: 350, price: 280, popular: false },
-          { size: "১ কেজি", regularPrice: 600, price: 490, popular: true }
-        ],
-        inStock: true
-      },
-      {
-        id: 6,
-        name: "স্পেশাল সুস্থ জীবন মেগা কম্বো প্যাক (Vitality Mega Combo)",
-        slug: "vitality-mega-combo",
-        category: "combo",
-        tag: "মেগা অফার • ফ্রি ডেলিভারি",
-        image: "images/hero_banner_1.png",
-        rating: 5.0,
-        reviewCount: 546,
-        description: "মধুময় কালো সোনা ৫০০ গ্রাম + খাঁটি সুন্দরবনের মধু ৫০০ গ্রাম + এরাবিয়ান এনার্জি মিক্স ৪০০ গ্রাম — একসাথে সম্পূর্ণ পরিবারের সুস্বাস্থ্যের মেগা কম্বো!",
-        variants: [
-          { size: "সম্পূর্ণ ৩টি আইটেম কম্বো", regularPrice: 2650, price: 1990, popular: true }
-        ],
-        inStock: true
-      }
-    ];
+    this.products = [];
     window.dispatchEvent(new CustomEvent('products_loaded', { detail: this.products }));
   },
 
