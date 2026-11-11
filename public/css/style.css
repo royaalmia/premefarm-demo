@@ -462,13 +462,10 @@ body {
 }
 
 .slide-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, rgba(8, 41, 23, 0.92) 0%, rgba(8, 41, 23, 0.75) 50%, rgba(0,0,0,0.3) 100%);
-  z-index: 1;
+  display: none !important;
+  background: transparent !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .slide-content {
@@ -2354,7 +2351,9 @@ body {
     pointer-events: auto !important;
   }
   .slide-overlay {
-    background: linear-gradient(180deg, rgba(8, 41, 23, 0.88) 0%, rgba(8, 41, 23, 0.94) 100%) !important;
+    display: none !important;
+    background: transparent !important;
+    opacity: 0 !important;
   }
   .slide-content {
     padding: 24px 18px !important;

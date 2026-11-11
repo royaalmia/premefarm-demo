@@ -1148,6 +1148,89 @@ export async function onRequest(context) {
       return jsonResponse({ success: true, user });
     }
 
+    
+    // ================= WHOLESALE B2B INQUIRIES API =================
+    if (path === '/api/wholesale' && method === 'POST') {
+      try {
+        await db.prepare(`CREATE TABLE IF NOT EXISTS wholesale_inquiries (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          businessName TEXT,
+          phone TEXT NOT NULL,
+          address TEXT,
+          products TEXT,
+          quantity TEXT,
+          note TEXT,
+          status TEXT DEFAULT 'new',
+          createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`).run();
+      } catch (e) {}
+
+      const body = await request.json();
+      const { name, businessName, phone, address, products, quantity, note } = body;
+      if (!name || !phone) {
+        return jsonResponse({ success: false, message: 'নাম এবং মোবাইল নম্বর দেওয়া আবশ্যক' }, 400);
+      }
+
+      const res = await db.prepare(`
+        INSERT INTO wholesale_inquiries (name, businessName, phone, address, products, quantity, note, status, createdAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'new', datetime('now'))
+      `).bind(
+        name.trim(),
+        (businessName || '').trim(),
+        phone.trim(),
+        (address || '').trim(),
+        (products || '').trim(),
+        (quantity || '').trim(),
+        (note || '').trim()
+      ).run();
+
+      return jsonResponse({
+        success: true,
+        message: 'আপনার পাইকারি / হোলসেল আবেদনটি সফলভাবে গৃহীত হয়েছে! আমাদের হোলসেল সেলস টিম দ্রুত আপনার সাথে যোগাযোগ করবে।',
+        id: res.meta?.last_row_id
+      });
+    }
+
+    if (path === '/api/wholesale' && method === 'GET') {
+      try {
+        await db.prepare(`CREATE TABLE IF NOT EXISTS wholesale_inquiries (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          businessName TEXT,
+          phone TEXT NOT NULL,
+          address TEXT,
+          products TEXT,
+          quantity TEXT,
+          note TEXT,
+          status TEXT DEFAULT 'new',
+          createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`).run();
+      } catch (e) {}
+
+      const rows = (await db.prepare('SELECT * FROM wholesale_inquiries ORDER BY id DESC').all()).results || [];
+      return jsonResponse({ success: true, count: rows.length, data: rows });
+    }
+
+    const wsStatusMatch = path.match(/^\/api\/wholesale\/(\d+)\/status$/);
+    if (wsStatusMatch && method === 'PUT') {
+      const id = parseInt(wsStatusMatch[1]);
+      const { status, note } = await request.json();
+      if (note !== undefined) {
+        await db.prepare('UPDATE wholesale_inquiries SET status = ?, note = ? WHERE id = ?').bind(status || 'new', note, id).run();
+      } else {
+        await db.prepare('UPDATE wholesale_inquiries SET status = ? WHERE id = ?').bind(status || 'new', id).run();
+      }
+      return jsonResponse({ success: true, message: 'স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে' });
+    }
+
+    const wsDelMatch = path.match(/^\/api\/wholesale\/(\d+)$/);
+    if (wsDelMatch && method === 'DELETE') {
+      const id = parseInt(wsDelMatch[1]);
+      await db.prepare('DELETE FROM wholesale_inquiries WHERE id = ?').bind(id).run();
+      return jsonResponse({ success: true, message: 'হোলসেল আবেদন মুছে ফেলা হয়েছে' });
+    }
+
     return jsonResponse({ success: false, message: `Route not found: ${method} ${path}` }, 404);
 
   } catch (err) {

@@ -402,6 +402,7 @@ const AdminApp = {
     await this.fetchFailedOrders();
     await this.fetchAuditLogs();
     await this.fetchBlacklist();
+    await this.fetchWholesale();
     await this.fetchLandingPages();
     await this.fetchProducts();
     await this.fetchCoupons();
@@ -803,7 +804,7 @@ const AdminApp = {
 
   // ================= NAVIGATION TABS =================
   setupTabs() {
-    const validTabs = ['dashboard', 'orders', 'audit', 'blacklist', 'landing', 'products', 'coupons', 'cms', 'roles', 'courier', 'store'];
+    const validTabs = ['dashboard', 'orders', 'wholesale', 'audit', 'blacklist', 'landing', 'products', 'coupons', 'cms', 'roles', 'courier', 'store'];
     const getInitialTab = () => {
       const hash = window.location.hash ? window.location.hash.replace('#', '').trim() : '';
       if (hash && validTabs.includes(hash)) return hash;
@@ -853,6 +854,7 @@ const AdminApp = {
 
     if (tab === 'dashboard') this.renderDashboard();
     if (tab === 'orders') this.fetchOrders();
+    if (tab === 'wholesale') this.fetchWholesale();
     if (tab === 'audit') this.fetchAuditLogs();
     if (tab === 'blacklist') this.fetchBlacklist();
     if (tab === 'landing') this.populateLandingProducts();
@@ -2981,7 +2983,166 @@ const AdminApp = {
       });
       alert('স্টোর সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!');
     } catch (e) {}
-  }
+  },
+
+  // ================= WHOLESALE INQUIRIES MANAGEMENT =================
+  wholesaleInquiries: [],
+  wholesaleFilter: 'all',
+
+  async fetchWholesale() {
+    try {
+      const res = await fetch('/api/wholesale');
+      if (res.ok) {
+        const json = await res.json();
+        this.wholesaleInquiries = json.data || [];
+        this.renderWholesale();
+      }
+    } catch (e) {
+      console.error('Failed to fetch wholesale inquiries:', e);
+    }
+  },
+
+  filterWholesale(filter, btn) {
+    this.wholesaleFilter = filter;
+    document.querySelectorAll('.btn-ws-filter').forEach(b => {
+      b.style.background = '#fff';
+      b.style.color = '#475569';
+      b.style.borderColor = '#cbd5e1';
+      b.classList.remove('active');
+    });
+    if (btn) {
+      btn.style.background = '#0d4d29';
+      btn.style.color = '#fff';
+      btn.style.borderColor = '#c9decb';
+      btn.classList.add('active');
+    }
+    this.renderWholesale();
+  },
+
+  renderWholesale() {
+    const tbody = document.getElementById('wholesale-table-body');
+    const badge = document.getElementById('ws-badge');
+    const countAll = document.getElementById('ws-count-all');
+    const countNew = document.getElementById('ws-count-new');
+    const countContacted = document.getElementById('ws-count-contacted');
+    const countConfirmed = document.getElementById('ws-count-confirmed');
+
+    const total = this.wholesaleInquiries.length;
+    const newItems = this.wholesaleInquiries.filter(i => (i.status || 'new') === 'new').length;
+    const contacted = this.wholesaleInquiries.filter(i => i.status === 'contacted').length;
+    const confirmed = this.wholesaleInquiries.filter(i => i.status === 'confirmed').length;
+
+    if (badge) {
+      badge.textContent = newItems;
+      badge.style.display = newItems > 0 ? 'inline-block' : 'none';
+    }
+    if (countAll) countAll.textContent = total;
+    if (countNew) countNew.textContent = newItems;
+    if (countContacted) countContacted.textContent = contacted;
+    if (countConfirmed) countConfirmed.textContent = confirmed;
+
+    if (!tbody) return;
+
+    let items = this.wholesaleInquiries;
+    if (this.wholesaleFilter !== 'all') {
+      items = items.filter(i => (i.status || 'new') === this.wholesaleFilter);
+    }
+
+    if (items.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b;">কোনো হোলসেল আবেদন পাওয়া যায়নি।</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = items.map(w => {
+      const st = w.status || 'new';
+      let stBadge = '<span style="background:#fef3c7; color:#92400e; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">নতুন (New)</span>';
+      if (st === 'contacted') stBadge = '<span style="background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">যোগাযোগ হয়েছে</span>';
+      if (st === 'confirmed') stBadge = '<span style="background:#dcfce7; color:#15803d; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">কনফার্মড ডিল</span>';
+      if (st === 'cancelled') stBadge = '<span style="background:#fee2e2; color:#dc2626; padding:3px 9px; border-radius:12px; font-size:11.5px; font-weight:800;">বাতিল</span>';
+
+      const cleanPhone = (w.phone || '').replace(/[^0-9]/g, '');
+      const waPhone = cleanPhone.startsWith('88') ? cleanPhone : ('88' + cleanPhone);
+
+      return `
+        <tr style="border-bottom:1px solid #f1f5f9;">
+          <td style="padding:12px 16px;">
+            <b style="color:#0d4d29;">#WS-${w.id}</b>
+            <div style="font-size:11px; color:#64748b; margin-top:2px;">${w.createdAt || ''}</div>
+          </td>
+          <td style="padding:12px 16px;">
+            <b style="color:#1e293b; font-size:14px;">${this.escapeHtml(w.name || '')}</b>
+            ${w.businessName ? `<div style="font-size:12px; color:#0d4d29; font-weight:700;">🏢 ${this.escapeHtml(w.businessName)}</div>` : ''}
+          </td>
+          <td style="padding:12px 16px;">
+            <div style="font-weight:700; color:#0f172a; font-family:monospace;">${w.phone || ''}</div>
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <a href="https://wa.me/${waPhone}?text=${encodeURIComponent('আসসালামু আলাইকুম ' + (w.name || '') + ' ভাই, প্রিমি ফার্ম হোলসেল ডিপার্টমেন্ট থেকে আপনার পাইকারি ইনকোয়ারির প্রেক্ষিতে যোগাযোগ করছি।')}" target="_blank" rel="noopener" style="font-size:11px; background:#25D366; color:#fff; padding:2px 8px; border-radius:4px; text-decoration:none; font-weight:800; display:inline-flex; align-items:center; gap:3px;">
+                💬 WhatsApp
+              </a>
+              <a href="tel:${w.phone}" style="font-size:11px; background:#e2e8f0; color:#334155; padding:2px 8px; border-radius:4px; text-decoration:none; font-weight:700;">
+                📞 কল
+              </a>
+            </div>
+          </td>
+          <td style="padding:12px 16px; font-size:13px; color:#475569; max-width:200px;">
+            ${this.escapeHtml(w.address || '')}
+          </td>
+          <td style="padding:12px 16px; font-size:12.5px;">
+            <div style="font-weight:700; color:#0d4d29;">${this.escapeHtml(w.products || 'সকল পণ্য')}</div>
+            ${w.quantity ? `<div style="font-size:11.5px; color:#64748b;">পরিমাণ: ${this.escapeHtml(w.quantity)}</div>` : ''}
+            ${w.note ? `<div style="font-size:11px; color:#94a3b8; font-style:italic; margin-top:2px;">নোট: ${this.escapeHtml(w.note)}</div>` : ''}
+          </td>
+          <td style="padding:12px 16px;">
+            ${stBadge}
+          </td>
+          <td style="padding:12px 16px; text-align:right;">
+            <div style="display:inline-flex; gap:6px; align-items:center;">
+              <select onchange="AdminApp.updateWholesaleStatus(${w.id}, this.value)" style="padding:4px 8px; border-radius:6px; border:1px solid #cbd5e1; font-size:12px; font-weight:700; background:#fff; cursor:pointer;">
+                <option value="new" ${st === 'new' ? 'selected' : ''}>নতুন</option>
+                <option value="contacted" ${st === 'contacted' ? 'selected' : ''}>যোগাযোগ হয়েছে</option>
+                <option value="confirmed" ${st === 'confirmed' ? 'selected' : ''}>কনফার্মড</option>
+                <option value="cancelled" ${st === 'cancelled' ? 'selected' : ''}>বাতিল</option>
+              </select>
+              <button type="button" onclick="AdminApp.deleteWholesale(${w.id})" title="মুছে ফেলুন" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer; font-size:12px;">✕</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  async updateWholesaleStatus(id, status) {
+    try {
+      const res = await fetch(`/api/wholesale/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      const data = await res.json();
+      if (data.success) {
+        const item = this.wholesaleInquiries.find(i => i.id == id);
+        if (item) item.status = status;
+        this.renderWholesale();
+      }
+    } catch (e) {
+      alert('স্ট্যাটাস আপডেট করতে সমস্যা হয়েছে');
+    }
+  },
+
+  async deleteWholesale(id) {
+    if (!confirm('আপনি কি নিশ্চিত যে এই হোলসেল আবেদনটি মুছে ফেলতে চান?')) return;
+    try {
+      const res = await fetch(`/api/wholesale/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        this.wholesaleInquiries = this.wholesaleInquiries.filter(i => i.id != id);
+        this.renderWholesale();
+      }
+    } catch (e) {
+      alert('আবেদন মুছতে সমস্যা হয়েছে');
+    }
+  },
+
 };
 
 window.addEventListener('DOMContentLoaded', () => {

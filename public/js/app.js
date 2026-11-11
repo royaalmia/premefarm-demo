@@ -271,24 +271,25 @@ const PremeStore = {
     if (!slider) return;
     
     // Build slides HTML
-    const slidesHtml = banners.map((b, idx) => `
-      <div class="slide ${idx === 0 ? 'active' : ''}" style="background-image: url('${b.image}');">
-        <div class="slide-overlay"></div>
-        <div class="slide-content">
-          ${b.badge ? `<div class="slide-badge">${b.badge}</div>` : ''}
-          <h2 class="slide-title">
-            ${b.title}
-          </h2>
-          <p class="slide-desc">
-            ${b.desc}
-          </p>
-          <div class="slide-actions">
-            ${b.btn1Text || b.buttonText ? `<a href="${b.btn1Link || '#kalo-shona'}" class="btn-primary-large"><span>🛍️</span> ${b.btn1Text || b.buttonText}</a>` : ''}
-            ${b.btn2Text ? `<a href="${b.btn2Link || '/shop'}" class="btn-secondary-outline">${b.btn2Text}</a>` : ''}
-          </div>
+    // Build slides HTML (Crystal clear banner with no dark shadow overlay)
+    const slidesHtml = banners.map((b, idx) => {
+      const hasText = (b.title && b.title.trim().length > 0) || (b.desc && b.desc.trim().length > 0);
+      return `
+        <div class="slide ${idx === 0 ? 'active' : ''}" style="background-image: url('${b.image}'); background-size: cover; background-position: center;">
+          ${hasText ? `
+            <div class="slide-content">
+              ${b.badge ? `<div class="slide-badge">${b.badge}</div>` : ''}
+              ${b.title ? `<h2 class="slide-title">${b.title}</h2>` : ''}
+              ${b.desc ? `<p class="slide-desc">${b.desc}</p>` : ''}
+              <div class="slide-actions">
+                ${b.btn1Text || b.buttonText ? `<a href="${b.btn1Link || '#kalo-shona'}" class="btn-primary-large"><span>🛍️</span> ${b.btn1Text || b.buttonText}</a>` : ''}
+                ${b.btn2Text ? `<a href="${b.btn2Link || '/shop'}" class="btn-secondary-outline">${b.btn2Text}</a>` : ''}
+              </div>
+            </div>
+          ` : ''}
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
 
     const dotsHtml = `
       <div class="slider-dots">
@@ -791,3 +792,79 @@ if (document.readyState === 'loading') {
 } else {
   bootStore();
 }
+
+
+// ================= WHOLESALE POPUP MODAL HANDLERS =================
+window.openWholesaleModal = function() {
+  const modal = document.getElementById('wholesale-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closeWholesaleModal = function() {
+  const modal = document.getElementById('wholesale-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+};
+
+window.handleWholesaleSubmit = async function(event) {
+  event.preventDefault();
+  const submitBtn = document.getElementById('ws-submit-btn');
+  const statusMsg = document.getElementById('ws-status-msg');
+
+  const name = document.getElementById('ws-name').value.trim();
+  const businessName = document.getElementById('ws-business').value.trim();
+  const phone = document.getElementById('ws-phone').value.trim();
+  const address = document.getElementById('ws-address').value.trim();
+  const quantity = document.getElementById('ws-quantity').value.trim();
+  const note = document.getElementById('ws-note').value.trim();
+
+  const checkedProds = Array.from(document.querySelectorAll('input[name="ws-prod"]:checked')).map(el => el.value);
+  const products = checkedProds.join(', ');
+
+  if (!name || !phone || !address) {
+    alert('অনুগ্রহ করে নাম, মোবাইল নম্বর এবং ঠিকানা প্রদান করুন।');
+    return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'জমা হচ্ছে... ⏳';
+  }
+
+  try {
+    const res = await fetch('/api/wholesale', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, businessName, phone, address, products, quantity, note })
+    });
+    const data = await res.json();
+    if (data.success) {
+      if (statusMsg) {
+        statusMsg.style.display = 'block';
+        statusMsg.style.background = '#dcfce7';
+        statusMsg.style.color = '#15803d';
+        statusMsg.style.border = '1px solid #86efac';
+        statusMsg.innerHTML = '🎉 ' + (data.message || 'আপনার হোলসেল আবেদনটি সফলভাবে জমা হয়েছে!');
+      }
+      document.getElementById('wholesale-form').reset();
+      setTimeout(() => {
+        window.closeWholesaleModal();
+        if (statusMsg) statusMsg.style.display = 'none';
+      }, 3000);
+    } else {
+      alert(data.message || 'আবেদন জমা দিতে সমস্যা হয়েছে।');
+    }
+  } catch (err) {
+    alert('নেটওয়ার্ক সমস্যার কারণে আবেদন জমা দেওয়া সম্ভব হয়নি। আবার চেষ্টা করুন।');
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>আবেদন জমা দিন</span> ➔';
+    }
+  }
+};
