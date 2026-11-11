@@ -194,13 +194,11 @@
         </button>
 
         <!-- Logged-in User Profile & Topbar Logout Combined (Top Right) -->
-        <div style="display: flex; align-items: center; gap: 8px; background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 4px 12px; border-radius: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-          <div style="line-height: 1.2;">
-            <div style="font-size: 10px; color: #64748b; font-weight: 700;" data-i18n="sidebar_user_label">লগইন কৃত একাউন্ট:</div>
-            <b style="font-size: 13px; color: #0d4d29;" id="sidebar-user-name">সুপার এডমিন</b>
-          </div>
-          <span class="badge-role" style="background: #0d4d29; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: 800;" id="sidebar-user-role">Super Admin</span>
-          <button type="button" onclick="AdminApp.handleLogout()" class="btn-topbar-logout" style="margin-left: 4px; padding: 5px 12px; font-size: 12.5px; font-weight: 800; border-radius: 18px; border: 1.5px solid #ef4444; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Logout">
+        <div style="display: flex; align-items: center; gap: 8px; background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 5px 14px; border-radius: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <span style="font-size: 11.5px; color: #64748b; font-weight: 700; white-space: nowrap;" data-i18n="sidebar_user_label">লগইন কৃত:</span>
+          <span class="badge-role" style="background: #0d4d29; color: #fff; font-size: 11.5px; padding: 3px 10px; border-radius: 12px; font-weight: 800; white-space: nowrap;" id="sidebar-user-role">Super Admin</span>
+          <span id="sidebar-user-name" style="display: none;">সুপার এডমিন</span>
+          <button type="button" onclick="AdminApp.handleLogout()" class="btn-topbar-logout" style="margin-left: 2px; padding: 4px 10px; font-size: 12px; font-weight: 800; border-radius: 18px; border: 1.5px solid #ef4444; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;" title="Logout">
             <span>🚪</span> <span data-i18n="btn_logout">লগআউট</span>
           </button>
         </div>

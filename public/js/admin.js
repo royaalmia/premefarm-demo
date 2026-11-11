@@ -9,7 +9,7 @@ const I18N = {
     sidebar_title: 'Preme Farm',
     sidebar_sub: 'কন্ট্রোল প্যানেল',
     sidebar_tagline: 'প্রিমি ফার্ম • ১০০% খাঁটি ও নিরাপদ',
-    sidebar_user_label: 'লগইন কৃত একাউন্ট:',
+    sidebar_user_label: 'লগইন কৃত:',
     nav_dashboard: 'ড্যাশবোর্ড',
     nav_orders: 'অর্ডার ম্যানেজমেন্ট',
     nav_wholesale: 'হোলসেল',
@@ -742,17 +742,22 @@ const AdminApp = {
       }
     }
 
-    // Update active user in sidebar
-    const userName = document.getElementById('sidebar-user-name');
-    if (userName) {
-      if (lang === 'en') {
-        if (this.activeAgent === 'সুপার এডমিন') userName.textContent = 'Super Admin';
-        else if (this.activeAgent === 'মার্কেটিং স্পেশালিস্ট') userName.textContent = 'Marketing Specialist';
-        else userName.textContent = this.activeAgent;
+    // Update active user role in topbar
+    const roleEl = document.getElementById('sidebar-user-role');
+    if (roleEl) {
+      const isSuperAdmin = (this.activeAgent === 'সুপার এডমিন' || this.activeAgent === 'Super Admin');
+      if (isSuperAdmin) {
+        roleEl.textContent = lang === 'en' ? 'Super Admin' : 'সুপার এডমিন';
+      } else if (this.activeAgent.includes('Supervisor') || this.activeAgent.includes('রফিক')) {
+        roleEl.textContent = lang === 'en' ? 'Supervisor' : 'সুপারভাইজার';
+      } else if (this.activeAgent.includes('মার্কেটিং')) {
+        roleEl.textContent = lang === 'en' ? 'Marketing Specialist' : 'মার্কেটিং স্পেশালিস্ট';
       } else {
-        userName.textContent = this.activeAgent;
+        roleEl.textContent = lang === 'en' ? 'Call Center Agent' : 'কল সেন্টার এজেন্ট';
       }
     }
+    const userName = document.getElementById('sidebar-user-name');
+    if (userName) userName.textContent = this.activeAgent;
   },
 
   // ================= MOBILE SIDEBAR DRAWER =================
@@ -813,19 +818,25 @@ const AdminApp = {
       }
     });
 
-    // Update active user pill in sidebar
+    // Update active user pill in topbar
     const nameEl = document.getElementById('sidebar-user-name');
     const roleEl = document.getElementById('sidebar-user-role');
-    if (nameEl) {
+    if (nameEl) nameEl.textContent = this.activeAgent;
+    if (roleEl) {
       if (this.currentLang === 'en') {
-        if (this.activeAgent === 'সুপার এডমিন') nameEl.textContent = 'Super Admin';
-        else if (this.activeAgent === 'মার্কেটিং স্পেশালিস্ট') nameEl.textContent = 'Marketing Specialist';
-        else nameEl.textContent = this.activeAgent;
+        if (role === 'সুপার এডমিন' || isSuperAdmin) roleEl.textContent = 'Super Admin';
+        else if (role === 'সুপারভাইজার') roleEl.textContent = 'Supervisor';
+        else if (role === 'কল সেন্টার এজেন্ট') roleEl.textContent = 'Call Center Agent';
+        else if (role === 'মার্কেটিং স্পেশালিস্ট') roleEl.textContent = 'Marketing Specialist';
+        else roleEl.textContent = role || 'Agent';
       } else {
-        nameEl.textContent = this.activeAgent;
+        if (role === 'Super Admin' || isSuperAdmin) roleEl.textContent = 'সুপার এডমিন';
+        else if (role === 'Supervisor') roleEl.textContent = 'সুপারভাইজার';
+        else if (role === 'Call Center Agent') roleEl.textContent = 'কল সেন্টার এজেন্ট';
+        else if (role === 'Marketing Specialist') roleEl.textContent = 'মার্কেটিং স্পেশালিস্ট';
+        else roleEl.textContent = role || 'এজেন্ট';
       }
     }
-    if (roleEl) roleEl.textContent = role || (isSuperAdmin ? 'Super Admin' : 'Agent');
 
     // If current tab is hidden, auto-switch to first allowed tab
     if (!isSuperAdmin && !(perms || []).includes(this.currentTab)) {
