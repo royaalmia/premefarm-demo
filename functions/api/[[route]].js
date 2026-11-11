@@ -507,19 +507,9 @@ export async function onRequest(context) {
       const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
       const content = r ? parseJsonField(r.value, {}) : {};
       const staff = content.staff || [
-        { id: 'staff-admin', name: 'সুপার এডমিন', username: 'admin', pin: '1234', role: 'Super Admin', permissions: ['*'] },
-        { id: 'staff-tanvir', name: 'তানভীর (Agent-01)', username: 'tanvir', pin: '1234', role: 'Call Center Agent', permissions: ['orders'] },
-        { id: 'staff-sadia', name: 'সাদিয়া (Agent-02)', username: 'sadia', pin: '1234', role: 'Call Center Agent', permissions: ['orders'] },
-        { id: 'staff-rafiq', name: 'রফিক (Supervisor)', username: 'rafiq', pin: '1234', role: 'Supervisor', permissions: ['orders', 'audit', 'blacklist'] },
-        { id: 'staff-marketing', name: 'মার্কেটিং স্পেশালিস্ট', username: 'marketing', pin: '1234', role: 'Marketing', permissions: ['landing', 'coupons'] }
+        { id: 'staff-admin', name: 'সুপার এডমিন', username: 'admin', pin: '1234', role: 'Super Admin', permissions: ['*'] }
       ];
       return jsonResponse({ success: true, data: staff });
-    }
-
-    if (path === '/api/content' && method === 'GET') {
-      const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
-      const content = r ? parseJsonField(r.value, {}) : {};
-      return jsonResponse({ success: true, data: content });
     }
 
     // ================= 6. CUSTOMER AUTHENTICATION =================
@@ -688,8 +678,24 @@ export async function onRequest(context) {
 
     if ((path === '/api/cms' || path === '/api/content') && method === 'GET') {
       const r = await db.prepare('SELECT value FROM cms WHERE key = ?').bind('content').first();
-      const content = r ? parseJsonField(r.value, DEFAULT_CMS_CONTENT) : DEFAULT_CMS_CONTENT;
+      let content = r ? parseJsonField(r.value, DEFAULT_CMS_CONTENT) : DEFAULT_CMS_CONTENT;
+      if (!content || !content.banners || !Array.isArray(content.banners) || content.banners.length === 0) {
+        content = {
+          ...DEFAULT_CMS_CONTENT,
+          ...(content || {}),
+          banners: DEFAULT_CMS_CONTENT.banners
+        };
+        await db.prepare('INSERT OR REPLACE INTO cms (key, value) VALUES (?, ?)').bind('content', JSON.stringify(content)).run();
+      }
       return jsonResponse({ success: true, content, data: content });
+    }
+
+    if (path === '/api/admin/clear-demo-data' && (method === 'POST' || method === 'GET')) {
+      await db.prepare('DELETE FROM orders').run();
+      await db.prepare('DELETE FROM failed_orders').run();
+      await db.prepare('DELETE FROM audit_logs').run();
+      await db.prepare("DELETE FROM users WHERE role != 'super_admin' AND id != 'ADMIN-01'").run();
+      return jsonResponse({ success: true, message: 'সকল ডেমো অর্ডার ও ডেমো ইউজার ডিলিট করা হয়েছে। শুধু মেইন এডমিন সক্রিয় আছে।' });
     }
 
     if (path === '/api/content/header' && (method === 'PUT' || method === 'POST')) {

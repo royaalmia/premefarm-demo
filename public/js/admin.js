@@ -10,6 +10,7 @@ const I18N = {
     sidebar_sub: 'কন্ট্রোল প্যানেল',
     sidebar_tagline: 'প্রিমি ফার্ম • ১০০% খাঁটি ও নিরাপদ',
     sidebar_user_label: 'লগইন কৃত একাউন্ট:',
+    nav_dashboard: 'ড্যাশবোর্ড',
     nav_orders: 'অর্ডার ম্যানেজমেন্ট',
     nav_audit: 'এজেন্ট অ্যাক্টিভিটি লগ',
     nav_blacklist: 'ব্ল্যাকলিস্ট ও সিকিউরিটি',
@@ -30,10 +31,39 @@ const I18N = {
     btn_csv: 'অর্ডার রিপোর্ট (CSV)',
     status_live: 'লাইভ সিস্টেম',
 
-    stat_sales: 'মোট বিক্রি (COD)',
+    stat_sales: 'মোট ডেলিভার্ড সেলস',
     stat_orders: 'মোট অর্ডার',
-    stat_pending: 'পেন্ডিং অর্ডার',
-    stat_courier: 'ইন কুরিয়ার',
+    stat_pending: 'পেন্ডিং পার্সেল',
+    stat_courier: 'কুরিয়ারে প্রেরিত',
+    stat_cancelled: 'বাতিল ও রিটার্ন',
+    stat_total_sub: 'সর্বমোট বুকিং',
+
+    dash_header_title: 'প্রিমি ফার্ম ওভারভিউ ও বিজনেস অ্যানালিটিক্স',
+    dash_header_sub: 'সেলস গ্রাফ, কুরিয়ার পারফরম্যান্স, স্টক অ্যালার্ট ও রিয়েল-টাইম বিজনেস রিপোর্ট',
+    chart_sales_title: 'সাপ্তাহিক সেলস ও অর্ডার ট্র্যাকিং গ্রাফ',
+    chart_sales_sub: 'গত ৭ দিনের প্রতিদিনের ডেলিভারি রেভিনিউ ও নতুন অর্ডারের ভলিউম',
+    legend_sales: 'সেলস',
+    legend_orders: 'অর্ডার',
+    chart_status_title: 'অর্ডার ফুলফিলমেন্ট স্ট্যাটাস',
+    chart_status_sub: 'ডেলিভারি সাফল্য ও কুরিয়ার অনুপাত',
+    st_delivered_lbl: 'সফল ডেলিভারি',
+    st_transit_lbl: 'কুরিয়ারে প্রেরিত',
+    st_pending_lbl: 'পেন্ডিং পার্সেল',
+    st_cancel_lbl: 'বাতিল ও রিটার্ন',
+    fulfillment_rate_label: 'ফুলফিলমেন্ট স্কোর:',
+    inventory_hub_title: 'প্রোডাক্ট ক্যাটালগ ও স্টক সামারি',
+    inventory_hub_sub: 'লাইভ পণ্য সংখ্যা, স্টক লেভেল ও ইনভেন্টরি ভ্যালু',
+    btn_manage_stock: 'স্টক ম্যানেজ করুন ➔',
+    inv_total_prods: 'মোট আইটেম',
+    inv_instock: 'ইন স্টক',
+    inv_lowstock: 'লো স্টক অ্যালার্ট',
+    inv_catalog_val: 'ক্যাটালগ ভ্যালু',
+    courier_matrix_title: 'কুরিয়ার পার্টনার পারফরম্যান্স',
+    courier_matrix_sub: 'Steadfast, Pathao ও RedX কুরিয়ার ডেলিভারি সাকসেস রেট',
+    btn_courier_api_link: 'এপিআই সেটিংস ➔',
+    recent_orders_title: 'সর্বশেষ লাইভ অর্ডার',
+    recent_orders_sub: 'ওয়েবসাইট ও ল্যান্ডিং পেজ থেকে আসা সদ্য অর্ডারসমূহ',
+    btn_view_all_orders: 'সকল অর্ডার দেখুন ➔',
 
     card_orders_title: 'অর্ডার ম্যানেজমেন্ট',
     card_orders_sub: 'ল্যান্ডিং পেজ ও ওয়েবসাইট থেকে আসা সকল অর্ডার পরিচালনা, ফ্রড চেক এবং কুরিয়ার বুকিং',
@@ -53,7 +83,7 @@ const I18N = {
     th_customer: 'গ্রাহক তথ্য ও ফ্রড চেক',
     th_address: 'ডেলিভারি ঠিকানা',
     th_items: 'অর্ডারকৃত পণ্য',
-    th_bill: 'বিল (COD)',
+    th_bill: 'বিল',
     th_status: 'স্ট্যাটাস',
     th_courier: 'কুরিয়ার একশন',
     th_note: 'কল সেন্টার নোট',
@@ -105,7 +135,7 @@ const I18N = {
     new_ord_qty: 'পরিমাণ',
     new_ord_price: 'মূল্য (৳)',
     new_ord_area: 'ডেলিভারি এলাকা',
-    new_ord_total: 'সর্বমোট বিল (COD)',
+    new_ord_total: 'সর্বমোট বিল',
     new_ord_note: 'কল সেন্টার অভ্যন্তরীণ নোট',
     placeholder_note: 'যেমন: কাস্টমার বিকেলে ডেলিভারি চান',
     placeholder_customer_name: 'গ্রাহকের পুরো নাম লিখুন',
@@ -132,7 +162,7 @@ const I18N = {
     th_modal_price: 'মূল্য (৳)',
     ord_subtotal_label: 'পণ্য মূল্য (৳)',
     ord_delivery_label: 'ডেলিভারি চার্জ (৳)',
-    ord_total_label: 'সর্বমোট প্রদেয় COD (৳)',
+    ord_total_label: 'সর্বমোট প্রদেয় টাকা (৳)',
     ord_note_label: 'কল সেন্টার অভ্যন্তরীণ নোট',
     placeholder_detail_note: 'নোট লিখুন: যেমন- কাস্টমার কাল দুপুরে ডেলিভারি নিশ্চিত করতে বলেছেন...',
     ord_courier_status_label: 'কুরিয়ার অবস্থা:',
@@ -151,6 +181,7 @@ const I18N = {
     sidebar_sub: 'CONTROL PANEL',
     sidebar_tagline: 'Preme Farm • 100% Pure & Organic',
     sidebar_user_label: 'Logged in as:',
+    nav_dashboard: 'Dashboard',
     nav_orders: 'Order Management',
     nav_audit: 'Agent Activity Logs',
     nav_blacklist: 'Blacklist & Security',
@@ -173,8 +204,37 @@ const I18N = {
 
     stat_sales: 'Total Sales (COD)',
     stat_orders: 'Total Orders',
-    stat_pending: 'Pending Orders',
+    stat_pending: 'Pending Parcels',
     stat_courier: 'In Courier',
+    stat_cancelled: 'Cancelled / Returned',
+    stat_total_sub: 'Total Bookings',
+
+    dash_header_title: 'Preme Farm Overview & Business Analytics',
+    dash_header_sub: 'Sales charts, courier performance matrix, inventory health & real-time insights',
+    chart_sales_title: 'Weekly Sales & Order Tracking Chart',
+    chart_sales_sub: 'Daily delivered revenue and incoming order volume over the last 7 days',
+    legend_sales: 'Sales',
+    legend_orders: 'Orders',
+    chart_status_title: 'Order Fulfillment Status',
+    chart_status_sub: 'Delivery success and logistics breakdown',
+    st_delivered_lbl: 'Successful Delivery',
+    st_transit_lbl: 'In Courier Transit',
+    st_pending_lbl: 'Pending Parcels',
+    st_cancel_lbl: 'Cancelled / Returned',
+    fulfillment_rate_label: 'Fulfillment Score:',
+    inventory_hub_title: 'Product Catalog & Inventory Health',
+    inventory_hub_sub: 'Live items, stock levels and total catalog valuation',
+    btn_manage_stock: 'Manage Stock ➔',
+    inv_total_prods: 'Total Items',
+    inv_instock: 'In Stock',
+    inv_lowstock: 'Low Stock Alert',
+    inv_catalog_val: 'Catalog Value',
+    courier_matrix_title: 'Courier Partner Performance',
+    courier_matrix_sub: 'Steadfast, Pathao & RedX delivery success ratios',
+    btn_courier_api_link: 'API Settings ➔',
+    recent_orders_title: 'Recent Live Orders',
+    recent_orders_sub: 'Incoming orders from store and landing pages',
+    btn_view_all_orders: 'View All Orders ➔',
 
     card_orders_title: 'Order Management',
     card_orders_sub: 'Manage website & landing page orders, run fraud checks, and book couriers',
@@ -239,7 +299,7 @@ const I18N = {
     // New Order Modal
     new_order_title: 'Create New Order',
     new_ord_name: 'Customer Name *',
-    new_ord_phone: 'Mobile Number *',
+    new_ord_phone: 'Phone Number *',
     new_ord_address: 'Full Delivery Address *',
     new_ord_product: 'Select Product',
     new_ord_qty: 'Quantity',
@@ -247,11 +307,11 @@ const I18N = {
     new_ord_area: 'Delivery Area',
     new_ord_total: 'Total Bill (COD)',
     new_ord_note: 'Call Center Internal Note',
-    placeholder_note: 'e.g., Customer requested afternoon delivery',
-    placeholder_customer_name: 'Enter customer full name',
+    placeholder_note: 'e.g. Customer requested afternoon delivery',
+    placeholder_customer_name: 'Customer full name',
     placeholder_phone: '11-digit mobile number',
     placeholder_address: 'House, Road, Area, District...',
-    opt_city_dhaka: 'Inside Dhaka (Charge ৳70)',
+    opt_city_dhaka: 'Inside Dhaka (Charge ৳100)',
     opt_city_outside: 'Outside Dhaka (Charge ৳130)',
     btn_cancel: 'Cancel',
     btn_save_order: 'Save Order ➔',
@@ -261,9 +321,9 @@ const I18N = {
     ord_details_date_label: 'Date:',
     ord_details_source_label: 'Source:',
     ord_status_change_label: 'Change Order Status *',
-    ord_city_label: 'Delivery City / Area',
+    ord_city_label: 'Delivery City / Region',
     ord_customer_name_label: 'Customer Name *',
-    ord_phone_label: 'Mobile Number *',
+    ord_phone_label: 'Phone Number *',
     ord_address_label: 'Full Delivery Address *',
     ord_items_list_label: 'Ordered Items List',
     th_modal_product: 'Product',
@@ -287,6 +347,42 @@ const I18N = {
     fraud_blacklisted_msg: 'Warning: This phone number is blacklisted!'
   }
 };
+
+const DEFAULT_BANNERS = [
+  {
+    id: 1,
+    badge: '⚡ কাজের ক্লান্তি দূর করার ন্যাচারাল ফর্মুলা',
+    title: 'অফিসের কাজের ক্লান্তি? <br><span class="gold">সারাদিন থাকুন চাঙ্গা ও প্রাণবন্ত!</span>',
+    desc: 'টানা কাজের চাপ আর শারীরিক দুর্বলতাকে বিদায় জানান। কাজের টেবিলে রাখুন প্রিমি ফার্মের মধুময় কালো সোনা — ১০০% প্রাকৃতিক স্ট্যামিনা বুস্টার।',
+    image: 'images/hero_banner_1.png',
+    btn1Text: '🛍️ এখনই অর্ডার করুন',
+    btn1Link: '#kalo-shona',
+    btn2Text: 'শপ ভিজিট করুন',
+    btn2Link: '/shop'
+  },
+  {
+    id: 2,
+    badge: '🌿 সুস্থ ও ফিট থাকার সহজ অভ্যাস',
+    title: 'খাঁটি পণ্যের বিশ্বস্ত ঠিকানা <br><span class="gold">আপনার সুস্থতার সিক্রেট পার্টনার!</span>',
+    desc: 'প্রতিদিন সকালে মাত্র এক চামচেই ফিরিয়ে আনুন অফুরন্ত উদ্যম, ক্লান্তিহীন কর্মশক্তি ও অটুট রোগ প্রতিরোধ ক্ষমতা।',
+    image: 'images/hero_banner_2.png',
+    btn1Text: '🛍️ ট্রায়াল প্যাক অর্ডার করুন',
+    btn1Link: '#kalo-shona',
+    btn2Text: 'শপ ভিজিট করুন',
+    btn2Link: '/shop'
+  },
+  {
+    id: 3,
+    badge: '🍵 ১০০% খাঁটি ভেষজ ওয়েলনেস',
+    title: 'সুখী জীবনের জন্য <br><span class="gold">স্বাস্থ্যকর ও খাঁটি খাবার</span>',
+    desc: 'সুন্দরবনের কাঁচা মধু, দানাদার গাওয়া ঘি, রোজেলা টি ও ঘরোয়া আচারের খাঁটি স্বাদ ঘরে বসেই উপভোগ করুন।',
+    image: 'images/hero_banner_3.png',
+    btn1Text: '🛍️ শপ দেখুন',
+    btn1Link: '/shop',
+    btn2Text: 'আমাদের সম্পর্কে',
+    btn2Link: '#about'
+  }
+];
 
 const AdminApp = {
   orders: [],
@@ -324,6 +420,15 @@ const AdminApp = {
     const agentSelect = document.getElementById('active-agent-select');
     if (agentSelect) {
       agentSelect.value = this.activeAgent;
+    }
+
+    // Automatically purge old demo data once as requested by the owner
+    if (localStorage.getItem('pf_demo_cleared_v2') !== 'true') {
+      try {
+        await fetch('/api/admin/clear-demo-data', { method: 'POST' });
+        localStorage.removeItem('premefarm_orders');
+        localStorage.setItem('pf_demo_cleared_v2', 'true');
+      } catch (e) {}
     }
 
     await this.fetchStats();
@@ -732,7 +837,7 @@ const AdminApp = {
 
   // ================= NAVIGATION TABS =================
   setupTabs() {
-    this.currentTab = 'orders';
+    this.currentTab = 'dashboard';
     const links = document.querySelectorAll('.sidebar-nav a');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -753,9 +858,11 @@ const AdminApp = {
     const target = document.getElementById(`tab-${tab}`);
     if (target) target.classList.add('active');
 
+    if (tab === 'dashboard') this.renderDashboard();
     if (tab === 'audit') this.fetchAuditLogs();
     if (tab === 'blacklist') this.fetchBlacklist();
     if (tab === 'landing') this.populateLandingProducts();
+    if (tab === 'cms') this.fetchCmsContent();
     this.closeSidebar();
   },
 
@@ -808,6 +915,132 @@ const AdminApp = {
     });
   },
 
+  formatStatus(status) {
+    const s = status || 'Pending';
+    if (this.currentLang === 'en') return s;
+    const map = {
+      'Pending': 'পেন্ডিং',
+      'Hold': 'স্থগিত',
+      'Confirmed': 'নিশ্চিত',
+      'In Courier': 'কুরিয়ারে প্রেরিত',
+      'Shipped': 'কুরিয়ারে প্রেরিত',
+      'Delivered': 'ডেলিভার্ড',
+      'Return': 'রিটার্ন',
+      'Cancelled': 'বাতিল'
+    };
+    return map[s] || s;
+  },
+
+  renderDashboard() {
+    const isEn = this.currentLang === 'en';
+    const orders = this.orders || [];
+    const totalCount = orders.length;
+
+    const deliveredOrders = orders.filter(o => (o.status || '').toLowerCase() === 'delivered');
+    const inCourierOrders = orders.filter(o => {
+      const s = (o.status || '').toLowerCase();
+      return s === 'in courier' || s === 'shipped';
+    });
+    const pendingOrders = orders.filter(o => {
+      const s = (o.status || '').toLowerCase();
+      return s === 'pending' || s === 'confirmed' || s === 'hold';
+    });
+    const cancelledOrders = orders.filter(o => {
+      const s = (o.status || '').toLowerCase();
+      return s === 'cancelled' || s === 'cancel' || s === 'return' || s === 'returned';
+    });
+
+    const pctDeliv = totalCount > 0 ? Math.round((deliveredOrders.length / totalCount) * 100) : 100;
+    const pctCourier = totalCount > 0 ? Math.round((inCourierOrders.length / totalCount) * 100) : 0;
+    const pctPending = totalCount > 0 ? Math.round((pendingOrders.length / totalCount) * 100) : 0;
+    const pctCancelled = totalCount > 0 ? Math.round((cancelledOrders.length / totalCount) * 100) : 0;
+
+    const elPctDeliv = document.getElementById('dash-pct-delivered');
+    const elBarDeliv = document.getElementById('dash-bar-delivered');
+    if (elPctDeliv) elPctDeliv.textContent = `${pctDeliv}%`;
+    if (elBarDeliv) elBarDeliv.style.width = `${pctDeliv}%`;
+
+    const elPctCourier = document.getElementById('dash-pct-courier');
+    const elBarCourier = document.getElementById('dash-bar-courier');
+    if (elPctCourier) elPctCourier.textContent = `${pctCourier}%`;
+    if (elBarCourier) elBarCourier.style.width = `${pctCourier}%`;
+
+    const elPctPending = document.getElementById('dash-pct-pending');
+    const elBarPending = document.getElementById('dash-bar-pending');
+    if (elPctPending) elPctPending.textContent = `${pctPending}%`;
+    if (elBarPending) elBarPending.style.width = `${pctPending}%`;
+
+    const elPctCancelled = document.getElementById('dash-pct-cancelled');
+    const elBarCancelled = document.getElementById('dash-bar-cancelled');
+    if (elPctCancelled) elPctCancelled.textContent = `${pctCancelled}%`;
+    if (elBarCancelled) elBarCancelled.style.width = `${pctCancelled}%`;
+
+    const elScore = document.getElementById('dash-overall-score');
+    if (elScore) elScore.textContent = `${pctDeliv}%`;
+
+    // Render Recent 5 Orders on Dashboard
+    const recentBody = document.getElementById('dashboard-recent-orders-body');
+    if (recentBody) {
+      if (orders.length === 0) {
+        recentBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#64748b;">${isEn ? 'No recent orders yet. Live incoming orders will appear here.' : 'এখনও কোনো লাইভ অর্ডার নেই। নতুন অর্ডার আসলে এখানে সাথে সাথে প্রদর্শিত হবে।'}</td></tr>`;
+      } else {
+        const recent5 = orders.slice(0, 5);
+        recentBody.innerHTML = recent5.map(o => {
+          const itemsCount = (o.items || []).reduce((sum, it) => sum + (it.quantity || 1), 0);
+          const firstItem = (o.items && o.items[0]) ? o.items[0].name : 'পণ্য';
+          const itemsSummary = itemsCount > 1 ? `${firstItem} + ${itemsCount - 1} টি` : firstItem;
+          const phone = o.customer?.phone || o.phone || '';
+          const custName = o.customer?.name || o.customerName || 'গ্রাহক';
+          const dt = o.createdAt ? new Date(o.createdAt).toLocaleDateString() : 'আজ';
+          return `
+            <tr>
+              <td>
+                <b style="color: #0d4d29;">${o.id.startsWith('#') ? o.id : '#' + o.id}</b>
+                <div style="font-size: 11.5px; color: #64748b;">${dt} • ${o.source || 'Website'}</div>
+              </td>
+              <td>
+                <div style="font-weight: 700; color: #1e293b;">${this.escapeHtml(custName)}</div>
+                <div style="font-size: 12px; color: #64748b; font-family: monospace;">${phone}</div>
+              </td>
+              <td>
+                <b style="color: #166534;">৳${(o.total || 0).toLocaleString()}</b>
+                <div style="font-size: 11px; color: #64748b;">${this.escapeHtml(itemsSummary)}</div>
+              </td>
+              <td>
+                <span class="badge-status ${(o.status || 'pending').toLowerCase()}" style="display:inline-block; padding:3px 8px; border-radius:12px; font-size:11.5px; font-weight:800;">
+                  ${this.formatStatus(o.status)}
+                </span>
+              </td>
+              <td>
+                <button type="button" onclick="AdminApp.openOrderDetailsModal('${o.id}')" style="background: #eef5f0; color: #0d4d29; border: 1px solid #c9decb; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer;">
+                  ${isEn ? 'View ➔' : 'বিস্তারিত ➔'}
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    // Product Inventory Summary
+    if (this.products && this.products.length > 0) {
+      const totalProds = this.products.length;
+      const inStock = this.products.filter(p => (p.stock === undefined || p.stock > 0)).length;
+      const lowStock = this.products.filter(p => p.stock !== undefined && p.stock > 0 && p.stock <= 5).length;
+      const catVal = this.products.reduce((sum, p) => sum + (p.price || 0) * (p.stock || 10), 0);
+
+      const elTotal = document.getElementById('dash-inv-total');
+      const elInStock = document.getElementById('dash-inv-instock');
+      const elLowStock = document.getElementById('dash-inv-lowstock');
+      const elVal = document.getElementById('dash-inv-value');
+
+      if (elTotal) elTotal.textContent = isEn ? `${totalProds} Items` : `${totalProds} টি`;
+      if (elInStock) elInStock.textContent = isEn ? `${inStock} Items` : `${inStock} টি`;
+      if (elLowStock) elLowStock.textContent = isEn ? `${lowStock} Alerts` : `${lowStock} টি`;
+      if (elVal) elVal.textContent = `৳${catVal.toLocaleString()}`;
+    }
+  },
+
   renderStats(stats) {
     const isEn = this.currentLang === 'en';
     const deliveredRev = stats.deliveredRevenue !== undefined ? stats.deliveredRevenue : (stats.totalRevenue || 0);
@@ -846,6 +1079,8 @@ const AdminApp = {
 
     const elOrders = document.getElementById('stat-orders');
     if (elOrders) elOrders.textContent = totalCount;
+
+    this.renderDashboard();
   },
 
   // ================= 1. ORDERS WORKFLOW =================
@@ -857,6 +1092,7 @@ const AdminApp = {
         this.orders = json.orders || json.data || [];
         this.updateTabCounters();
         this.renderOrdersTable();
+        this.renderDashboard();
         return;
       }
     } catch (e) {}
@@ -864,6 +1100,7 @@ const AdminApp = {
     this.orders = JSON.parse(localStorage.getItem('premefarm_orders') || '[]');
     this.updateTabCounters();
     this.renderOrdersTable();
+    this.renderDashboard();
   },
 
   async fetchFailedOrders() {
@@ -1095,11 +1332,11 @@ const AdminApp = {
           </td>
           <td>
             <b style="font-size:15px; color:#0d4d29;">৳${o.total}</b><br>
-            <span style="font-size:11.5px; color:#64748b;">COD</span>
+            <span style="font-size:11.5px; color:#64748b;">${this.currentLang === 'en' ? 'COD' : 'ক্যাশ অন ডেলিভারি'}</span>
           </td>
           <td>
             <span class="badge-status ${statusClass}" style="display:inline-block; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:800; cursor:pointer;" onclick="AdminApp.openOrderDetailsModal('${o.id}')" title="স্ট্যাটাস পরিবর্তন করতে ক্লিক করুন">
-              ${o.status || 'Pending'}
+              ${this.formatStatus(o.status)}
             </span>
           </td>
           <td>
@@ -2464,10 +2701,16 @@ const AdminApp = {
           if (document.getElementById('cms-footer-about')) document.getElementById('cms-footer-about').value = c.footer.aboutText || '';
           if (document.getElementById('cms-footer-copy')) document.getElementById('cms-footer-copy').value = c.footer.copyright || '';
         }
-        this.banners = c.banners || [];
+        this.banners = (c.banners && Array.isArray(c.banners) && c.banners.length > 0) ? c.banners : DEFAULT_BANNERS;
+        this.renderBanners();
+      } else {
+        this.banners = DEFAULT_BANNERS;
         this.renderBanners();
       }
-    } catch (e) {}
+    } catch (e) {
+      this.banners = DEFAULT_BANNERS;
+      this.renderBanners();
+    }
   },
 
   renderBanners() {
@@ -2503,6 +2746,59 @@ const AdminApp = {
     `).join('');
   },
 
+  handleBannerFileUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert(this.currentLang === 'en' ? 'Image file size must be less than 5MB' : 'ছবির সাইজ সর্বোচ্চ ৫ মেগাবাইট হতে পারবে');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64Data = e.target.result;
+      const imgInput = document.getElementById('banner-image');
+      if (imgInput) imgInput.value = base64Data;
+
+      const previewWrapper = document.getElementById('banner-preview-wrapper');
+      const previewImg = document.getElementById('banner-preview-img');
+      const previewStatus = document.getElementById('banner-preview-status');
+      const previewDim = document.getElementById('banner-preview-dimensions');
+
+      if (previewImg) previewImg.src = base64Data;
+      if (previewWrapper) previewWrapper.style.display = 'flex';
+      if (previewStatus) previewStatus.textContent = file.name;
+      if (previewDim) previewDim.textContent = `${(file.size / 1024).toFixed(1)} KB • প্রস্তুত`;
+    };
+    reader.readAsDataURL(file);
+  },
+
+  clearBannerImage() {
+    const fileInput = document.getElementById('banner-file-input');
+    if (fileInput) fileInput.value = '';
+    const imgInput = document.getElementById('banner-image');
+    if (imgInput) imgInput.value = '';
+    const previewWrapper = document.getElementById('banner-preview-wrapper');
+    if (previewWrapper) previewWrapper.style.display = 'none';
+  },
+
+  onManualBannerUrlChange(val) {
+    const previewWrapper = document.getElementById('banner-preview-wrapper');
+    const previewImg = document.getElementById('banner-preview-img');
+    const previewStatus = document.getElementById('banner-preview-status');
+    const previewDim = document.getElementById('banner-preview-dimensions');
+
+    if (val && val.trim().length > 3) {
+      if (previewImg) previewImg.src = val.trim();
+      if (previewWrapper) previewWrapper.style.display = 'flex';
+      if (previewStatus) previewStatus.textContent = this.currentLang === 'en' ? 'Image Selected' : 'ছবি নির্বাচন করা হয়েছে';
+      if (previewDim) previewDim.textContent = val.trim().startsWith('data:') ? 'আপলোডকৃত ফাইল' : val.trim();
+    } else {
+      if (previewWrapper) previewWrapper.style.display = 'none';
+    }
+  },
+
   openBannerModal(id) {
     const editIdEl = document.getElementById('banner-edit-id');
     const titleEl = document.getElementById('banner-modal-title');
@@ -2515,19 +2811,24 @@ const AdminApp = {
     const b2Text = document.getElementById('banner-btn2-text');
     const b2Link = document.getElementById('banner-btn2-link');
 
+    const fileInput = document.getElementById('banner-file-input');
+    if (fileInput) fileInput.value = '';
+
     if (id !== undefined && id !== null) {
       const banner = this.banners.find((b, idx) => b.id === id || idx === id);
       if (banner) {
         editIdEl.value = banner.id !== undefined ? banner.id : id;
-        titleEl.textContent = 'হিরো ব্যানার এডিট করুন';
+        titleEl.textContent = this.currentLang === 'en' ? 'Edit Hero Banner' : 'হিরো ব্যানার এডিট করুন';
         badgeEl.value = banner.badge || '';
         bannerTitleEl.value = banner.title || '';
         descEl.value = banner.desc || '';
         imgEl.value = banner.image || '';
         b1Text.value = banner.btn1Text || banner.buttonText || '';
-        b1Link.value = banner.btn1Link || '#';
+        b1Link.value = banner.btn1Link || '#kalo-shona';
         b2Text.value = banner.btn2Text || '';
         b2Link.value = banner.btn2Link || '/shop';
+
+        this.onManualBannerUrlChange(banner.image || '');
         document.getElementById('banner-modal').classList.add('active');
         return;
       }
@@ -2535,7 +2836,7 @@ const AdminApp = {
 
     // New Banner defaults
     editIdEl.value = '';
-    titleEl.textContent = '+ নতুন হোমপেজ হিরো ব্যানার যোগ করুন';
+    titleEl.textContent = this.currentLang === 'en' ? '+ Add New Homepage Banner' : '+ নতুন হোমপেজ ব্যানার যোগ করুন';
     badgeEl.value = '🌿 বিশেষ অফার • ১০০% খাঁটি অর্গানিক পথ্য';
     bannerTitleEl.value = 'কাজের টেবিলে রাখুন <br><span class="gold">আপনার সিক্রেট এনার্জি পার্টনার!</span>';
     descEl.value = 'প্রতিদিন সকালে মাত্র এক চামচেই ফিরিয়ে আনুন অফুরন্ত উদ্যম, ক্লান্তিহীন কর্মশক্তি ও অটুট রোগ প্রতিরোধ ক্ষমতা।';
@@ -2544,6 +2845,8 @@ const AdminApp = {
     b1Link.value = '#kalo-shona';
     b2Text.value = 'শপ ভিজিট করুন';
     b2Link.value = '/shop';
+
+    this.onManualBannerUrlChange('images/hero_banner_1.png');
     document.getElementById('banner-modal').classList.add('active');
   },
 

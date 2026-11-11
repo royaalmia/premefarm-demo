@@ -47,51 +47,11 @@
       "id": "staff-admin",
       "name": "সুপার এডমিন",
       "username": "admin",
-      "pin": "1234",
+      "pin": "Admin@PremeFarm",
       "role": "Super Admin",
       "roleTitleBn": "সুপার এডমিন",
       "roleTitleEn": "Super Admin",
       "permissions": ["*"]
-    },
-    {
-      "id": "staff-tanvir",
-      "name": "তানভীর (Agent-01)",
-      "username": "tanvir",
-      "pin": "1234",
-      "role": "Call Center Agent",
-      "roleTitleBn": "কল সেন্টার এক্সিকিউটিভ",
-      "roleTitleEn": "Call Center Agent",
-      "permissions": ["orders"]
-    },
-    {
-      "id": "staff-sadia",
-      "name": "সাদিয়া (Agent-02)",
-      "username": "sadia",
-      "pin": "1234",
-      "role": "Call Center Agent",
-      "roleTitleBn": "কল সেন্টার এক্সিকিউটিভ",
-      "roleTitleEn": "Call Center Agent",
-      "permissions": ["orders"]
-    },
-    {
-      "id": "staff-rafiq",
-      "name": "রফিক (Supervisor)",
-      "username": "rafiq",
-      "pin": "1234",
-      "role": "Supervisor",
-      "roleTitleBn": "কল সেন্টার সুপারভাইজার",
-      "roleTitleEn": "Supervisor",
-      "permissions": ["orders", "audit", "blacklist"]
-    },
-    {
-      "id": "staff-marketing",
-      "name": "মার্কেটিং স্পেশালিস্ট",
-      "username": "marketing",
-      "pin": "1234",
-      "role": "Marketing",
-      "roleTitleBn": "মার্কেটিং স্পেশালিস্ট",
-      "roleTitleEn": "Marketing Specialist",
-      "permissions": ["landing", "coupons"]
     }
   ]
 }
