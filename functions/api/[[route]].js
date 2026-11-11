@@ -843,7 +843,7 @@ export async function onRequest(context) {
     }
 
     // ================= 15A. COURIER WEBHOOK (LIVE AUTO-UPDATE) =================
-    if (path === '/api/courier/webhook' && (method === 'POST' || method === 'GET')) {
+    if ((path === '/api/courier/webhook' || path === '/api/courier/webhoo' || path.startsWith('/api/courier/webhook') || path.startsWith('/api/courier/webhoo')) && (method === 'POST' || method === 'GET')) {
       let payload = {};
       try {
         if (method === 'POST') payload = await request.json();

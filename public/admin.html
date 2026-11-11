@@ -620,19 +620,19 @@
 
         <!-- 2. Webhook / Auto-Status Notification URL (Requested) -->
         <div style="background: #f8fafc; border: 1.5px dashed #94a3b8; border-radius: 12px; padding: 18px 22px; margin-bottom: 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div style="flex: 1; min-width: 280px;">
               <b style="color: #0f172a; font-size: 14.5px;">⚡ কুরিয়ার স্বয়ংক্রিয় স্ট্যাটাস ওয়েব হুক (Live Webhook URL)</b>
-              <p style="color: #64748b; font-size: 13px; margin: 4px 0 0;">
+              <p style="color: #64748b; font-size: 13px; margin: 4px 0 8px;">
                 কুরিয়ার থেকে পার্সেল <b>ডেলিভারি (Delivered)</b> বা <b>বাতিল/রিটার্ন (Cancelled/Return)</b> হলে এই লিংকে নোটিফিকেশন এসে ড্যাশবোর্ড স্বয়ংক্রিয়ভাবে আপডেট হয়ে যাবে:
               </p>
-              <code style="display: inline-block; margin-top: 8px; background: #e2e8f0; color: #0f172a; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 700;">
-                https://premefarm-demo.royaalmia.workers.dev/api/courier/webhook
-              </code>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="text" id="webhook-url-input" readonly value="https://premefarm-demo.royaalmia.workers.dev/api/courier/webhook" onclick="this.select(); navigator.clipboard.writeText(this.value);" style="width: 100%; max-width: 520px; background: #e2e8f0; color: #0f172a; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 700; border: 1px solid #cbd5e1; font-family: monospace; cursor: pointer;" title="ক্লিক করলেই কপি হবে">
+                <button type="button" onclick="const input = document.getElementById('webhook-url-input'); input.select(); navigator.clipboard.writeText(input.value); alert('ওয়েবহুক লিংক কপি হয়েছে: ' + input.value);" class="btn-white" style="padding: 8px 16px; border-radius: 6px; font-weight: 800; font-size: 13px; white-space: nowrap; cursor: pointer;">
+                  📋 কপি করুন
+                </button>
+              </div>
             </div>
-            <button type="button" onclick="navigator.clipboard.writeText('https://premefarm-demo.royaalmia.workers.dev/api/courier/webhook'); alert('ওয়েবহুক লিংক কপি হয়েছে!');" class="btn-white" style="padding: 8px 16px; border-radius: 6px; font-weight: 800; font-size: 13px;">
-              📋 ওয়েব হুক কপি করুন
-            </button>
           </div>
         </div>
 

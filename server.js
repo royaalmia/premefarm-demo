@@ -970,7 +970,7 @@ app.post('/api/courier/send', async (req, res) => {
 });
 
 // Courier Webhook (Live automatic update when courier delivers or cancels)
-app.all('/api/courier/webhook', (req, res) => {
+app.all(['/api/courier/webhook', '/api/courier/webhoo', '/api/courier/webhooks'], (req, res) => {
   const payload = req.method === 'POST' ? req.body : req.query;
   const invoice = payload.invoice || payload.order_id || payload.orderId;
   const trackingCode = payload.tracking_code || payload.consignment_id;
