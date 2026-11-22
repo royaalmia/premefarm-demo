@@ -66,9 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $uu_id = isset($data['uu_id']) ? trim(strip_tags($data['uu_id'])) : ('pf_' . uniqid() . '_' . bin2hex(random_bytes(4)));
     $page_url = isset($data['url']) ? trim(strip_tags($data['url'])) : ($_SERVER['HTTP_REFERER'] ?? 'https://premefarm.com');
 
-    // Clean phone number format for Bangladesh (01XXXXXXXXX)
+    // Convert Bengali numerals to English numerals
+    $bn_digits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    $en_digits = ['0','1','2','3','4','5','6','7','8','9'];
+    $phone = str_replace($bn_digits, $en_digits, $phone);
+
+    // Clean phone number format for Bangladesh (+880, 880, 00880 support)
     $clean_phone = preg_replace('/[^0-9]/', '', $phone);
-    if (strlen($clean_phone) === 13 && substr($clean_phone, 0, 2) === '88') {
+    if (strpos($clean_phone, '0088') === 0) {
+        $clean_phone = substr($clean_phone, 4);
+    } elseif (strpos($clean_phone, '880') === 0) {
         $clean_phone = substr($clean_phone, 2);
     }
 
