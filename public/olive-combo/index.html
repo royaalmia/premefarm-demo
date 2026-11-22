@@ -1413,6 +1413,35 @@
       }
     }
 
+  
+    /* Highlighted Pickle Names in Hero Subtitle */
+    .highlight-pickle {
+      display: inline-block;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+      vertical-align: baseline;
+    }
+    .pickle-jamun {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FCD34D;
+      box-shadow: 0 1px 2px rgba(217, 119, 6, 0.12);
+    }
+    .pickle-burmese {
+      background: #FFEDD5;
+      color: #9A3412;
+      border: 1px solid #FDBA74;
+      box-shadow: 0 1px 2px rgba(234, 88, 12, 0.12);
+    }
+    @media (max-width: 620px) {
+      .highlight-pickle {
+        padding: 1px 5px;
+        font-size: 14.5px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1469,7 +1498,7 @@
           এক জলপাই, দুই রকম জাদু!
         </h1>
         <p class="hero-subtitle-screenshot">
-          মিষ্টির মতো দেখতে অলিভ জামুন আর ঝাল-মশলায় মাখানো বার্মিজ জলপাই আচার—দুটোই একবার খেলে স্বাদ ভুলতে পারবেন না!
+          মিষ্টির মতো দেখতে <span class="highlight-pickle pickle-jamun">অলিভ জামুন</span> আর ঝাল-মশলায় মাখানো <span class="highlight-pickle pickle-burmese">বার্মিজ জলপাই আচার</span>—দুটোই একবার খেলে স্বাদ ভুলতে পারবেন না!
         </p>
         <div class="hero-special-offer-tag">
           ✨ দুই স্পেশাল আচার এখন বিশেষ অফারে ✨
