@@ -91,11 +91,88 @@
       /* No fixed bottom bar padding */
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
     .container {
       width: 100%;
-      max-width: 660px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 0 16px;
+    }
+    header .container {
+      max-width: 960px;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 14px;
+      }
+    }
+
+    /* Desktop & Mobile Responsive Grid for Two Pickles */
+    .pickle-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 14px;
+      margin-bottom: 16px;
+    }
+    @media (min-width: 640px) {
+      .pickle-cards-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+    }
+    .pickle-item-card {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      margin-bottom: 0;
+    }
+    .pickle-item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    }
+
+    /* 2-Column Responsive Checklist for Why Preme Farm on Desktop */
+    @media (min-width: 640px) {
+      .why-preme-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px 20px;
+      }
+    }
+
+    /* Sticky Desktop Order Summary */
+    @media (min-width: 768px) {
+      .checkout-columns {
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: 30px;
+        align-items: start;
+      }
+      .checkout-col:last-child {
+        position: sticky;
+        top: 60px;
+      }
+      .section-card {
+        padding: 28px 24px;
+      }
+      .why-preme-card {
+        padding: 30px 28px;
+      }
+    }
+
+    /* Custom Elegant Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #14793C;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0A4A24;
     }
 
     /* Top Subtle Brand Bar */
@@ -1437,6 +1514,8 @@
       <div class="sec-tag">কম্বো পরিচিতি</div>
       <h2 class="sec-heading">একই সাথে দুই রকম অসাধারণ স্বাদ</h2>
 
+      <!-- Pickle Cards Grid (2 columns on desktop, 1 on mobile) -->
+      <div class="pickle-cards-grid">
       <!-- Pickle 1: Olive Jamun -->
       <div class="pickle-item-card">
         <div class="pickle-thumb-wrap">
@@ -1467,6 +1546,7 @@
             শুকনো চিলি ফ্লেক্স, রোস্টেড মসলা ও বিট লবণে মাখানো চটপটা গোল গোল বল। মুখে দিলেই জিভে জল আনা ঝাল ও টকের দারুণ বিস্ফোরণ।
           </p>
         </div>
+      </div>
       </div>
 
       <!-- Purity Row -->
