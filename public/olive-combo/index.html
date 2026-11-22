@@ -996,35 +996,72 @@
     /* =========================================================================
        📸 PREME FARM SIGNATURE STYLES (MATCHING USER REFERENCE SCREENSHOT)
        ========================================================================= */
-    .price-strip-screenshot {
+    /* 2-Line High-Impact Highlighted Price Showcase */
+    .price-box-twolines {
+      text-align: center;
+      margin: 20px auto 18px auto;
       display: flex;
-      align-items: baseline;
-      justify-content: center;
-      gap: 14px;
-      margin: 18px 0 16px 0;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
-    .regular-price-tag {
-      font-size: 19px;
+    .price-line-regular {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #F1F5F9;
       color: #64748B;
-      font-weight: 600;
+      padding: 6px 18px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 700;
+      border: 1px dashed #CBD5E1;
     }
-    .regular-price-tag s {
-      color: #94A3B8;
-      font-weight: 500;
-    }
-    .offer-price-tag {
-      font-size: 30px;
+    .price-line-regular .reg-strike s {
+      color: #EF4444;
       font-weight: 800;
-      color: #0A4A24;
+      font-size: 20px;
+    }
+    .price-line-offer {
       display: inline-flex;
       align-items: baseline;
-      gap: 6px;
+      justify-content: center;
+      gap: 10px;
+      background: #F0FDF4;
+      border: 2px solid #22C55E;
+      padding: 8px 26px;
+      border-radius: 50px;
+      box-shadow: 0 4px 16px rgba(22, 163, 74, 0.18);
     }
-    .offer-price-tag strong {
-      font-size: 38px;
-      font-weight: 900;
+    .offer-title {
+      font-size: 26px;
+      font-weight: 800;
       color: #0A4A24;
+    }
+    .offer-highlight {
+      font-size: 40px;
+      font-weight: 900;
+      color: #14793C;
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+    @media (max-width: 600px) {
+      .price-line-regular {
+        font-size: 16px;
+        padding: 5px 14px;
+      }
+      .price-line-regular .reg-strike s {
+        font-size: 18px;
+      }
+      .offer-title {
+        font-size: 22px;
+      }
+      .offer-highlight {
+        font-size: 34px;
+      }
+      .price-line-offer {
+        padding: 6px 20px;
+      }
     }
 
     /* Orange Pill Button matching screenshot */
@@ -1414,7 +1451,7 @@
         </p>
         <div class="hero-btns-row">
           <a href="#order-section" class="btn-green-order" onclick="trackInitiateCheckout()">
-            এখনই অর্ডার করুন ➔
+            এখনই অর্ডার করুন
           </a>
           <a href="https://wa.me/8801700000000?text=আসসালামু%20আলাইকুম,%20আমি%20প্রিমি%20ফার্মের%20১%20কেজি%20জলপাই%20আচার%20কম্বো%20অর্ডার%20করতে%20চাই।" class="btn-green-wa" target="_blank">
             WhatsApp করুন
@@ -1459,16 +1496,22 @@
       </div>
 
       <!-- Minimalist Luxury Price Card (Pickle Name, Small Regular, Big Offer) -->
-      <!-- Screenshot-Matching Price Strip -->
-      <div class="price-strip-screenshot">
-        <span class="regular-price-tag">রেগুলার <s>৳৯৯০</s></span>
-        <span class="offer-price-tag">অফার মূল্য: <strong>৳৭৯০</strong></span>
+      <!-- 2-Line High-Impact Price Showcase -->
+      <div class="price-box-twolines">
+        <div class="price-line-regular">
+          <span class="reg-label">রেগুলার মূল্য:</span>
+          <span class="reg-strike"><s>৳৯৯০</s></span>
+        </div>
+        <div class="price-line-offer">
+          <span class="offer-title">অফার মূল্য:</span>
+          <span class="offer-highlight">৳৭৯০</span>
+        </div>
       </div>
 
       <!-- Strategic Order Button #1 (Orange Pill Button matching screenshot) -->
       <div class="cta-pill-wrap">
         <a href="#order-section" class="btn-cta-pill" onclick="trackInitiateCheckout()">
-          <span class="btn-line-main">অর্ডার করতে ক্লিক করুন ➔</span>
+          <span class="btn-line-main">অর্ডার করতে ক্লিক করুন</span>
           <span class="btn-line-sub">(ক্যাশ অন ডেলিভারি)</span>
         </a>
       </div>
@@ -1559,7 +1602,7 @@
       <!-- Strategic Order Button #2 (After Product Showcase) -->
       <div class="cta-pill-wrap" style="margin-top: 16px; margin-bottom: 0;">
         <a href="#order-section" class="btn-cta-pill" onclick="trackInitiateCheckout()">
-          <span class="btn-line-main">অর্ডার করতে ক্লিক করুন ➔</span>
+          <span class="btn-line-main">অর্ডার করতে ক্লিক করুন</span>
           <span class="btn-line-sub">(ক্যাশ অন ডেলিভারি)</span>
         </a>
       </div>
@@ -1718,11 +1761,6 @@
     </section>
   </main>
 
-  <!-- Floating WhatsApp Order -->
-  <a href="#" id="floatingWaBtn" class="floating-wa" target="_blank" title="হোয়াটসঅ্যাপে অর্ডার করুন">
-    💬
-  </a>
-
   <!-- Footer (Clean Green & White, Zero Admin) -->
   <footer>
     <div class="footer-brand">প্রিমি ফার্ম (Preme Farm)</div>
@@ -1819,10 +1857,7 @@
       if (callBtn && window.PREME_CONFIG.SUPPORT_PHONE) {
         callBtn.href = "tel:" + window.PREME_CONFIG.SUPPORT_PHONE;
       }
-      const waBtn = document.getElementById('floatingWaBtn');
-      if (waBtn && window.PREME_CONFIG.WHATSAPP_NUMBER) {
-        waBtn.href = "https://wa.me/" + window.PREME_CONFIG.WHATSAPP_NUMBER + "?text=" + encodeURIComponent("আমি প্রিমি ফার্মের ১ কেজি জলপাই আচার কম্বো (৭৯০৳) অর্ডার করতে চাই।");
-      }
+
     }
 
     const PRICES = {
