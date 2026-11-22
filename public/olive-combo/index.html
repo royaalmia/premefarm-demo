@@ -707,30 +707,65 @@
       color: #475569;
     }
 
-    /* Submit Button (Black/Deep Green Solid) */
+    /* Submit Button (Vibrant Golden-Yellow with Deep Green Contrast - High Conversion) */
+    @keyframes pulse-yellow {
+      0% {
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+      }
+      50% {
+        box-shadow: 0 6px 24px rgba(245, 158, 11, 0.75), 0 0 0 6px rgba(251, 191, 36, 0.25);
+      }
+      100% {
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+      }
+    }
+
     .btn-submit {
       width: 100%;
-      background: #000000;
-      color: var(--white);
-      border: none;
-      padding: 16px;
-      border-radius: 8px;
-      font-size: 19px;
+      background: linear-gradient(180deg, #FBBF24 0%, #F59E0B 100%);
+      color: #0A2E1A;
+      border: 2px solid #D97706;
+      padding: 16px 20px;
+      border-radius: 10px;
+      font-size: 20px;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      transition: all 0.2s;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: pulse-yellow 2.5s infinite;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.2px;
     }
     .btn-submit:hover {
-      background: #14793C;
+      background: linear-gradient(180deg, #F59E0B 0%, #D97706 100%);
+      color: #051A0E;
+      border-color: #B45309;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.65);
+      animation: none;
+    }
+    .btn-submit:active {
+      transform: translateY(0);
     }
     .btn-submit:disabled {
       opacity: 0.65;
       cursor: not-allowed;
+      animation: none;
+    }
+    .btn-total-badge {
+      background: rgba(10, 46, 26, 0.12);
+      color: #0A2E1A;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 19px;
+      font-weight: 900;
+      margin-left: 6px;
+      border: 1px solid rgba(10, 46, 26, 0.18);
+      display: inline-block;
     }
 
     /* Footer */
@@ -1118,7 +1153,7 @@
 
               <!-- Strategic Order Button #3 (Submit Button Matching Screenshot) -->
               <button type="submit" class="btn-submit" id="submitBtn">
-                অর্ডার কনফার্ম করুন <span id="btnTotalText">৳ ৮৭০.০০</span>
+                <span>🛒</span> অর্ডার কনফার্ম করুন <span id="btnTotalText" class="btn-total-badge">৳ ৮৭০.০০</span>
               </button>
             </div>
           </div>
@@ -1376,7 +1411,7 @@
       // Show Confirmation Modal
       document.getElementById('successModal').style.display = 'flex';
       submitBtn.disabled = false;
-      submitBtn.innerHTML = 'অর্ডার কনফার্ম করুন <span id="btnTotalText">৳ ' + totalAmount + '.00</span>';
+      submitBtn.innerHTML = '<span>🛒</span> অর্ডার কনফার্ম করুন <span id="btnTotalText" class="btn-total-badge">৳ ' + totalAmount + '.00</span>';
       document.getElementById('orderForm').reset();
       updateSummary();
     });
