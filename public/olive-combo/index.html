@@ -1338,12 +1338,21 @@
       const orderId = 'PF-OLV-' + Math.floor(100000 + Math.random() * 900000);
       const orderDate = new Date().toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka' });
 
+      // Generate or retrieve persistent browser UUID for Bizmation
+      let browserUuId = localStorage.getItem('bizmation_uu_id');
+      if (!browserUuId) {
+        browserUuId = 'pf_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+        localStorage.setItem('bizmation_uu_id', browserUuId);
+      }
+
       const orderPayload = {
         order_id: orderId,
+        uu_id: browserUuId,
         date: orderDate,
         name: name,
         customer_name: name,
         phone: phone,
+        mobile_number: phone,
         customer_phone: phone,
         address: address,
         customer_address: address,
@@ -1354,7 +1363,8 @@
         shipping_cost: deliveryInfo.charge,
         delivery_charge: deliveryInfo.charge,
         total_amount: totalAmount,
-        total: totalAmount
+        total: totalAmount,
+        url: window.location.href
       };
 
       // 1. Send to Bizmation Webhook if configured
