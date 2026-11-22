@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // =========================================================================
 define('BIZMATION_API_URL', 'https://api.bizmation.io/api/orders/store');
 define('BIZMATION_ACCESS_TOKEN', '$2y$10$Eac4HuFOyD8qX1EOmh8RuOw2kCToC6yew3wvpVy6J71a/j2Fvi6Xe'); // Replace with your actual Bearer token
-define('BIZMATION_INVENTORY_ID', 12345); // Replace with your actual numeric Bizmation User/Inventory ID
+define('BIZMATION_INVENTORY_ID', 15346); // Replace with your actual numeric Bizmation User/Inventory ID
 
 $orders_json_file = __DIR__ . '/orders.json';
 $orders_csv_file = __DIR__ . '/orders.csv';
