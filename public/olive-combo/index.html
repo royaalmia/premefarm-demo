@@ -1537,25 +1537,11 @@
                 </div>
               </div>
 
-              <!-- 5. Quantity Selection -->
-              <div class="form-group">
-                <label class="form-label">পরিমাণ নির্বাচন <span class="req">*</span></label>
-                <div class="qty-options">
-                  <label class="qty-card">
-                    <input type="radio" name="quantity" value="1" checked onchange="updateSummary()" style="display:none;">
-                    <div class="qty-title">১টি কম্বো (১ কেজি)</div>
-                    <div class="qty-price">৳ ৭৯০.০০</div>
-                  </label>
-                  <label class="qty-card">
-                    <input type="radio" name="quantity" value="2" onchange="updateSummary()" style="display:none;">
-                    <div class="qty-title">২টি কম্বো (২ কেজি)</div>
-                    <div class="qty-price">৳ ১,৫০০.০০</div>
-                  </label>
-                </div>
+              <!-- Fixed 1KG Combo Quantity -->
+                <input type="hidden" name="quantity" id="selectedQuantity" value="1">
               </div>
-            </div>
 
-            <!-- Right Column: আপনার অর্ডার (Order Summary matching screenshot) -->
+              <!-- Right Column: আপনার অর্ডার (Order Summary matching screenshot) -->
             <div class="checkout-col">
               <h3 class="col-title">আপনার অর্ডার</h3>
 
@@ -1732,7 +1718,7 @@
 
     function updateSummary() {
       const areaRadio = document.querySelector('input[name="delivery_area"]:checked');
-      const qtyRadio = document.querySelector('input[name="quantity"]:checked');
+      const qtyRadio = document.querySelector('input[name="quantity"]');
 
       const areaKey = areaRadio ? areaRadio.value : 'inside_dhaka';
       const qtyKey = qtyRadio ? qtyRadio.value : '1';
@@ -1779,7 +1765,7 @@
       const address = document.getElementById('custAddress').value.trim();
 
       const areaRadio = document.querySelector('input[name="delivery_area"]:checked');
-      const qtyRadio = document.querySelector('input[name="quantity"]:checked');
+      const qtyRadio = document.querySelector('input[name="quantity"]');
 
       const areaKey = areaRadio ? areaRadio.value : 'inside_dhaka';
       const qtyKey = qtyRadio ? qtyRadio.value : '1';
