@@ -1107,14 +1107,31 @@
     /* 4 Trust Cards Grid matching screenshot */
     .trust-cards-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
       margin-bottom: 24px;
     }
     @media (max-width: 620px) {
       .trust-cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      .trust-card {
+        padding: 10px 6px;
+        flex-direction: column;
+        text-align: center;
+        gap: 4px;
+      }
+      .trust-card-icon {
+        font-size: 20px;
+      }
+      .trust-card-info strong {
+        font-size: 11px;
+        display: block;
+      }
+      .trust-card-info span {
+        font-size: 9.5px;
+        display: block;
       }
     }
     .trust-card {
@@ -1374,6 +1391,28 @@
       50% { opacity: 0.25; }
     }
 
+  
+    .hero-special-offer-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, #FEF08A 0%, #FDE047 100%);
+      color: #064E3B;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: 1px solid rgba(255,255,255,0.6);
+      letter-spacing: 0.2px;
+    }
+    @media (max-width: 620px) {
+      .hero-special-offer-tag {
+        font-size: 13.5px;
+        padding: 5px 14px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1407,7 +1446,7 @@
   <header>
     <div class="container header-inner">
       <a href="#" class="logo-box">
-        <img src="https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/logo.png" onerror="this.onerror=null; this.src='images/logo.png';" alt="Preme Farm Logo" class="logo-img" onerror="this.style.display='none'">
+        <img src="images/logo.png" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/logo.png?v=3';" alt="Preme Farm Logo" class="logo-img" onerror="this.style.display='none'">
         <div class="brand-text">
           <h2>প্রিমি ফার্ম</h2>
           <p>Preme Farm</p>
@@ -1427,11 +1466,14 @@
           🌿 Preme Farm | Healthy Food For Happy Life
         </div>
         <h1 class="hero-title-screenshot">
-          টক-মিষ্টি ঝাল স্বাদে সেরা<br>জলপাই আচার!
+          এক জলপাই, দুই রকম জাদু!
         </h1>
         <p class="hero-subtitle-screenshot">
-          প্রতিটি কামড়ে ঐতিহ্যবাহী আচারের আসল মজা। Preme Farm-এর জলপাই আচারের অনন্য স্বাদে উপভোগ করুন প্রতিদিনের খাবার।
+          মিষ্টির মতো দেখতে অলিভ জামুন আর ঝাল-মশলায় মাখানো বার্মিজ জলপাই আচার—দুটোই একবার খেলে স্বাদ ভুলতে পারবেন না!
         </p>
+        <div class="hero-special-offer-tag">
+          ✨ দুই স্পেশাল আচার এখন বিশেষ অফারে ✨
+        </div>
         <div class="hero-btns-row">
           <a href="#order-section" class="btn-green-order" onclick="trackInitiateCheckout()">
             এখনই অর্ডার করুন
@@ -1451,17 +1493,17 @@
         <div class="slider-track" id="sliderTrack">
           <!-- Slide 1: Combo Hero Shot -->
           <div class="slide-item">
-            <img src="https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-1-combo.jpg" onerror="this.onerror=null; this.src='images/slide-1-combo.jpg';" alt="১ কেজি কম্বো প্যাক" loading="eager">
+            <img src="images/slide-1-combo.jpg" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-1-combo.jpg?v=3';" alt="১ কেজি কম্বো প্যাক" loading="eager">
             <div class="slide-caption-bar">১ কেজি কম্বো প্যাক (অলিভ জামুন + বার্মিজ আচার)</div>
           </div>
           <!-- Slide 2: Olive Jamun Close-up -->
           <div class="slide-item">
-            <img src="https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-2-jamun.jpg" onerror="this.onerror=null; this.src='images/slide-2-jamun.jpg';" alt="মিষ্টি ও রসালো অলিভ জামুন" loading="lazy">
+            <img src="images/slide-2-jamun.jpg" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-2-jamun.jpg?v=3';" alt="মিষ্টি ও রসালো অলিভ জামুন" loading="lazy">
             <div class="slide-caption-bar">রসালো ও মিষ্টি অলিভ জামুন (৫০০ গ্রাম)</div>
           </div>
           <!-- Slide 3: Burmese Olive Close-up -->
           <div class="slide-item">
-            <img src="https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-3-burmese.jpg" onerror="this.onerror=null; this.src='images/slide-3-burmese.jpg';" alt="ঝাল-মশলায় বার্মিজ জলপাই" loading="lazy">
+            <img src="images/slide-3-burmese.jpg" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-3-burmese.jpg?v=3';" alt="ঝাল-মশলায় বার্মিজ জলপাই" loading="lazy">
             <div class="slide-caption-bar">ঝাল-মশলায় মাখানো বার্মিজ জলপাই বল (৫০০ গ্রাম)</div>
           </div>
         </div>
@@ -1518,14 +1560,6 @@
         </div>
 
         <div class="trust-card">
-          <div class="trust-card-icon">🛡️</div>
-          <div class="trust-card-info">
-            <strong>মানিব্যাক গ্যারান্টি</strong>
-            <span>শতভাগ সন্তুষ্টি</span>
-          </div>
-        </div>
-
-        <div class="trust-card">
           <div class="trust-card-icon">⭐</div>
           <div class="trust-card-info">
             <strong>৪.৯/৫ রেটিং</strong>
@@ -1545,7 +1579,7 @@
       <!-- Pickle 1: Olive Jamun -->
       <div class="pickle-item-card">
         <div class="pickle-thumb-wrap">
-          <img src="https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-2-jamun.jpg" onerror="this.onerror=null; this.src='images/slide-2-jamun.jpg';" alt="Olive Jamun Pickle Preme Farm" class="pickle-thumb" loading="lazy">
+          <img src="images/slide-2-jamun.jpg" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-2-jamun.jpg?v=3';" alt="Olive Jamun Pickle Preme Farm" class="pickle-thumb" loading="lazy">
         </div>
         <div class="pickle-item-content">
           <div class="pickle-header-row">
@@ -1561,7 +1595,7 @@
       <!-- Pickle 2: Burmese Olive Pickle -->
       <div class="pickle-item-card">
         <div class="pickle-thumb-wrap">
-          <img src="https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-3-burmese.jpg" onerror="this.onerror=null; this.src='images/slide-3-burmese.jpg';" alt="Burmese Olive Pickle Preme Farm" class="pickle-thumb" loading="lazy">
+          <img src="images/slide-3-burmese.jpg" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-3-burmese.jpg?v=3';" alt="Burmese Olive Pickle Preme Farm" class="pickle-thumb" loading="lazy">
         </div>
         <div class="pickle-item-content">
           <div class="pickle-header-row">
@@ -1634,8 +1668,8 @@
         <form id="orderForm" method="POST" action="order.php">
           <input type="hidden" name="product_name" id="hiddenProductName" value="১ কেজি জলপাই আচার কম্বো (অলিভ জামুন ৫০০ গ্রাম + বার্মিজ ৫০০ গ্রাম)">
           <input type="hidden" name="product_price" id="hiddenProductPrice" value="790">
-          <input type="hidden" name="shipping_cost" id="hiddenShippingCost" value="80">
-          <input type="hidden" name="total_amount" id="hiddenTotalAmount" value="870">
+          <input type="hidden" name="shipping_cost" id="hiddenShippingCost" value="100">
+          <input type="hidden" name="total_amount" id="hiddenTotalAmount" value="890">
 
           <div class="checkout-columns">
             <!-- Left Column: অর্ডারের তথ্য (Billing Details) -->
@@ -1666,17 +1700,17 @@
                 <div class="delivery-options">
                   <label class="delivery-radio-label">
                     <div class="radio-left">
-                      <input type="radio" name="delivery_area" value="inside_dhaka" checked onchange="updateSummary()">
-                      <span>ঢাকা সিটির ভেতরে</span>
-                    </div>
-                    <span class="radio-charge">৳ ৮০.০০</span>
-                  </label>
-                  <label class="delivery-radio-label">
-                    <div class="radio-left">
-                      <input type="radio" name="delivery_area" value="outside_dhaka" onchange="updateSummary()">
+                      <input type="radio" name="delivery_area" value="outside_dhaka" checked onchange="updateSummary()">
                       <span>ঢাকা সিটির বাইরে</span>
                     </div>
                     <span class="radio-charge">৳ ১০০.০০</span>
+                  </label>
+                  <label class="delivery-radio-label">
+                    <div class="radio-left">
+                      <input type="radio" name="delivery_area" value="inside_dhaka" onchange="updateSummary()">
+                      <span>ঢাকা সিটির ভেতরে</span>
+                    </div>
+                    <span class="radio-charge">৳ ৮০.০০</span>
                   </label>
                 </div>
               </div>
@@ -1700,7 +1734,7 @@
                   <tr>
                     <td>
                       <div class="product-summary-cell">
-                        <img src="https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-1-combo.jpg" onerror="this.onerror=null; this.src='images/slide-1-combo.jpg';" alt="১ কেজি কম্বো" class="product-summary-img">
+                        <img src="images/slide-1-combo.jpg" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/royaalmia/premefarm-demo@main/public/olive-combo/images/slide-1-combo.jpg?v=3';" alt="১ কেজি কম্বো" class="product-summary-img">
                         <div>
                           <div class="product-summary-title" id="summaryProductName">১ কেজি জলপাই আচার কম্বো</div>
                           <div class="product-summary-qty" id="summaryProductQty">× 1</div>
@@ -1716,13 +1750,13 @@
                   <tr>
                     <td style="color:#64748B;">Shipping</td>
                     <td class="text-right" id="summaryShipping">
-                      <div id="summaryShippingText" style="font-size:12px; color:#64748B;">ঢাকা সিটির ভেতরে:</div>
-                      <div id="summaryDeliveryCharge" style="font-weight:600;">৳ ৮০.০০</div>
+                      <div id="summaryShippingText" style="font-size:12px; color:#64748B;">ঢাকা সিটির বাইরে:</div>
+                      <div id="summaryDeliveryCharge" style="font-weight:600;">৳ ১০০.০০</div>
                     </td>
                   </tr>
                   <tr class="summary-total-row">
                     <td>Total</td>
-                    <td class="text-right total-number" id="summaryTotal">৳ ৮৭০.০০</td>
+                    <td class="text-right total-number" id="summaryTotal">৳ ৮৯০.০০</td>
                   </tr>
                 </tbody>
               </table>
@@ -1735,7 +1769,7 @@
 
               <!-- Strategic Order Button #3 (Submit Button Matching Screenshot) -->
               <button type="submit" class="btn-submit" id="submitBtn">
-                অর্ডার কনফার্ম করুন <span id="btnTotalText">৳ ৮৭০.০০</span>
+                অর্ডার কনফার্ম করুন <span id="btnTotalText">৳ ৮৯০.০০</span>
               </button>
             </div>
           </div>
@@ -1856,11 +1890,11 @@
       const areaRadio = document.querySelector('input[name="delivery_area"]:checked');
       const qtyRadio = document.querySelector('input[name="quantity"]');
 
-      const areaKey = areaRadio ? areaRadio.value : 'inside_dhaka';
+      const areaKey = areaRadio ? areaRadio.value : 'outside_dhaka';
       const qtyKey = qtyRadio ? qtyRadio.value : '1';
 
       const itemInfo = PRICES[qtyKey] || PRICES[1];
-      const deliveryInfo = DELIVERY[areaKey] || DELIVERY['inside_dhaka'];
+      const deliveryInfo = DELIVERY[areaKey] || DELIVERY['outside_dhaka'];
 
       const total = itemInfo.item + deliveryInfo.charge;
 
@@ -1903,7 +1937,7 @@
       const areaRadio = document.querySelector('input[name="delivery_area"]:checked');
       const qtyRadio = document.querySelector('input[name="quantity"]');
 
-      const areaKey = areaRadio ? areaRadio.value : 'inside_dhaka';
+      const areaKey = areaRadio ? areaRadio.value : 'outside_dhaka';
       const qtyKey = qtyRadio ? qtyRadio.value : '1';
 
       const itemInfo = PRICES[qtyKey];

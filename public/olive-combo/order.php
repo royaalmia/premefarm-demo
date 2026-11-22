@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = isset($data['name']) ? trim(strip_tags($data['name'])) : '';
     $phone = isset($data['phone']) ? trim(strip_tags($data['phone'])) : (isset($data['mobile_number']) ? trim(strip_tags($data['mobile_number'])) : '');
     $address = isset($data['address']) ? trim(strip_tags($data['address'])) : '';
-    $delivery_area = isset($data['delivery_area']) ? trim(strip_tags($data['delivery_area'])) : 'inside_dhaka';
+    $delivery_area = isset($data['delivery_area']) ? trim(strip_tags($data['delivery_area'])) : 'outside_dhaka';
     $quantity = isset($data['quantity']) ? intval($data['quantity']) : 1;
     $notes = isset($data['notes']) ? trim(strip_tags($data['notes'])) : 'Facebook Ads 1KG Olive Combo Offer';
     $uu_id = isset($data['uu_id']) ? trim(strip_tags($data['uu_id'])) : ('pf_' . uniqid() . '_' . bin2hex(random_bytes(4)));
