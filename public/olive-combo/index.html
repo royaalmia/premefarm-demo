@@ -130,21 +130,35 @@
       text-decoration: none;
     }
     .logo-img {
-      height: 42px;
+      height: 58px;
       width: auto;
       object-fit: contain;
+      transition: transform 0.2s ease;
     }
     .brand-text h2 {
-      font-size: 19px;
+      font-size: 22px;
       color: var(--primary);
       font-weight: 800;
       margin: 0;
-      line-height: 1.1;
+      line-height: 1.15;
     }
     .brand-text p {
-      font-size: 11px;
-      color: var(--text-muted);
+      font-size: 12.5px;
+      color: #475569;
       margin: 0;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    @media (min-width: 600px) {
+      .logo-img {
+        height: 66px;
+      }
+      .brand-text h2 {
+        font-size: 25px;
+      }
+      .brand-text p {
+        font-size: 13.5px;
+      }
     }
     .call-btn-head {
       display: inline-flex;
@@ -944,15 +958,14 @@
     }
     .btn-cta-pill {
       display: inline-flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 3px;
       width: 100%;
       background: linear-gradient(180deg, #E65100 0%, #D84315 100%);
       color: #FFFFFF;
-      font-size: 19px;
-      font-weight: 800;
-      padding: 16px 24px;
+      padding: 14px 20px;
       border-radius: 50px;
       text-decoration: none;
       box-shadow: 0 8px 24px rgba(216, 67, 21, 0.42);
@@ -960,6 +973,29 @@
       cursor: pointer;
       transition: all 0.25s ease;
       letter-spacing: 0.2px;
+      text-align: center;
+    }
+    .btn-cta-pill:hover {
+      background: linear-gradient(180deg, #D84315 0%, #BF360C 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(216, 67, 21, 0.55);
+      color: #FFFFFF;
+    }
+    .btn-cta-pill .btn-line-main {
+      font-size: 19.5px;
+      font-weight: 800;
+      line-height: 1.25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-cta-pill .btn-line-sub {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #FEF08A;
+      line-height: 1.2;
+      letter-spacing: 0.3px;
     }
     .btn-cta-pill:hover {
       background: linear-gradient(180deg, #D84315 0%, #BF360C 100%);
@@ -1277,7 +1313,7 @@
         <img src="images/logo.png" alt="Preme Farm Logo" class="logo-img" onerror="this.style.display='none'">
         <div class="brand-text">
           <h2>প্রিমি ফার্ম</h2>
-          <p>Preme Farm • খাঁটি ঘরোয়া আচার</p>
+          <p>Preme Farm</p>
         </div>
       </a>
       <a href="tel:01700000000" class="call-btn-head" id="callHeaderBtn">
@@ -1355,7 +1391,8 @@
       <!-- Strategic Order Button #1 (Orange Pill Button matching screenshot) -->
       <div class="cta-pill-wrap">
         <a href="#order-section" class="btn-cta-pill" onclick="trackInitiateCheckout()">
-          অর্ডার করতে ক্লিক করুন (ক্যাশ অন ডেলিভারি) ➔
+          <span class="btn-line-main">অর্ডার করতে ক্লিক করুন ➔</span>
+          <span class="btn-line-sub">(ক্যাশ অন ডেলিভারি)</span>
         </a>
       </div>
 
@@ -1442,7 +1479,8 @@
       <!-- Strategic Order Button #2 (After Product Showcase) -->
       <div class="cta-pill-wrap" style="margin-top: 16px; margin-bottom: 0;">
         <a href="#order-section" class="btn-cta-pill" onclick="trackInitiateCheckout()">
-          অর্ডার করতে ক্লিক করুন (ক্যাশ অন ডেলিভারি) ➔
+          <span class="btn-line-main">অর্ডার করতে ক্লিক করুন ➔</span>
+          <span class="btn-line-sub">(ক্যাশ অন ডেলিভারি)</span>
         </a>
       </div>
     </section>
@@ -1608,7 +1646,7 @@
   <!-- Footer (Clean Green & White, Zero Admin) -->
   <footer>
     <div class="footer-brand">প্রিমি ফার্ম (Preme Farm)</div>
-    <p>খাঁটি ঘরোয়া ও স্বাস্থ্যসম্মত আচারের বিশ্বস্ত ঠিকানা।</p>
+    <p>সুখী জীবনের জন্য স্বাস্থ্যকর খাবার</p>
     <p style="margin-top: 4px; font-size:11.5px; opacity: 0.85;">© 2026 Preme Farm. All rights reserved.</p>
   </footer>
 
