@@ -1067,6 +1067,101 @@
       line-height: 1.45;
     }
 
+  
+    /* =========================================================================
+       📸 PREME FARM HERO BANNER (MATCHING USER SCREENSHOT)
+       ========================================================================= */
+    .hero-banner-screenshot {
+      text-align: center;
+      padding: 12px 0 18px 0;
+    }
+    .brand-sub-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EAF4EB;
+      color: #14793C;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 14px;
+      border: 1px solid #CDE7D0;
+      letter-spacing: 0.2px;
+    }
+    .hero-title-screenshot {
+      font-size: 34px;
+      font-weight: 800;
+      color: #0F4A24;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+    @media (max-width: 600px) {
+      .hero-title-screenshot {
+        font-size: 27px;
+        line-height: 1.3;
+      }
+    }
+    .hero-subtitle-screenshot {
+      font-size: 15.5px;
+      color: #475569;
+      line-height: 1.6;
+      max-width: 580px;
+      margin: 0 auto 18px auto;
+      font-weight: 500;
+    }
+    .hero-btns-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .btn-green-order {
+      background: #14793C;
+      color: #FFFFFF;
+      font-size: 16.5px;
+      font-weight: 800;
+      padding: 13px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(20, 121, 60, 0.3);
+      transition: all 0.2s ease;
+      min-width: 160px;
+      justify-content: center;
+    }
+    .btn-green-order:hover {
+      background: #0A4A24;
+      color: #FFFFFF;
+      transform: translateY(-2px);
+    }
+    .btn-green-wa {
+      background: #14793C;
+      color: #FFFFFF;
+      font-size: 16.5px;
+      font-weight: 800;
+      padding: 13px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(20, 121, 60, 0.3);
+      transition: all 0.2s ease;
+      min-width: 160px;
+      justify-content: center;
+    }
+    .btn-green-wa:hover {
+      background: #0A4A24;
+      color: #FFFFFF;
+      transform: translateY(-2px);
+    }
+
   </style>
 </head>
 <body>
@@ -1095,15 +1190,25 @@
   <!-- Hero Content -->
   <main class="container">
     <section class="hero-section">
-      <div class="badge-pill">
-        <span>🍈</span> এক জলপাই, দুই রকম জাদু!
+      <div class="hero-banner-screenshot">
+        <div class="brand-sub-badge">
+          🌿 Preme Farm | Healthy Food For Happy Life
+        </div>
+        <h1 class="hero-title-screenshot">
+          টক-মিষ্টি ঝাল স্বাদে সেরা<br>জলপাই আচার!
+        </h1>
+        <p class="hero-subtitle-screenshot">
+          প্রতিটি কামড়ে ঐতিহ্যবাহী আচারের আসল মজা। Preme Farm-এর জলপাই আচারের অনন্য স্বাদে উপভোগ করুন প্রতিদিনের খাবার।
+        </p>
+        <div class="hero-btns-row">
+          <a href="#order-section" class="btn-green-order" onclick="trackInitiateCheckout()">
+            এখনই অর্ডার করুন ➔
+          </a>
+          <a href="https://wa.me/8801700000000?text=আসসালামু%20আলাইকুম,%20আমি%20প্রিমি%20ফার্মের%20১%20কেজি%20জলপাই%20আচার%20কম্বো%20অর্ডার%20করতে%20চাই।" class="btn-green-wa" target="_blank">
+            WhatsApp করুন
+          </a>
+        </div>
       </div>
-      <h1 class="hero-title">
-        রসালো <span class="accent-text">অলিভ জামুন</span> + চটপটা <span class="accent-text">বার্মিজ জলপাই</span>
-      </h1>
-      <p class="hero-subtitle">
-        মিষ্টি আর ঝালের এক অপূর্ব মেলবন্ধন — মোট ১ কেজি স্পেশাল কম্বো প্যাক।
-      </p>
 
       <!-- ===================================================================== -->
       <!-- 🖼️ SWIPEABLE PHOTO SLIDER                                            -->
