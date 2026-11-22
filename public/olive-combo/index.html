@@ -1162,13 +1162,112 @@
       transform: translateY(-2px);
     }
 
+  
+    /* =========================================================================
+       🔥 LIVE URGENCY COUNTDOWN TIMER BAR (CONVERSION BOOSTER)
+       ========================================================================= */
+    .top-countdown-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: linear-gradient(90deg, #07351A 0%, #115F30 50%, #07351A 100%);
+      color: #FFFFFF;
+      border-bottom: 2px solid var(--accent);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      padding: 7px 12px;
+      font-size: 13.5px;
+    }
+    .countdown-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    .countdown-label {
+      font-weight: 700;
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      letter-spacing: 0.2px;
+    }
+    .countdown-label .fire-icon {
+      font-size: 16px;
+      animation: pulse-fire 1.5s infinite;
+    }
+    @keyframes pulse-fire {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+    }
+    .countdown-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .timer-unit {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(254, 240, 138, 0.4);
+      border-radius: 6px;
+      padding: 2px 7px;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 3px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .timer-num {
+      color: #FEF08A;
+      font-size: 16px;
+      font-weight: 900;
+      font-family: inherit;
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+    }
+    .timer-txt {
+      font-size: 10.5px;
+      color: #A7F3D0;
+      font-weight: 600;
+    }
+    .timer-sep {
+      color: #FEF08A;
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1;
+      animation: blink-sep 1s infinite;
+    }
+    @keyframes blink-sep {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- Top Subtle Brand Bar -->
-  <div class="top-bar">
-    🌿 প্রিমি ফার্ম — ঐতিহ্যবাহী ঘরোয়া স্বাদের দুই স্পেশাল আচার কম্বো
+  <!-- 🔥 Top Live Urgency Countdown Bar -->
+  <div class="top-countdown-bar">
+    <div class="countdown-inner">
+      <span class="countdown-label">
+        <span class="fire-icon">🔥</span> বিশেষ কম্বো অফার শেষ হতে বাকি:
+      </span>
+      <div class="countdown-timer" id="topCountdownTimer">
+        <div class="timer-unit">
+          <span class="timer-num" id="cdHours">০৫</span>
+          <span class="timer-txt">ঘণ্টা</span>
+        </div>
+        <span class="timer-sep">:</span>
+        <div class="timer-unit">
+          <span class="timer-num" id="cdMins">২৮</span>
+          <span class="timer-txt">মিনিট</span>
+        </div>
+        <span class="timer-sep">:</span>
+        <div class="timer-unit">
+          <span class="timer-num" id="cdSecs">৪২</span>
+          <span class="timer-txt">সেকেন্ড</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Header -->
@@ -1782,6 +1881,55 @@
     function closeSuccessModal() {
       document.getElementById('successModal').style.display = 'none';
     }
+  
+    // =========================================================================
+    // 🔥 LIVE ROLLING COUNTDOWN TIMER ENGINE (PERSISTENT & BENGALI NUMERALS)
+    // =========================================================================
+    (function initUrgencyCountdown() {
+      const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      function toBengali(num) {
+        return String(num).padStart(2, '0').split('').map(d => bnDigits[d] || d).join('');
+      }
+
+      // 6-hour rolling window stored in localStorage
+      const DURATION = 6 * 60 * 60 * 1000; // 6 hours
+      let targetTime = localStorage.getItem('preme_offer_timer_end');
+
+      const now = Date.now();
+      if (!targetTime || now > parseInt(targetTime, 10)) {
+        targetTime = now + DURATION;
+        localStorage.setItem('preme_offer_timer_end', targetTime);
+      } else {
+        targetTime = parseInt(targetTime, 10);
+      }
+
+      const hoursEl = document.getElementById('cdHours');
+      const minsEl = document.getElementById('cdMins');
+      const secsEl = document.getElementById('cdSecs');
+
+      function updateTimer() {
+        let remaining = targetTime - Date.now();
+        if (remaining <= 0) {
+          // Loop seamlessly to keep urgency active for incoming traffic
+          targetTime = Date.now() + DURATION;
+          localStorage.setItem('preme_offer_timer_end', targetTime);
+          remaining = DURATION;
+        }
+
+        const totalSecs = Math.floor(remaining / 1000);
+        const h = Math.floor(totalSecs / 3600);
+        const m = Math.floor((totalSecs % 3600) / 60);
+        const s = totalSecs % 60;
+
+        if (hoursEl) hoursEl.textContent = toBengali(h);
+        if (minsEl) minsEl.textContent = toBengali(m);
+        if (secsEl) secsEl.textContent = toBengali(s);
+      }
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    })();
+
   </script>
 </body>
 </html>
