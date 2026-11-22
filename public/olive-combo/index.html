@@ -901,6 +901,172 @@
       font-weight: 700;
       cursor: pointer;
     }
+  
+    /* =========================================================================
+       📸 PREME FARM SIGNATURE STYLES (MATCHING USER REFERENCE SCREENSHOT)
+       ========================================================================= */
+    .price-strip-screenshot {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 14px;
+      margin: 18px 0 16px 0;
+      flex-wrap: wrap;
+    }
+    .regular-price-tag {
+      font-size: 19px;
+      color: #64748B;
+      font-weight: 600;
+    }
+    .regular-price-tag s {
+      color: #94A3B8;
+      font-weight: 500;
+    }
+    .offer-price-tag {
+      font-size: 30px;
+      font-weight: 800;
+      color: #0A4A24;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .offer-price-tag strong {
+      font-size: 38px;
+      font-weight: 900;
+      color: #0A4A24;
+    }
+
+    /* Orange Pill Button matching screenshot */
+    .cta-pill-wrap {
+      text-align: center;
+      margin: 8px 0 22px 0;
+      width: 100%;
+    }
+    .btn-cta-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: linear-gradient(180deg, #E65100 0%, #D84315 100%);
+      color: #FFFFFF;
+      font-size: 19px;
+      font-weight: 800;
+      padding: 16px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(216, 67, 21, 0.42);
+      border: 2px solid #FB923C;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      letter-spacing: 0.2px;
+    }
+    .btn-cta-pill:hover {
+      background: linear-gradient(180deg, #D84315 0%, #BF360C 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(216, 67, 21, 0.55);
+      color: #FFFFFF;
+    }
+    .btn-cta-pill:active {
+      transform: translateY(0);
+    }
+
+    /* 4 Trust Cards Grid matching screenshot */
+    .trust-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 620px) {
+      .trust-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+    }
+    .trust-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .trust-card-icon {
+      font-size: 24px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .trust-card-info {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    .trust-card-info strong {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #0F172A;
+      line-height: 1.25;
+    }
+    .trust-card-info span {
+      font-size: 11.5px;
+      color: #64748B;
+      margin-top: 2px;
+      line-height: 1.2;
+    }
+
+    /* "কেন প্রিমি ফার্মের এই আচার আপনার জন্য সেরা?" Section matching screenshot */
+    .why-preme-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 24px 20px;
+      margin-bottom: 24px;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+    .why-preme-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0A4A24;
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: 0.2px;
+    }
+    .why-preme-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .why-preme-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .check-circle {
+      width: 28px;
+      height: 28px;
+      background: #ECFDF5;
+      color: #059669;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .check-text {
+      font-size: 15px;
+      color: #1E293B;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
   </style>
 </head>
 <body>
@@ -976,19 +1142,53 @@
       </div>
 
       <!-- Minimalist Luxury Price Card (Pickle Name, Small Regular, Big Offer) -->
-      <div class="price-box">
-        <div class="price-pickle-name">১ কেজি জলপাই আচার কম্বো (অলিভ জামুন + বার্মিজ)</div>
-        <div class="price-sub-size">৫০০ গ্রাম + ৫০০ গ্রাম কাঁচের জার</div>
-        <div class="price-main-row">
-          <span class="regular-strike">৳৯৯০</span>
-          <span class="offer-big">৳৭৯০</span>
-        </div>
+      <!-- Screenshot-Matching Price Strip -->
+      <div class="price-strip-screenshot">
+        <span class="regular-price-tag">রেগুলার <s>৳৯৯০</s></span>
+        <span class="offer-price-tag">অফার মূল্য: <strong>৳৭৯০</strong></span>
       </div>
 
-      <!-- Strategic Order Button #1 (Under Hero) -->
-      <a href="#order-section" class="btn-cta" onclick="trackInitiateCheckout()">
-        <span>🛒</span> এখনই অর্ডার করুন — ৳৭৯০
-      </a>
+      <!-- Strategic Order Button #1 (Orange Pill Button matching screenshot) -->
+      <div class="cta-pill-wrap">
+        <a href="#order-section" class="btn-cta-pill" onclick="trackInitiateCheckout()">
+          অর্ডার করতে ক্লিক করুন (ক্যাশ অন ডেলিভারি) ➔
+        </a>
+      </div>
+
+      <!-- 4 Trust Cards Grid matching screenshot -->
+      <div class="trust-cards-grid">
+        <div class="trust-card">
+          <div class="trust-card-icon">🌿</div>
+          <div class="trust-card-info">
+            <strong>১০০% প্রাকৃতিক</strong>
+            <span>ভেজালমুক্ত আচার</span>
+          </div>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-card-icon">🚚</div>
+          <div class="trust-card-info">
+            <strong>ক্যাশ অন ডেলিভারি</strong>
+            <span>পণ্য দেখে পেমেন্ট</span>
+          </div>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-card-icon">🛡️</div>
+          <div class="trust-card-info">
+            <strong>মানিব্যাক গ্যারান্টি</strong>
+            <span>শতভাগ সন্তুষ্টি</span>
+          </div>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-card-icon">⭐</div>
+          <div class="trust-card-info">
+            <strong>৪.৯/৫ রেটিং</strong>
+            <span>ভেরিফাইড রিভিউ</span>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- SECTION: THE TWO PICKLES SHOWCASE -->
@@ -1036,67 +1236,41 @@
       </div>
 
       <!-- Strategic Order Button #2 (After Product Showcase) -->
-      <a href="#order-section" class="btn-cta-secondary" onclick="trackInitiateCheckout()">
-        <span>👉</span> স্পেশাল কম্বোটি অর্ডার করুন (৳৭৯০)
-      </a>
+      <div class="cta-pill-wrap" style="margin-top: 16px; margin-bottom: 0;">
+        <a href="#order-section" class="btn-cta-pill" onclick="trackInitiateCheckout()">
+          অর্ডার করতে ক্লিক করুন (ক্যাশ অন ডেলিভারি) ➔
+        </a>
+      </div>
     </section>
 
         <!-- ===================================================================== -->
-    <!-- 🌿 WHY BUY FROM US / KEY FEATURES SECTION                            -->
     <!-- ===================================================================== -->
-    <section class="section-card">
-      <div class="sec-tag">বিশেষ বৈশিষ্ট্য</div>
-      <h2 class="sec-heading">প্রিমি ফার্মের আচার কেন নেবেন?</h2>
-
-      <div class="why-us-grid">
-        <div class="why-us-item">
-          <div class="why-us-icon">🍈</div>
-          <div class="why-us-text">
-            <h4>১০০% বাছাইকৃত ফ্রেশ জলপাই</h4>
-            <p>প্রতিটি জলপাই নিখুঁতভাবে বাছাই করে তৈরি, কোনো ফাটা বা দাগযুক্ত জলপাই ব্যবহার করা হয় না।</p>
-          </div>
-        </div>
-
-        <div class="why-us-item">
-          <div class="why-us-icon">🛢️</div>
-          <div class="why-us-text">
-            <h4>ঘানির খাঁটি সরিষার তেলে তৈরি</h4>
-            <p>ভেজালমুক্ত খাঁটি সরিষার তেল ও নিজস্ব সিক্রেট মশলায় প্রস্তুত, যা মুখে এনে দেয় আসল আচারের ঝাঁঝ ও ঘ্রাণ।</p>
-          </div>
-        </div>
-
-        <div class="why-us-item">
-          <div class="why-us-icon">🚫</div>
-          <div class="why-us-text">
-            <h4>কোনো ক্ষতিকর কেমিক্যাল বা প্রিজারভেটিভ নেই</h4>
-            <p>কৃত্রিম রঙ, ভিনেগার বা রাসায়নিক প্রিজারভেটিভ মুক্ত—পরিবারের ছোট থেকে বড় সবার স্বাস্থ্যের জন্য সম্পূর্ণ নিরাপদ।</p>
-          </div>
-        </div>
-
-        <div class="why-us-item">
-          <div class="why-us-icon">😍</div>
-          <div class="why-us-text">
-            <h4>১ কম্বোতে দুই জাদুকরী স্বাদ</h4>
-            <p>মিষ্টি ও রসালো অলিভ জামুন (৫০০ গ্রাম) এবং ঝাল-টক চটপটা বার্মিজ আচার (৫০০ গ্রাম)—এক অর্ডারে দুই ভিন্ন টেস্ট!</p>
-          </div>
-        </div>
-
-        <div class="why-us-item">
-          <div class="why-us-icon">🏡</div>
-          <div class="why-us-text">
-            <h4>সম্পূর্ণ স্বাস্থ্যসম্মত ঘরোয়া পরিবেশ</h4>
-            <p>কারখানার যান্ত্রিক তৈরি নয়, ঘরোয়া পরম যত্নে নিখুঁত পরিচ্ছন্নতায় তৈরি করা হয়।</p>
-          </div>
-        </div>
-
-        <div class="why-us-item">
-          <div class="why-us-icon">📦</div>
-          <div class="why-us-text">
-            <h4>ক্যাশ অন ডেলিভারি সুবিধা</h4>
-            <p>অগ্রিম কোনো টাকা দিতে হবে না। ডেলিভারি ম্যানের কাছ থেকে প্রোডাক্ট হাতে পেয়ে নিশ্চিত হয়ে টাকা দিন।</p>
-          </div>
-        </div>
-      </div>
+    <!-- 🌿 WHY PREME FARM IS BEST (MATCHING USER REFERENCE SCREENSHOT)       -->
+    <!-- ===================================================================== -->
+    <section class="why-preme-card">
+      <h2 class="why-preme-title">🌿 কেন প্রিমি ফার্মের এই পণ্যটি আপনার জন্য সেরা?</h2>
+      <ul class="why-preme-list">
+        <li>
+          <span class="check-circle">✓</span>
+          <span class="check-text">১০০% বাছাইকৃত ফ্রেশ জলপাই ও ঘানির খাঁটি সরিষার তেলের নিশ্চয়তা</span>
+        </li>
+        <li>
+          <span class="check-circle">✓</span>
+          <span class="check-text">ঘরোয়া পরম যত্নে তৈরি, মুখে এনে দেয় জিভে জল আনা আসল আচারের স্বাদ</span>
+        </li>
+        <li>
+          <span class="check-circle">✓</span>
+          <span class="check-text">কোনো ক্ষতিকর কেমিক্যাল, প্রিজারভেটিভ বা কৃত্রিম রঙের ভেজাল নেই</span>
+        </li>
+        <li>
+          <span class="check-circle">✓</span>
+          <span class="check-text">১ কম্বোতেই দুই বিপরীতধর্মী স্বাদ—রসালো মিষ্টি অলিভ জামুন ও ঝাল-টক বার্মিজ জলপাই</span>
+        </li>
+        <li>
+          <span class="check-circle">✓</span>
+          <span class="check-text">ক্যাশ অন ডেলিভারিতে সম্পূর্ণ নিশ্চিন্তে পণ্য হাতে পেয়ে মূল্য পরিশোধের সুযোগ</span>
+        </li>
+      </ul>
     </section>
 
 <!-- ===================================================================== -->
