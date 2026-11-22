@@ -9,7 +9,7 @@
   <meta name="description" content="রসালো অলিভ জামুন আর ঝাল-মশলায় মাখানো বার্মিজ জলপাই আচার—দুই স্পেশাল আচারের ১ কেজি রাজকীয় কম্বো এখন বিশেষ অফারে মাত্র ৳৭৯০ তে! ক্যাশ অন ডেলিভারি।">
   <meta property="og:title" content="এক জলপাই, দুই রকম জাদু! | অলিভ জামুন + বার্মিজ জলপাই আচার কম্বো">
   <meta property="og:description" content="রেগুলার ৯৯০ টাকার ১ কেজি প্রিমিয়াম আচার কম্বো এখন মাত্র ৭৯০ টাকায়! ক্যাশ অন ডেলিভারি সমগ্র বাংলাদেশে।">
-  <meta property="og:image" content="images/olive-combo-hero.jpg">
+  <meta property="og:image" content="images/slide-1-combo.jpg">
   <meta property="og:type" content="product">
   <meta name="theme-color" content="#14793C">
 
@@ -51,9 +51,9 @@
 
   <style>
     :root {
-      /* Brand Palette: Deep Forest Green + Honey Gold/Yellow + Pure White */
-      --primary: #14793C;        /* Signature Organic Forest Green */
-      --primary-dark: #0A4A24;   /* Deep Royal Green */
+      /* Official Brand Palette: Green + Yellow + White */
+      --primary: #14793C;        /* Signature Organic Green */
+      --primary-dark: #0A4A24;   /* Deep Forest Green */
       --primary-light: #F0FDF4;  /* Light Mint Tint */
       --accent: #EAB308;         /* Warm Honey Gold */
       --accent-light: #FEF08A;   /* Light Golden Accent */
@@ -61,6 +61,7 @@
       --dark: #0D281A;          /* Deep Forest Charcoal */
       --text-muted: #4B6354;
       --border: #D1E7DD;
+      --border-light: #E2E8F0;
       --white: #FFFFFF;
       --shadow-sm: 0 2px 10px rgba(20, 121, 60, 0.05);
       --shadow-md: 0 6px 20px rgba(20, 121, 60, 0.08);
@@ -85,14 +86,14 @@
       color: var(--dark);
       background-color: #F7FAF7;
       line-height: 1.6;
-      font-size: 16.5px;
+      font-size: 16px;
       overflow-x: hidden;
-      padding-bottom: 76px;
+      /* No fixed bottom bar padding */
     }
 
     .container {
       width: 100%;
-      max-width: 620px;
+      max-width: 660px;
       margin: 0 auto;
       padding: 0 16px;
     }
@@ -162,7 +163,7 @@
 
     /* Hero Section */
     .hero-section {
-      padding: 20px 0 12px 0;
+      padding: 18px 0 12px 0;
       text-align: center;
     }
     .badge-pill {
@@ -175,28 +176,28 @@
       border-radius: 20px;
       font-size: 13px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       border: 1px solid #FDE047;
     }
     .hero-title {
-      font-size: 27px;
+      font-size: 26px;
       font-weight: 800;
       color: var(--dark);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       line-height: 1.32;
     }
     .hero-title span.accent-text {
       color: var(--primary);
     }
     .hero-subtitle {
-      font-size: 16px;
+      font-size: 15.5px;
       color: #334D3D;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       line-height: 1.5;
     }
 
     /* ========================================================================= */
-    /* 🖼️ ULTRA-SLEEK TOUCH PHOTO SLIDER                                         */
+    /* 🖼️ SWIPEABLE HERO PHOTO SLIDER                                            */
     /* ========================================================================= */
     .hero-slider-wrap {
       position: relative;
@@ -235,10 +236,7 @@
       font-size: 14px;
       font-weight: 700;
       text-align: center;
-      letter-spacing: 0.2px;
     }
-
-    /* Clean Floating Badge */
     .card-floating-weight {
       position: absolute;
       top: 12px;
@@ -253,7 +251,6 @@
       z-index: 10;
     }
 
-    /* Slider Navigation Arrows */
     .slider-arrow {
       position: absolute;
       top: 50%;
@@ -280,7 +277,6 @@
     .arrow-left { left: 10px; }
     .arrow-right { right: 10px; }
 
-    /* Slider Dots */
     .slider-dots {
       display: flex;
       justify-content: center;
@@ -302,22 +298,27 @@
       background: var(--primary);
     }
 
-    /* Minimalist Luxury Price Card */
+    /* Minimalist Luxury Price Card (Pickle Name, Small Regular, Big Offer) */
     .price-box {
       background: linear-gradient(135deg, #14793C 0%, #0A4A24 100%);
       color: var(--white);
-      padding: 18px 16px;
+      padding: 16px 14px;
       border-radius: 16px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       box-shadow: var(--shadow-md);
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.15);
     }
-    .price-label-top {
-      font-size: 13.5px;
-      color: #D1FAE5;
+    .price-pickle-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFFFFF;
       margin-bottom: 4px;
-      font-weight: 500;
+    }
+    .price-sub-size {
+      font-size: 13.5px;
+      color: #A7F3D0;
+      margin-bottom: 8px;
     }
     .price-main-row {
       display: flex;
@@ -326,20 +327,20 @@
       gap: 12px;
     }
     .regular-strike {
-      font-size: 19px;
+      font-size: 16px;
       text-decoration: line-through;
-      color: #A7F3D0;
+      color: #CBD5E1;
       font-weight: 500;
     }
     .offer-big {
-      font-size: 42px;
-      font-weight: 800;
+      font-size: 46px;
+      font-weight: 900;
       color: var(--accent-light);
       font-family: var(--font-en), var(--font-bn);
       line-height: 1;
     }
 
-    /* Primary Action CTA */
+    /* Strategic Order Button #1 (Under Hero) */
     .btn-cta {
       display: flex;
       align-items: center;
@@ -351,31 +352,26 @@
       font-size: 20px;
       font-weight: 800;
       padding: 16px 20px;
-      border-radius: 14px;
+      border-radius: 12px;
       text-decoration: none;
       box-shadow: 0 6px 22px rgba(20, 121, 60, 0.35);
       border: none;
       cursor: pointer;
       transition: all 0.2s ease;
-      animation: btnPulse 2.5s infinite;
-    }
-    @keyframes btnPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
+      margin-bottom: 16px;
     }
     .btn-cta:hover, .btn-cta:active {
       background: #0A4A24;
       transform: translateY(-2px);
     }
 
-    /* Section Cards (Sleek & White) */
+    /* Section Cards */
     .section-card {
       background: var(--white);
       border-radius: 18px;
       padding: 22px 18px;
-      margin-top: 22px;
-      margin-bottom: 22px;
+      margin-top: 18px;
+      margin-bottom: 18px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
     }
@@ -388,10 +384,10 @@
       margin-bottom: 4px;
     }
     .sec-heading {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
       color: var(--dark);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     /* Product Cards */
@@ -440,7 +436,32 @@
       line-height: 1.5;
     }
 
-    /* Brand Value Bar */
+    /* Strategic Order Button #2 (After Product Showcase) */
+    .btn-cta-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: #0A4A24;
+      color: var(--white);
+      font-size: 18.5px;
+      font-weight: 800;
+      padding: 15px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(10, 74, 36, 0.25);
+      border: 1px solid #14793C;
+      cursor: pointer;
+      margin-top: 14px;
+      transition: all 0.2s;
+    }
+    .btn-cta-secondary:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Purity Bar */
     .purity-row {
       display: flex;
       justify-content: space-around;
@@ -456,30 +477,48 @@
     }
 
     /* ========================================================================= */
-    /* 📋 LUXURY ORDER FORM                                                      */
+    /* 📋 WOOCOMMERCE-STYLE E-COMMERCE CHECKOUT FORM (MATCHING USER SCREENSHOT)   */
     /* ========================================================================= */
-    .order-box {
+    .checkout-wrapper {
       background: #FFFFFF;
       border: 2px solid var(--primary);
       border-radius: 18px;
-      padding: 24px 18px;
+      overflow: hidden;
       margin-top: 24px;
       margin-bottom: 24px;
       box-shadow: var(--shadow-md);
-      position: relative;
     }
-    .order-heading {
+    .checkout-top-banner {
+      background: var(--primary);
+      color: var(--white);
+      padding: 14px 16px;
       text-align: center;
-      font-size: 23px;
+      font-size: 16px;
       font-weight: 800;
-      color: var(--dark);
-      margin-bottom: 4px;
+      line-height: 1.4;
     }
-    .order-desc {
-      text-align: center;
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 18px;
+    .checkout-body {
+      padding: 20px 18px;
+    }
+    .checkout-columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 620px) {
+      .checkout-columns {
+        grid-template-columns: 1.1fr 1fr;
+        gap: 24px;
+      }
+    }
+
+    .col-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #F1F5F9;
     }
 
     .form-group {
@@ -493,16 +532,16 @@
       margin-bottom: 6px;
     }
     .form-label span.req {
-      color: var(--primary);
+      color: #DC2626;
     }
     .form-control {
       width: 100%;
       height: 48px;
       border: 1.5px solid #CBD5E1;
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 10px 14px;
       font-family: var(--font-bn);
-      font-size: 15.5px;
+      font-size: 15px;
       color: #0F172A;
       background: #FFFFFF;
       transition: border-color 0.2s;
@@ -513,7 +552,7 @@
       box-shadow: 0 0 0 3px rgba(20, 121, 60, 0.15);
     }
     textarea.form-control {
-      height: 72px;
+      height: 68px;
       resize: vertical;
     }
 
@@ -528,10 +567,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 14px;
+      padding: 10px 12px;
       background: #F8FAF8;
       border: 1.5px solid #CBD5E1;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -544,12 +583,12 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 600;
       color: #0F172A;
     }
     .radio-charge {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--primary);
     }
@@ -559,16 +598,15 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .qty-card {
       border: 1.5px solid #CBD5E1;
       background: #FFFFFF;
-      padding: 12px 10px;
-      border-radius: 10px;
+      padding: 10px 8px;
+      border-radius: 8px;
       text-align: center;
       cursor: pointer;
-      position: relative;
     }
     .qty-card:has(input:checked) {
       border-color: var(--primary);
@@ -576,65 +614,119 @@
       box-shadow: 0 0 0 2px rgba(20, 121, 60, 0.2);
     }
     .qty-title {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #0F172A;
     }
     .qty-price {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--primary);
     }
 
-    /* Summary Box */
-    .summary-box {
-      background: #F0FDF4;
-      border: 1.5px dashed #86EFAC;
-      border-radius: 12px;
+    /* Right Column: Order Summary Table (Matching Screenshot) */
+    .order-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .order-table th {
+      text-align: left;
+      padding: 8px 0;
+      border-bottom: 1px solid #E2E8F0;
+      color: #475569;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .order-table th.text-right, .order-table td.text-right {
+      text-align: right;
+    }
+    .order-table td {
+      padding: 12px 0;
+      border-bottom: 1px dashed #E2E8F0;
+      color: #1E293B;
+      vertical-align: middle;
+    }
+    .product-summary-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .product-summary-img {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #E2E8F0;
+      flex-shrink: 0;
+    }
+    .product-summary-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0F172A;
+      line-height: 1.3;
+    }
+    .product-summary-qty {
+      font-size: 12.5px;
+      color: var(--gray);
+    }
+    .summary-total-row td {
+      border-top: 1.5px solid #CBD5E1;
+      border-bottom: none;
+      padding-top: 14px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+    .total-number {
+      font-size: 22px;
+      font-family: var(--font-en), var(--font-bn);
+      color: var(--primary-dark);
+    }
+
+    /* Cash on Delivery Notice Box */
+    .cod-box {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
       padding: 12px 14px;
       margin-bottom: 16px;
     }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
+    .cod-title {
       font-size: 14px;
-      color: #475569;
+      font-weight: 700;
+      color: #0F172A;
       margin-bottom: 4px;
     }
-    .summary-row.total-row {
-      border-top: 1.5px solid #BBF7D0;
-      padding-top: 8px;
-      margin-top: 6px;
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--primary-dark);
-    }
-    .total-val {
-      color: var(--primary-dark);
-      font-size: 22px;
-      font-family: var(--font-en), var(--font-bn);
+    .cod-desc {
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 13px;
+      color: #475569;
     }
 
-    /* Submit Button */
+    /* Submit Button (Black/Deep Green Solid) */
     .btn-submit {
       width: 100%;
-      background: linear-gradient(180deg, #16A34A 0%, #14793C 100%);
+      background: #000000;
       color: var(--white);
       border: none;
       padding: 16px;
-      border-radius: 12px;
-      font-size: 20px;
+      border-radius: 8px;
+      font-size: 19px;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(20, 121, 60, 0.35);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.2s;
     }
     .btn-submit:hover {
-      background: #0A4A24;
+      background: #14793C;
     }
     .btn-submit:disabled {
       opacity: 0.65;
@@ -656,69 +748,15 @@
       margin-bottom: 4px;
     }
 
-    /* Sticky Bottom Mobile Bar */
-    .sticky-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--white);
-      border-top: 1px solid #DCFCE7;
-      padding: 10px 16px;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-      z-index: 99;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .sticky-price-col {
-      display: flex;
-      flex-direction: column;
-    }
-    .sticky-price-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1;
-    }
-    .sticky-price-val {
-      font-size: 21px;
-      font-weight: 800;
-      color: var(--primary);
-      font-family: var(--font-en), var(--font-bn);
-      line-height: 1.2;
-    }
-    .sticky-price-val s {
-      font-size: 13.5px;
-      color: #94A3B8;
-      font-weight: 400;
-    }
-    .btn-sticky-order {
-      flex: 1;
-      background: var(--primary);
-      color: var(--white);
-      padding: 11px 16px;
-      border-radius: 10px;
-      font-size: 16.5px;
-      font-weight: 800;
-      text-align: center;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(20, 121, 60, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
     /* Floating WhatsApp Button */
     .floating-wa {
       position: fixed;
-      bottom: 80px;
+      bottom: 24px;
       left: 16px;
       background: #25D366;
       color: var(--white);
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -726,7 +764,7 @@
       box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
       z-index: 90;
       text-decoration: none;
-      font-size: 26px;
+      font-size: 27px;
     }
 
     /* Success Modal */
@@ -749,7 +787,7 @@
       border-radius: 20px;
       max-width: 440px;
       width: 100%;
-      padding: 24px 20px;
+      padding: 26px 20px;
       text-align: center;
       box-shadow: var(--shadow-lg);
       animation: popIn 0.3s ease;
@@ -777,14 +815,19 @@
       margin-bottom: 6px;
     }
     .modal-desc {
-      font-size: 14px;
-      color: #475569;
+      font-size: 15px;
+      font-weight: 600;
+      color: #15803D;
+      background: #F0FDF4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #BBF7D0;
       margin-bottom: 16px;
       line-height: 1.5;
     }
     .order-invoice-card {
-      background: #F0FDF4;
-      border: 1px solid #BBF7D0;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
       border-radius: 12px;
       padding: 12px 14px;
       text-align: left;
@@ -801,9 +844,9 @@
       background: var(--primary);
       color: var(--white);
       border: none;
-      padding: 12px;
+      padding: 13px;
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 16.5px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -881,16 +924,17 @@
         <span class="slider-dot" data-index="2"></span>
       </div>
 
-      <!-- Minimalist Luxury Price Card -->
+      <!-- Minimalist Luxury Price Card (Pickle Name, Small Regular, Big Offer) -->
       <div class="price-box">
-        <div class="price-label-top">১ কেজি কম্বো প্যাক এক্সক্লুসিভ অফার</div>
+        <div class="price-pickle-name">১ কেজি জলপাই আচার কম্বো (অলিভ জামুন + বার্মিজ)</div>
+        <div class="price-sub-size">৫০০ গ্রাম + ৫০০ গ্রাম কাঁচের জার</div>
         <div class="price-main-row">
           <span class="regular-strike">৳৯৯০</span>
           <span class="offer-big">৳৭৯০</span>
         </div>
       </div>
 
-      <!-- Primary Action CTA -->
+      <!-- Strategic Order Button #1 (Under Hero) -->
       <a href="#order-section" class="btn-cta" onclick="trackInitiateCheckout()">
         <span>🛒</span> এখনই অর্ডার করুন — ৳৭৯০
       </a>
@@ -904,7 +948,7 @@
       <!-- Pickle 1: Olive Jamun -->
       <div class="pickle-item-card">
         <div class="pickle-thumb-wrap">
-          <img src="images/olive-jamun.jpg" alt="Olive Jamun Pickle Preme Farm" class="pickle-thumb" loading="lazy">
+          <img src="images/slide-2-jamun.jpg" alt="Olive Jamun Pickle Preme Farm" class="pickle-thumb" loading="lazy">
         </div>
         <div class="pickle-item-content">
           <div class="pickle-header-row">
@@ -920,7 +964,7 @@
       <!-- Pickle 2: Burmese Olive Pickle -->
       <div class="pickle-item-card">
         <div class="pickle-thumb-wrap">
-          <img src="images/burmese-olive.jpg" alt="Burmese Olive Pickle Preme Farm" class="pickle-thumb" loading="lazy">
+          <img src="images/slide-3-burmese.jpg" alt="Burmese Olive Pickle Preme Farm" class="pickle-thumb" loading="lazy">
         </div>
         <div class="pickle-item-content">
           <div class="pickle-header-row">
@@ -939,116 +983,149 @@
         <span class="purity-item">🛢️ খাঁটি সরিষার তেল</span>
         <span class="purity-item">🏡 ঘরোয়া রেসিপি</span>
       </div>
+
+      <!-- Strategic Order Button #2 (After Product Showcase) -->
+      <a href="#order-section" class="btn-cta-secondary" onclick="trackInitiateCheckout()">
+        <span>👉</span> স্পেশাল কম্বোটি অর্ডার করুন (৳৭৯০)
+      </a>
     </section>
 
-    <!-- SECTION: INSTANT ORDER FORM (BIZMATION COMPLIANT & HIGH CONVERTING) -->
-    <section class="order-box" id="order-section">
-      <h2 class="order-heading">অর্ডার কনফার্ম করুন</h2>
-      <p class="order-desc">ক্যাশ অন ডেলিভারি — পণ্য হাতে পেয়ে মূল্য পরিশোধ করবেন</p>
+    <!-- ===================================================================== -->
+    <!-- 📋 WOOCOMMERCE-STYLE E-COMMERCE CHECKOUT (MATCHING USER SCREENSHOT)   -->
+    <!-- ===================================================================== -->
+    <section class="checkout-wrapper" id="order-section">
+      <!-- Green Top Banner (Matching Screenshot) -->
+      <div class="checkout-top-banner">
+        অর্ডার করতে নিচের ফর্মে আপনার নাম, পূর্ণ ঠিকানা এবং মোবাইল নাম্বার লিখুন।
+      </div>
 
-      <!-- Standard Form with Bizmation compliant field names -->
-      <form id="orderForm" method="POST" action="order.php">
-        <input type="hidden" name="product_name" id="hiddenProductName" value="১ কেজি জলপাই আচার কম্বো (অলিভ জামুন ৫০০ গ্রাম + বার্মিজ ৫০০ গ্রাম)">
-        <input type="hidden" name="product_price" id="hiddenProductPrice" value="790">
-        <input type="hidden" name="shipping_cost" id="hiddenShippingCost" value="80">
-        <input type="hidden" name="total_amount" id="hiddenTotalAmount" value="870">
+      <div class="checkout-body">
+        <form id="orderForm" method="POST" action="order.php">
+          <input type="hidden" name="product_name" id="hiddenProductName" value="১ কেজি জলপাই আচার কম্বো (অলিভ জামুন ৫০০ গ্রাম + বার্মিজ ৫০০ গ্রাম)">
+          <input type="hidden" name="product_price" id="hiddenProductPrice" value="790">
+          <input type="hidden" name="shipping_cost" id="hiddenShippingCost" value="80">
+          <input type="hidden" name="total_amount" id="hiddenTotalAmount" value="870">
 
-        <!-- 1. Customer Name -->
-        <div class="form-group">
-          <label class="form-label" for="custName">আপনার পুরো নাম <span class="req">*</span></label>
-          <input type="text" id="custName" name="customer_name" class="form-control" placeholder="যেমন: তানভীর হাসান" required autocomplete="name">
-        </div>
+          <div class="checkout-columns">
+            <!-- Left Column: অর্ডারের তথ্য (Billing Details) -->
+            <div class="checkout-col">
+              <h3 class="col-title">অর্ডারের তথ্য</h3>
 
-        <!-- 2. Customer Phone -->
-        <div class="form-group">
-          <label class="form-label" for="custPhone">মোবাইল নম্বর <span class="req">*</span></label>
-          <input type="tel" id="custPhone" name="customer_phone" class="form-control" placeholder="যেমন: 017XXXXXXXX" required autocomplete="tel" pattern="[0-9]{11}">
-        </div>
-
-        <!-- 3. Full Address -->
-        <div class="form-group">
-          <label class="form-label" for="custAddress">সম্পূর্ণ ডেলিভারি ঠিকানা <span class="req">*</span></label>
-          <textarea id="custAddress" name="customer_address" class="form-control" placeholder="বাসা/রোড, এলাকা এবং জেলা..." required autocomplete="street-address"></textarea>
-        </div>
-
-        <!-- 4. Delivery Area Selection -->
-        <div class="form-group">
-          <label class="form-label">ডেলিভারি লোকেশন <span class="req">*</span></label>
-          <div class="delivery-options">
-            <label class="delivery-radio-label">
-              <div class="radio-left">
-                <input type="radio" name="delivery_area" value="inside_dhaka" checked onchange="updateSummary()">
-                <span>ঢাকা সিটির ভেতরে</span>
+              <!-- 1. Customer Name -->
+              <div class="form-group">
+                <label class="form-label" for="custName">আপনার পূর্ণ নাম লিখুন <span class="req">*</span></label>
+                <input type="text" id="custName" name="customer_name" class="form-control" placeholder="আপনার নাম লিখুন..." required autocomplete="name">
               </div>
-              <span class="radio-charge">৳৮০</span>
-            </label>
-            <label class="delivery-radio-label">
-              <div class="radio-left">
-                <input type="radio" name="delivery_area" value="outside_dhaka" onchange="updateSummary()">
-                <span>ঢাকা সিটির বাইরে</span>
+
+              <!-- 2. Full Address -->
+              <div class="form-group">
+                <label class="form-label" for="custAddress">আপনার পূর্ণ ঠিকানা লিখুন <span class="req">*</span></label>
+                <textarea id="custAddress" name="customer_address" class="form-control" placeholder="বাসা/রোড নং, এলাকা এবং জেলা..." required autocomplete="street-address"></textarea>
               </div>
-              <span class="radio-charge">৳১০০</span>
-            </label>
-          </div>
-        </div>
 
-        <!-- 5. Quantity Selection -->
-        <div class="form-group">
-          <label class="form-label">প্যাকেজ নির্বাচন <span class="req">*</span></label>
-          <div class="qty-options">
-            <label class="qty-card">
-              <input type="radio" name="quantity" value="1" checked onchange="updateSummary()" style="display:none;">
-              <div class="qty-title">১টি কম্বো (১ কেজি)</div>
-              <div class="qty-price">৳৭৯০</div>
-            </label>
-            <label class="qty-card">
-              <input type="radio" name="quantity" value="2" onchange="updateSummary()" style="display:none;">
-              <div class="qty-title">২টি কম্বো (২ কেজি)</div>
-              <div class="qty-price">৳১,৫০০</div>
-            </label>
-          </div>
-        </div>
+              <!-- 3. Customer Phone -->
+              <div class="form-group">
+                <label class="form-label" for="custPhone">আপনার ফোন নাম্বার লিখুন <span class="req">*</span></label>
+                <input type="tel" id="custPhone" name="customer_phone" class="form-control" placeholder="017XXXXXXXX" required autocomplete="tel" pattern="[0-9]{11}">
+              </div>
 
-        <!-- 6. Special Notes (Optional) -->
-        <div class="form-group">
-          <label class="form-label" for="custNotes">বিশেষ নির্দেশনা (ঐচ্ছিক)</label>
-          <input type="text" id="custNotes" name="notes" class="form-control" placeholder="যেমন: ডেলিভারির আগে ফোন দিবেন...">
-        </div>
+              <!-- 4. Shipping Delivery Area -->
+              <div class="form-group">
+                <label class="form-label">Shipping (ডেলিভারি চার্জ) <span class="req">*</span></label>
+                <div class="delivery-options">
+                  <label class="delivery-radio-label">
+                    <div class="radio-left">
+                      <input type="radio" name="delivery_area" value="inside_dhaka" checked onchange="updateSummary()">
+                      <span>ঢাকা সিটির ভেতরে</span>
+                    </div>
+                    <span class="radio-charge">৳ ৮০.০০</span>
+                  </label>
+                  <label class="delivery-radio-label">
+                    <div class="radio-left">
+                      <input type="radio" name="delivery_area" value="outside_dhaka" onchange="updateSummary()">
+                      <span>ঢাকা সিটির বাইরে</span>
+                    </div>
+                    <span class="radio-charge">৳ ১০০.০০</span>
+                  </label>
+                </div>
+              </div>
 
-        <!-- 7. Live Price Summary -->
-        <div class="summary-box">
-          <div class="summary-row">
-            <span id="summaryPackageText">১ কেজি কম্বো (অলিভ জামুন + বার্মিজ)</span>
-            <span id="summaryItemPrice">৳৭৯০</span>
-          </div>
-          <div class="summary-row">
-            <span>ডেলিভারি চার্জ (<span id="summaryAreaText">ঢাকা সিটির ভেতরে</span>)</span>
-            <span id="summaryDeliveryCharge">৳৮০</span>
-          </div>
-          <div class="summary-row total-row">
-            <span>সর্বমোট প্রদেয় টাকা:</span>
-            <span class="total-val" id="summaryTotal">৳৮৭০</span>
-          </div>
-        </div>
+              <!-- 5. Quantity Selection -->
+              <div class="form-group">
+                <label class="form-label">পরিমাণ নির্বাচন <span class="req">*</span></label>
+                <div class="qty-options">
+                  <label class="qty-card">
+                    <input type="radio" name="quantity" value="1" checked onchange="updateSummary()" style="display:none;">
+                    <div class="qty-title">১টি কম্বো (১ কেজি)</div>
+                    <div class="qty-price">৳ ৭৯০.০০</div>
+                  </label>
+                  <label class="qty-card">
+                    <input type="radio" name="quantity" value="2" onchange="updateSummary()" style="display:none;">
+                    <div class="qty-title">২টি কম্বো (২ কেজি)</div>
+                    <div class="qty-price">৳ ১,৫০০.০০</div>
+                  </label>
+                </div>
+              </div>
+            </div>
 
-        <!-- 8. Submit Button -->
-        <button type="submit" class="btn-submit" id="submitBtn">
-          <span>✅</span> <span id="submitBtnText">অর্ডার সম্পন্ন করুন (৳৮৭০)</span>
-        </button>
-      </form>
+            <!-- Right Column: আপনার অর্ডার (Order Summary matching screenshot) -->
+            <div class="checkout-col">
+              <h3 class="col-title">আপনার অর্ডার</h3>
+
+              <table class="order-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th class="text-right">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="product-summary-cell">
+                        <img src="images/slide-1-combo.jpg" alt="১ কেজি কম্বো" class="product-summary-img">
+                        <div>
+                          <div class="product-summary-title" id="summaryProductName">১ কেজি জলপাই আচার কম্বো</div>
+                          <div class="product-summary-qty" id="summaryProductQty">× 1</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-right" id="summaryItemPrice" style="font-weight:700;">৳ ৭৯০.০০</td>
+                  </tr>
+                  <tr>
+                    <td style="color:#64748B;">Subtotal</td>
+                    <td class="text-right" id="summarySubtotal" style="font-weight:600;">৳ ৭৯০.০০</td>
+                  </tr>
+                  <tr>
+                    <td style="color:#64748B;">Shipping</td>
+                    <td class="text-right" id="summaryShipping">
+                      <div id="summaryShippingText" style="font-size:12px; color:#64748B;">ঢাকা সিটির ভেতরে:</div>
+                      <div id="summaryDeliveryCharge" style="font-weight:600;">৳ ৮০.০০</div>
+                    </td>
+                  </tr>
+                  <tr class="summary-total-row">
+                    <td>Total</td>
+                    <td class="text-right total-number" id="summaryTotal">৳ ৮৭০.০০</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Cash on Delivery Notice -->
+              <div class="cod-box">
+                <div class="cod-title">Cash on delivery</div>
+                <div class="cod-desc">Pay with cash upon delivery.</div>
+              </div>
+
+              <!-- Strategic Order Button #3 (Submit Button Matching Screenshot) -->
+              <button type="submit" class="btn-submit" id="submitBtn">
+                অর্ডার কনফার্ম করুন <span id="btnTotalText">৳ ৮৭০.০০</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </section>
   </main>
-
-  <!-- Sticky Bottom Mobile Bar -->
-  <div class="sticky-bar">
-    <div class="sticky-price-col">
-      <div class="sticky-price-label">অফার মূল্য:</div>
-      <div class="sticky-price-val">৳৭৯০ <s>৳৯৯০</s></div>
-    </div>
-    <a href="#order-section" class="btn-sticky-order" onclick="trackInitiateCheckout()">
-      <span>🛒</span> অর্ডার করুন
-    </a>
-  </div>
 
   <!-- Floating WhatsApp Order -->
   <a href="#" id="floatingWaBtn" class="floating-wa" target="_blank" title="হোয়াটসঅ্যাপে অর্ডার করুন">
@@ -1062,13 +1139,13 @@
     <p style="margin-top: 4px; font-size:11.5px; opacity: 0.85;">© 2026 Preme Farm. All rights reserved.</p>
   </footer>
 
-  <!-- Order Success Modal -->
+  <!-- Order Success Modal (With Requested Thank You & Confirmation Call Message) -->
   <div class="modal-backdrop" id="successModal">
     <div class="modal-box">
       <div class="success-icon">✓</div>
-      <h3 class="modal-title">অর্ডার সফল হয়েছে!</h3>
+      <h3 class="modal-title">ধন্যবাদ! অর্ডার সফল হয়েছে</h3>
       <p class="modal-desc">
-        আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি কিছুক্ষণের মধ্যে কল দিয়ে অর্ডার কনফার্ম করবেন।
+        আমাদের প্রতিনিধি দ্রুত আপনাকে কল করে অর্ডারটি কনফার্ম করবেন।
       </p>
 
       <div class="order-invoice-card" id="invoiceDetails">
@@ -1158,8 +1235,8 @@
     }
 
     const PRICES = {
-      1: { item: 790, name: '১টি কম্বো (১ কেজি - অলিভ জামুন + বার্মিজ)' },
-      2: { item: 1500, name: '২টি কম্বো (২ কেজি - মেগা সেভার প্যাক)' }
+      1: { item: 790, name: '১ কেজি জলপাই আচার কম্বো', qty_text: '× 1' },
+      2: { item: 1500, name: '২ কেজি জলপাই আচার কম্বো', qty_text: '× 2' }
     };
     const DELIVERY = {
       'inside_dhaka': { charge: 80, name: 'ঢাকা সিটির ভেতরে' },
@@ -1178,12 +1255,14 @@
 
       const total = itemInfo.item + deliveryInfo.charge;
 
-      document.getElementById('summaryPackageText').innerText = itemInfo.name;
-      document.getElementById('summaryItemPrice').innerText = '৳' + itemInfo.item;
-      document.getElementById('summaryAreaText').innerText = deliveryInfo.name;
-      document.getElementById('summaryDeliveryCharge').innerText = '৳' + deliveryInfo.charge;
-      document.getElementById('summaryTotal').innerText = '৳' + total;
-      document.getElementById('submitBtnText').innerText = 'অর্ডার সম্পন্ন করুন (৳' + total + ')';
+      document.getElementById('summaryProductName').innerText = itemInfo.name;
+      document.getElementById('summaryProductQty').innerText = itemInfo.qty_text;
+      document.getElementById('summaryItemPrice').innerText = '৳ ' + itemInfo.item + '.00';
+      document.getElementById('summarySubtotal').innerText = '৳ ' + itemInfo.item + '.00';
+      document.getElementById('summaryShippingText').innerText = deliveryInfo.name + ':';
+      document.getElementById('summaryDeliveryCharge').innerText = '৳ ' + deliveryInfo.charge + '.00';
+      document.getElementById('summaryTotal').innerText = '৳ ' + total + '.00';
+      document.getElementById('btnTotalText').innerText = '৳ ' + total + '.00';
 
       document.getElementById('hiddenProductPrice').value = itemInfo.item;
       document.getElementById('hiddenShippingCost').value = deliveryInfo.charge;
@@ -1211,7 +1290,6 @@
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
-      const notes = document.getElementById('custNotes').value.trim();
 
       const areaRadio = document.querySelector('input[name="delivery_area"]:checked');
       const qtyRadio = document.querySelector('input[name="quantity"]:checked');
@@ -1241,8 +1319,7 @@
         shipping_cost: deliveryInfo.charge,
         delivery_charge: deliveryInfo.charge,
         total_amount: totalAmount,
-        total: totalAmount,
-        notes: notes
+        total: totalAmount
       };
 
       // 1. Send to Bizmation Webhook if configured
@@ -1292,14 +1369,14 @@
         <div class="invoice-row"><b>প্যাকেজ:</b> <span>${itemInfo.name}</span></div>
         <div class="invoice-row"><b>ডেলিভারি এলাকা:</b> <span>${deliveryInfo.name}</span></div>
         <div class="invoice-row" style="border-top:1.5px dashed #86EFAC; padding-top:6px; margin-top:6px; font-weight:800; color:#14793C;">
-          <b>সর্বমোট টাকা:</b> <span>৳${totalAmount} (ক্যাশ অন ডেলিভারি)</span>
+          <b>সর্বমোট টাকা:</b> <span>৳ ${totalAmount}.00 (ক্যাশ অন ডেলিভারি)</span>
         </div>
       `;
 
       // Show Confirmation Modal
       document.getElementById('successModal').style.display = 'flex';
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>✅</span> অর্ডার সম্পন্ন করুন (৳' + totalAmount + ')';
+      submitBtn.innerHTML = 'অর্ডার কনফার্ম করুন <span id="btnTotalText">৳ ' + totalAmount + '.00</span>';
       document.getElementById('orderForm').reset();
       updateSummary();
     });
